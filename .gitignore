@@ -1,0 +1,15 @@
+# Generated Windows binaries and release archives
+*.exe
+*.dll
+*.pdb
+*.zip
+bin/
+obj/
+.vs/
+work/
+outputs/
+test-results/
+*.user
+*.suo
+.env
+.env.*

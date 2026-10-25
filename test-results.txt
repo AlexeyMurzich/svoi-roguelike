@@ -1,0 +1,46 @@
+﻿PASS All 12 original relic effects
+PASS Invalid hero state and balance rejected
+PASS Unknown and foreign relics cannot be selected
+PASS Damage clamp and tears arithmetic
+PASS Debt gate, wealth requirements and large debt
+PASS Fractional gold discounts
+PASS Eternal cards cannot be unlocked or discounted twice
+PASS Family restriction resets, invalid values rejected
+PASS Automatic cards: 2200 seed/hand combinations
+PASS Investigation is idempotent per map and distinct node
+PASS Exchange callback is atomic and cannot re-enter
+PASS Uniform viewport, click mapping and image crop
+PASS Image ownership, fallback and file unlocking
+PASS UI all heroes and relics at six window sizes
+INFO After 72 resizes: GDI handles 19 -> 19; decoded images 32; cached fonts 9.
+PASS Resize/repaint determinism and GDI resources
+PASS Procedural act constraints, determinism and connectivity: 2000 seeds
+PASS Map traversal rejects skips and repeated actions
+PASS Map UI, modal clicks, investigation and resizing
+PASS Scrollable layout and actual deck model
+PASS Map scrolling, dragging, top bar, deck and relic menus at six sizes
+PASS Fullscreen bounds, taskbar coverage, minimal HUD and pause
+PASS Return to main menu and fresh run at six sizes
+PASS Combat rules, recycling, resources, victory and defeat
+PASS Combat UI, animation, pause and victory at six sizes
+PASS Hero portraits and relic hover across all twelve relics and six sizes
+PASS Smooth camera timing at 30/60/120 Hz
+INFO Map render + camera update at 1280x840: 31,7 ms/frame (offscreen sample, not a live FPS guarantee).
+PASS Smooth camera, pause, pose frames and render timing
+PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
+PASS Dog bite, accelerated timing, howl and pause at six sizes
+PASS Animation lifecycle and timing at 10/30/60/120 Hz
+PASS Debt atomicity, fractional charges, card contracts and configured draw
+PASS Hands of one to six cards preserve controls and aspect ratio
+PASS Reviewed input, capture, focus, overlay and debt-death interactions
+PASS Investigation reveals future enemy identity on map hover
+PASS Dog legs preserve color and opacity through bite and howl frames
+INFO 18 battle/map/pause/resize cycles: GDI handles 22 -> 22; source images 32; font cache 11.
+PASS Repeated battle/map/pause/resize transitions release resources
+PASS Death snapshots lifecycle and resource ownership
+PASS Separate dog deaths, all hero deaths, rat death and credit-card guard
+Suites: 38 passed, 0 failed. Assertions: 1129104.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+POST-REGRESSION: targeted DeathTests.Lifecycle + UiTests.TestDeathsAndGuard passed after resize-position fix; includes relocated snapshot assertion.
+STANDALONE: final EXE loaded 32 embedded images without assets; two dogs, independent offset cycles, 1920x1080 render passed.

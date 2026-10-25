@@ -1,0 +1,12 @@
+v0.11 final art prompts
+
+SHUTEN CREDIT CARD DEFENSE
+Create ONE full-body 2D painted game sprite on transparent background of the SAME glasses-wearing short-bearded jester man seated on the SAME stationary exercise bike as reference. Preserve face likeness, lightning earring, red/teal jester cap, red coat, gray pants and ornate gold bike. THIS IS A DEFENSE POSE facing RIGHT: he holds a huge dark green/gold CREDIT CARD as a shield in front of his torso and right side, bracing behind it with determined expression. Large readable card with chip, and exact printed number '9112 3801 2077 2522'. No slingshot in his hands. Keep bike and both feet fully visible and same proportions, clean game silhouette with safe padding around every edge. Hand-painted whimsical heroic dark card-roguelike aesthetic, warm gold rim light, matching reference style, no scenery, no ground plane, no UI, no other characters. One single sprite, not an atlas.
+
+DOG BODY
+Extract and redraw ONLY the headless gray dog's BODY from top-left of reference. ONE sprite on its own transparent canvas, no atlas. Full four legs, paws and complete tail, exactly this vicious spiky charcoal-gray wiry hound body, same style. No heads, no face, no other parts, no gore. Keep furry neck attachment at upper-left shoulder naturally ready for a separate head. Center the complete body, generous 10% transparent padding every side, do not clip feet or tail. Painterly dark roguelike warm rim light. Absolutely remove all heads from other parts of reference. One isolated headless animation BODY asset only, all anatomy preserved below neck.
+
+DOG HEAD STRIP
+Create ONE HEAD animation atlas on transparent background: exact 3:1 canvas, THREE EQUAL SQUARE CELLS horizontally. ONLY the SAME single scary gray hound HEAD in each cell, not bodies. Preserve narrow amber eyes, huge yellow fangs, angular skull and spiky charcoal gray fur of reference. Cell1 snarling idle facing LEFT, cell2 biting air with jaws fully OPEN LEFT, cell3 head tilted up HOWLING. Same head SCALE and neck fur attachment coordinate in all cells at x=.62 y=.75, furry lower neck edge for overlap. Each head entirely within its OWN square with at least 10% transparent padding every side. NO body, legs, paws, tail anywhere. No heads crossing cell boundaries. No grid lines, labels, text, environment. Same dark hand-painted roguelike style with warm rim light. Three heads only, independently registered; no human faces.
+
+Runtime death animation uses a temporary capture of each original creature; no additional painted death frames.
