@@ -11,7 +11,9 @@ namespace ShpilSvoih
         public int CyclePosition { get; private set; }
         public bool IsAlive { get { return Health > 0; } }
         public bool WillHowl { get { return Kind == EnemyKind.StrayDogs && CyclePosition == 2; } }
-        public string Name { get { return Kind == EnemyKind.Rat ? "Большая крыса" : Id == 0 ? "Серый пёс" : "Рыжий пёс"; } }
+        public int AttackDamage { get { return Kind == EnemyKind.Hedgehog ? 10 : 5; } }
+        public int Thorns { get { return Kind == EnemyKind.Hedgehog ? 2 : 0; } }
+        public string Name { get { return Kind == EnemyKind.StrayDogs ? (Id == 0 ? "Серый пёс" : "Рыжий пёс") : EnemyCatalog.Name(Kind); } }
 
         internal CombatEnemy(int id, EnemyKind kind, int offset)
         {

@@ -51,9 +51,9 @@ namespace ShpilSvoih
                 g.DrawString(price, font, brush, cx - size.Width / 2, cy - size.Height / 2);
             float rulesY = area.Y + area.Height * .765f;
             Rect(g, area.X + 13, rulesY, area.Width - 26, area.Height * .125f, Color.FromArgb(255, 17, 24, 25));
-            string rules = card.Attack ? combat.DamageFor(card) + " урона" : card.Block + " блока";
+            string rules = card.Attack ? combat.DamageFor(card) + " урона" : combat.BlockFor(card) + " блока";
             if (card.Attack && card.Block > 0)
-                rules += ", " + card.Block + " блока";
+                rules += ", " + combat.BlockFor(card) + " блока";
             TextAt(g, rules, area.X + 19, rulesY + 5, 16, text, area.Width - 32, true);
             TextAt(g, (index + 1).ToString(), area.Right - 17, area.Bottom - 22, 12, gold, 20, true);
             if (usable)

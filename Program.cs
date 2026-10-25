@@ -20,6 +20,9 @@ namespace ShpilSvoih
                         game.StartTestBattle();
                     if (Array.IndexOf(args, "--test-dogs") >= 0)
                         game.StartTestDogs();
+                    if (Array.IndexOf(args, "--test-hedgehog") >= 0) game.StartTestHedgehog();
+                    if (Array.IndexOf(args, "--test-rabid-hedgehog") >= 0) game.StartTestRabidHedgehog();
+                    if (Array.IndexOf(args, "--test-hedgehogs") >= 0) game.StartTestHedgehogs();
                     Application.Run(game);
                 }
 

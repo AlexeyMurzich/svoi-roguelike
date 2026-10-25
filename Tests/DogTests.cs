@@ -38,7 +38,7 @@ namespace ShpilSvoih
                     TestSuite.Check(!fight.ResolveEnemyTurn() && !fight.ResolveNextEnemyAction(), "queue cannot resolve twice");
                 }
             }
-            TestSuite.Check(dogs > 60 && dogs < 140, "both enemy encounters appear across seeds");
+            TestSuite.Check(dogs > 25 && dogs < 80, "both enemy encounters appear across seeds");
             var guarded = new HeroState(2, 50, 0, new Balance());
             guarded.AddCard(new CardData { Block = 7, Skill = true, ManaCost = 0 });
             var shieldFight = new CombatState(guarded, new Random(1), EnemyKind.StrayDogs);

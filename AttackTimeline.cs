@@ -9,7 +9,9 @@ namespace ShpilSvoih
         HeroGuard,
         RatBite,
         DogBite,
-        DogHowl
+        DogHowl,
+        HedgehogNeedles,
+        HedgehogBite
     }
 
     // Animation owns its clock and one impact callback, never the combat rules.
@@ -39,8 +41,8 @@ namespace ShpilSvoih
                 throw new InvalidOperationException("An attack is already running.");
 
             Kind = kind;
-            Duration = kind == AttackAnimation.HeroGuard ? .65f : kind == AttackAnimation.DogHowl ? 1.2f : kind == AttackAnimation.HeroStrike ? .95f : 1.05f;
-            HitTime = kind == AttackAnimation.HeroGuard ? .2f : kind == AttackAnimation.DogHowl ? .6f : kind == AttackAnimation.HeroStrike ? .5f : .52f;
+            Duration = kind == AttackAnimation.HedgehogNeedles ? 1.45f : kind == AttackAnimation.HedgehogBite ? 1.05f : kind == AttackAnimation.HeroGuard ? .65f : kind == AttackAnimation.DogHowl ? 1.2f : kind == AttackAnimation.HeroStrike ? .95f : 1.05f;
+            HitTime = kind == AttackAnimation.HedgehogNeedles ? 1.12f : kind == AttackAnimation.HedgehogBite ? .62f : kind == AttackAnimation.HeroGuard ? .2f : kind == AttackAnimation.DogHowl ? .6f : kind == AttackAnimation.HeroStrike ? .5f : .52f;
             Time = 0;
             HitApplied = false;
             impact = onImpact;

@@ -119,7 +119,7 @@ namespace ShpilSvoih
                     }
                 timeline.Cancel();
                 sheet.Save(Path.Combine(TestSuite.OutputDirectory, "shuten-animation-review.png"));
-                TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 31, "one shared Shuten atlas replaces two source bitmaps");
+                TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 33, "one shared Shuten atlas replaces two source bitmaps");
             }
         }
     }

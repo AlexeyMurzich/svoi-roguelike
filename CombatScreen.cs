@@ -13,6 +13,7 @@ namespace ShpilSvoih
         readonly Image[] cardSheets = new Image[4];
         readonly AttackTimeline attackTimeline = new AttackTimeline();
         PoseAtlas ratPoses, shutenPoses;
+        HedgehogAtlas hedgehogPoses, rabidHedgehogPoses;
         Image dogBody, dogHeads;
         readonly DeathVisuals deathVisuals = new DeathVisuals();
         int actingEnemyIndex = -1, attackTarget;
@@ -50,6 +51,8 @@ namespace ShpilSvoih
             dogHeads = assetStore.Get("enemies/stray-dogs.png", "enemies.stray-dogs.png");
             ratPoses = new PoseAtlas(assetStore.Get("enemies/rat-bite.png", "enemies.rat-bite.png"));
             shutenPoses = new PoseAtlas(assetStore.Get("shuten-combat.png", "shuten-combat.png"), 2, 2);
+            hedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-curl.png", "enemies.hedgehog-curl.png"), false);
+            rabidHedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-bite.png", "enemies.hedgehog-bite.png"), true);
             InitializeMotionTimer();
         }
 
@@ -77,6 +80,10 @@ namespace ShpilSvoih
         {
             StartTestEncounter(EnemyKind.StrayDogs);
         }
+
+        internal void StartTestHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
+        internal void StartTestRabidHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
+        internal void StartTestHedgehogs() { StartTestEncounter(EnemyKind.Hedgehogs); }
 
         void StartTestEncounter(EnemyKind enemy)
         {
@@ -157,7 +164,7 @@ namespace ShpilSvoih
                 {
                     combat.TryPlay(index);
                     SyncDeaths();
-                    combatNotice = combat.Phase == CombatPhase.Victory ? "Победа!" : combat.Phase == CombatPhase.Defeat ? "Поражение" : "Попадание";
+                    combatNotice = combat.Phase == CombatPhase.Victory ? "Победа!" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastRetaliation > 0 ? "Попадание · Шипы: −" + combat.LastRetaliation + " HP" : "Попадание";
                 });
             }
             else if (selected == 3 && card.Block > 0)
@@ -192,13 +199,14 @@ namespace ShpilSvoih
             bool howling = actor.WillHowl;
             combatNotice = actor.Name + (howling ? " воет" : " атакует");
             if (howling && Visible && ContainsFocus) howlSound.Play();
-            StartCombatAnimation(howling ? AttackAnimation.DogHowl : actor.Kind == EnemyKind.StrayDogs ? AttackAnimation.DogBite : AttackAnimation.RatBite, () =>
+            StartCombatAnimation(howling ? AttackAnimation.DogHowl : actor.Kind == EnemyKind.StrayDogs ? AttackAnimation.DogBite : actor.Kind == EnemyKind.Hedgehog ? AttackAnimation.HedgehogNeedles : actor.Kind == EnemyKind.RabidHedgehog ? AttackAnimation.HedgehogBite : AttackAnimation.RatBite, () =>
             {
                 int block = combat.Block;
+                bool wasRabid = combat.Rabies;
                 combat.ResolveNextEnemyAction();
                 if (combat.Block < block) guardVisualTime = .3f;
                 SyncDeaths();
-                combatNotice = howling ? "Слабость: урон атак −25% на 1 ход" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
+                combatNotice = !wasRabid && combat.Rabies ? "Бешенство наложено" : howling ? "Слабость: урон атак −25% на 1 ход" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
             });
         }
 

@@ -463,7 +463,13 @@ namespace ShpilSvoih
                     DrawDogPoseFor(g, new RectangleF(555, 324, 180, 205), 0);
                     DrawDogPoseFor(g, new RectangleF(750, 324, 180, 205), 1);
                 }
-                else FitImage(g, ratEnemy, new RectangleF(575, 324, 350, 205));
+                else if (enemy == EnemyKind.Hedgehogs)
+                {
+                    DrawHedgehogPose(g, new RectangleF(550, 324, 185, 205), false, false);
+                    DrawHedgehogPose(g, new RectangleF(750, 324, 185, 205), true, false);
+                }
+                else if (enemy == EnemyKind.Rat) FitImage(g, ratEnemy, new RectangleF(575, 324, 350, 205));
+                else DrawHedgehogPose(g, new RectangleF(575, 324, 350, 205), enemy == EnemyKind.RabidHedgehog, false);
                 Button(g, mapRun.PendingIsRevisit ? "Вернуться на карту" : "Продолжить тестовый маршрут  →", 355, 540, 570, 53, CompleteMapRoom, true);
                 return;
             }

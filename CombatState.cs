@@ -29,6 +29,23 @@ namespace ShpilSvoih
         public readonly HeroState Hero;
         public readonly EnemyKind Enemy;
         public int WeakTurns { get; private set; }
+        public bool Rabies { get; private set; }
+        public int Strength { get { return Rabies ? 2 : 0; } }
+        public int Dexterity { get { return Rabies ? -2 : 0; } }
+        public int LastRetaliation { get; private set; }
+        public int BlockFor(CardData card)
+        {
+            if (card == null) throw new ArgumentNullException("card");
+            return card.Block > 0 ? Math.Max(0, card.Block + Dexterity) : 0;
+        }
+        int ReceiveHit(int damage)
+        {
+            int before = Hero.Health;
+            int absorbed = Math.Min(Block, damage);
+            Block -= absorbed;
+            Hero.ReceiveDamage(damage - absorbed);
+            return before - Hero.Health;
+        }
         public ReadOnlyCollection<CombatEnemy> Enemies { get; private set; }
         public int SelectedTarget { get; private set; }
         public int ActingEnemy { get; private set; }
@@ -71,8 +88,9 @@ namespace ShpilSvoih
             Enemy = enemy;
             this.random = random;
             Hand = hand.AsReadOnly();
-            var enemies = new List<CombatEnemy> { new CombatEnemy(0, enemy, 0) };
+            var enemies = new List<CombatEnemy> { new CombatEnemy(0, enemy == EnemyKind.Hedgehogs ? EnemyKind.Hedgehog : enemy, 0) };
             if (enemy == EnemyKind.StrayDogs) enemies.Add(new CombatEnemy(1, enemy, 1));
+            if (enemy == EnemyKind.Hedgehogs) enemies.Add(new CombatEnemy(1, EnemyKind.RabidHedgehog, 0));
             Enemies = enemies.AsReadOnly();
             SelectedTarget = 0;
             ActingEnemy = -1;
@@ -147,7 +165,7 @@ namespace ShpilSvoih
             if (card == null)
                 throw new ArgumentNullException("card");
             int strength = Turn == 1 ? Hero.Effects.Strength : 0;
-            long damage = Math.Max(0, (long)card.Damage + Hero.BonusDamage + strength);
+            long damage = Math.Max(0, (long)card.Damage + Hero.BonusDamage + strength + (card.Attack ? Strength : 0));
             if (card.Attack && WeakTurns > 0) damage = damage * 3 / 4;
             return (int)Math.Min(int.MaxValue, damage);
         }
@@ -169,6 +187,7 @@ namespace ShpilSvoih
             if (!CanPlay(index))
                 return false;
             var card = hand[index];
+            LastRetaliation = 0;
             if (Hero.Hero == 3)
                 Hero.ChangeMoney(-Cost(card));
             else
@@ -186,14 +205,16 @@ namespace ShpilSvoih
             if (card.Attack)
             {
                 int damage = DamageFor(card);
-                Enemies[SelectedTarget].ReceiveDamage(damage);
+                var target = Enemies[SelectedTarget];
+                target.ReceiveDamage(damage);
+                if (target.Thorns > 0) LastRetaliation = ReceiveHit(target.Thorns);
                 if (!Enemies[SelectedTarget].IsAlive)
                     SelectedTarget = NextLivingEnemy(0);
             }
 
-            Block = (int)Math.Min(int.MaxValue, (long)Block + card.Block);
-            if (NextLivingEnemy(0) < 0)
-                Phase = CombatPhase.Victory;
+            Block = (int)Math.Min(int.MaxValue, (long)Block + BlockFor(card));
+            if (Hero.Health <= 0) Phase = CombatPhase.Defeat;
+            else if (NextLivingEnemy(0) < 0) Phase = CombatPhase.Victory;
             return true;
         }
 
@@ -236,9 +257,9 @@ namespace ShpilSvoih
             }
             else
             {
-                int absorbed = Math.Min(Block, EnemyAttack);
-                Block -= absorbed;
-                Hero.ReceiveDamage(EnemyAttack - absorbed);
+                int lost = ReceiveHit(actor.AttackDamage);
+                if (actor.Kind == EnemyKind.RabidHedgehog && lost > 0 && Hero.Health > 0 && Hero.Effects.AcceptDebuff())
+                    Rabies = true;
             }
             actor.CompleteAction();
             LastDamage = before - Hero.Health;

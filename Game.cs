@@ -127,6 +127,8 @@ namespace ShpilSvoih
                 assetStore.Dispose();
                 howlSound.Dispose();
                 deathVisuals.Dispose();
+                if (hedgehogPoses != null) hedgehogPoses.Dispose();
+                if (rabidHedgehogPoses != null) rabidHedgehogPoses.Dispose();
                 if (combatTimer != null) combatTimer.Dispose();
                 throw;
             }
@@ -509,6 +511,8 @@ namespace ShpilSvoih
                 mapRoutes.Dispose();
                 howlSound.Dispose();
                 deathVisuals.Dispose();
+                if (hedgehogPoses != null) hedgehogPoses.Dispose();
+                if (rabidHedgehogPoses != null) rabidHedgehogPoses.Dispose();
                 if (sceneBackground != null)
                 {
                     sceneBackground.Dispose();

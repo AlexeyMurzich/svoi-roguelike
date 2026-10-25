@@ -269,6 +269,10 @@ namespace ShpilSvoih
             Run("Refactor: atomic capture, invalid input and cleanup", UiTests.TestRefactorBoundaries);
             Run("Refactor: queued animation timing across frame rates", UiTests.TestRefactorTiming);
             Run("Refactor: Shuten pose registration and visual contact sheet", UiTests.TestRefactorArt);
+            Run("Hedgehogs: rabies, dexterity, block, needles and thorns", HedgehogTests.Rules);
+            Run("Hedgehogs: full pose extraction, animation, pause and resize", UiTests.TestHedgehogUi);
+            Run("Hedgehogs pair: switching target per card, queue and deaths", HedgehogPairTests.Rules);
+            Run("Hedgehogs pair: real clicks target different enemies in one turn", UiTests.TestHedgehogPairUi);
             if (passed == 0 && failures.Count == 0) failures.Add("No tests matched filter");
             string summary = "Suites: " + passed + " passed, " + failures.Count + " failed. Assertions: " + assertions + ".";
             results.Add(summary);

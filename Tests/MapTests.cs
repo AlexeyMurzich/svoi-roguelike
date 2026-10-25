@@ -202,7 +202,7 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "map-finished.png"));
                     Key(game, Keys.Enter);
                     TestSuite.Check(run.Finished && run.Pending == null, "completed map cannot restart on enter");
-                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 31, "map never duplicates images");
+                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 33, "map never duplicates images");
                     Call(game, "OpenCheckout");
                     TestSuite.Check(Read<MapRun>(game, "mapRun") == null && !Read<bool>(game, "mapScreen"), "new character run resets route");
                 }

@@ -10,7 +10,7 @@ namespace ShpilSvoih
     {
         public static void AnimationLifecycle()
         {
-            foreach (AttackAnimation kind in new[] { AttackAnimation.HeroStrike, AttackAnimation.HeroGuard, AttackAnimation.RatBite, AttackAnimation.DogBite, AttackAnimation.DogHowl })
+            foreach (AttackAnimation kind in new[] { AttackAnimation.HeroStrike, AttackAnimation.HeroGuard, AttackAnimation.RatBite, AttackAnimation.DogBite, AttackAnimation.DogHowl, AttackAnimation.HedgehogNeedles, AttackAnimation.HedgehogBite })
                 foreach (int hz in new[] { 10, 30, 60, 120 })
                 {
                     var timeline = new AttackTimeline();

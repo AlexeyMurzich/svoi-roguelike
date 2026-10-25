@@ -5,13 +5,13 @@ try {
  $release=Join-Path $PSScriptRoot ('outputs\Svoi-v'+$version)
  New-Item -ItemType Directory -Path $release -Force | Out-Null
  Copy-Item -LiteralPath ('Svoi-v'+$version+'.exe'),'README.txt' -Destination $release
- foreach($mode in @('battle','dogs')) {
+ foreach($mode in @('battle','dogs','hedgehog','rabid-hedgehog','hedgehogs')) {
   $launcher='@echo off'+"`r`n"+'start "" "%~dp0Svoi-v'+$version+'.exe" --test-'+$mode+"`r`n"
   [IO.File]::WriteAllText((Join-Path $release ('Launch-test-'+$mode+'.cmd')),$launcher,[Text.Encoding]::ASCII)
  }
  $binary=Join-Path $release ('Svoi-v'+$version+'.exe')
  $hash=(Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash
  [IO.File]::WriteAllText((Join-Path $release 'SHA256.txt'),$hash+'  '+[IO.Path]::GetFileName($binary)+"`r`n",[Text.Encoding]::ASCII)
- Compress-Archive -LiteralPath $binary,(Join-Path $release 'README.txt'),(Join-Path $release 'Launch-test-battle.cmd'),(Join-Path $release 'Launch-test-dogs.cmd'),(Join-Path $release 'SHA256.txt') -DestinationPath (Join-Path $PSScriptRoot ('outputs\Svoi-v'+$version+'-Windows.zip')) -Force
+ Compress-Archive -LiteralPath $binary,(Join-Path $release 'README.txt'),(Join-Path $release 'Launch-test-battle.cmd'),(Join-Path $release 'Launch-test-dogs.cmd'),(Join-Path $release 'Launch-test-hedgehog.cmd'),(Join-Path $release 'Launch-test-rabid-hedgehog.cmd'),(Join-Path $release 'Launch-test-hedgehogs.cmd'),(Join-Path $release 'SHA256.txt') -DestinationPath (Join-Path $PSScriptRoot ('outputs\Svoi-v'+$version+'-Windows.zip')) -Force
  Write-Output $release
 } finally { Pop-Location }

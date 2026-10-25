@@ -105,7 +105,7 @@ namespace ShpilSvoih
                     Call(game, "ReturnToMainMenu"); Call(game, "OpenCheckout"); Call(game, "TakeBuff"); Call(game, "OpenActMap");
                     Call(game, "ScrollMap", -110f); Call(game, "AdvanceMapMotion", .1f);
                     using (Render(game)) { }
-                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 31, "scene transitions never duplicate source images");
+                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 33, "scene transitions never duplicate source images");
                     if (cycle == 5)
                     {
                         initialHandles = GetGuiResources(process.Handle, 0);
@@ -115,7 +115,7 @@ namespace ShpilSvoih
                 uint finalHandles = GetGuiResources(process.Handle, 0);
                 TestSuite.Check(finalHandles <= initialHandles + 3, "battle/map/resize stress keeps GDI handles bounded");
                 TestSuite.Check(Read<System.Collections.Generic.Dictionary<Tuple<float, bool>, Font>>(game, "fonts").Count == initialFonts, "scene stress reuses fonts after warmup");
-                TestSuite.Note("18 battle/map/pause/resize cycles: GDI handles " + initialHandles + " -> " + finalHandles + "; source images 31; font cache " + initialFonts + ".");
+                TestSuite.Note("18 battle/map/pause/resize cycles: GDI handles " + initialHandles + " -> " + finalHandles + "; source images 33; font cache " + initialFonts + ".");
                 var assets = Read<ImageAssets>(game, "assetStore");
                 game.Dispose();
                 TestSuite.Check(assets.Count == 0 && Read<Bitmap>(game, "sceneBackground") == null, "closing game releases original images and derived background");
