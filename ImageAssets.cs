@@ -92,6 +92,11 @@ namespace ShpilSvoih
                 else if (resourceName == "health-icon.png" || resourceName == "coin-icon.png") displayWidth = Math.Min(displayWidth, 128);
                 else if (resourceName.StartsWith("relics.", StringComparison.Ordinal)) displayWidth = Math.Min(displayWidth, 256);
                 else if (resourceName == "hud-texture.png") displayWidth = Math.Min(displayWidth, 1086);
+                // These sources are much larger than their largest on-screen
+                // crops, even at 4K. Resample once, not on every animation frame.
+                else if (resourceName.StartsWith("cards.", StringComparison.Ordinal)) displayWidth = Math.Min(displayWidth, 1024);
+                else if (resourceName == "enemies.dog-body.png") displayWidth = Math.Min(displayWidth, 768);
+                else if (resourceName == "enemies.stray-dogs.png") displayWidth = Math.Min(displayWidth, 1086);
                 int displayHeight = source.Height * displayWidth / source.Width;
                 var bitmap = new Bitmap(displayWidth, displayHeight, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                 try

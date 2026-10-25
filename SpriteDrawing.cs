@@ -7,7 +7,14 @@ namespace ShpilSvoih
     {
         public static void Image(Graphics graphics, Image image, RectangleF target, RectangleF source, float opacity, bool warm)
         {
-            if (opacity <= 0) return;
+            if (!Motion.IsFinite(opacity) || opacity <= 0 || target.Width <= 0 || target.Height <= 0) return;
+            opacity = System.Math.Min(1, opacity);
+            // The common opaque draw needs neither a color matrix nor a point array.
+            if (opacity == 1 && !warm)
+            {
+                graphics.DrawImage(image, target, source, GraphicsUnit.Pixel);
+                return;
+            }
             using (var attributes = new ImageAttributes())
             {
                 var color = new ColorMatrix();

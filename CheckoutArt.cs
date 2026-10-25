@@ -18,6 +18,7 @@ namespace ShpilSvoih
         {
             StopMapMotion();
             ResetCombat();
+            mapRoutes.Clear();
             encounteredEnemies.Clear();
             testEnemyOverride = null;
             mapScreen = false;

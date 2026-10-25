@@ -55,12 +55,15 @@ namespace ShpilSvoih
         public readonly RectangleF Bounds;
         public readonly int CellWidth;
         readonly int columns;
+        public readonly int FrameCount;
 
         public PoseAtlas(Bitmap image, int columns = 3, int rows = 1)
         {
+            if (image == null) throw new ArgumentNullException("image");
             if (columns <= 0 || rows <= 0 || image.Width % columns != 0 || image.Height % rows != 0 || image.Width / columns != image.Height / rows)
                 throw new ArgumentException("Animation atlas must contain equal square cells.");
             this.columns = columns;
+            FrameCount = columns * rows;
             Image = image;
             CellWidth = image.Width / columns;
             int left = CellWidth, top = CellWidth, right = -1, bottom = -1;
@@ -100,6 +103,7 @@ namespace ShpilSvoih
 
         public void DrawPart(Graphics g, int frame, RectangleF slot, float opacity, float partScale, PointF offset)
         {
+            if (frame < 0 || frame >= FrameCount) throw new ArgumentOutOfRangeException("frame");
             if (opacity <= 0) return;
             var target = Target(slot);
             float scale = target.Width / Bounds.Width;
@@ -110,13 +114,7 @@ namespace ShpilSvoih
             var source = Bounds;
             source.X += frame % columns * CellWidth;
             source.Y += frame / columns * CellWidth;
-            using (var attributes = new ImageAttributes())
-            {
-                var matrix = new ColorMatrix(); matrix.Matrix33 = Math.Min(1, opacity);
-                attributes.SetColorMatrix(matrix);
-                attributes.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
-                g.DrawImage(Image, new[] { new PointF(target.Left, target.Top), new PointF(target.Right, target.Top), new PointF(target.Left, target.Bottom) }, source, GraphicsUnit.Pixel, attributes);
-            }
+            SpriteDrawing.Image(g, Image, target, source, opacity, false);
         }
 
         public void Blend(Graphics g, int from, int to, float amount, RectangleF slot)

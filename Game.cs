@@ -97,6 +97,7 @@ namespace ShpilSvoih
         bool preview = false;
         string notice = "";
         private ImageAssets assetStore;
+        bool resourcesDisposed;
         private readonly Dictionary<Tuple<float, bool>, Font> fonts = new Dictionary<Tuple<float, bool>, Font>();
         public Game()
         {
@@ -179,7 +180,7 @@ namespace ShpilSvoih
 
             if (mapScreen)
             {
-                if (e.KeyCode != Keys.Escape && e.KeyCode != Keys.Enter && e.KeyCode != Keys.D1 && e.KeyCode != Keys.D2 && e.KeyCode != Keys.D3 && !(HasLiveFight && e.KeyCode >= Keys.D4 && e.KeyCode <= Keys.D6) && e.KeyCode != Keys.D && e.KeyCode != Keys.R && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down && e.KeyCode != Keys.PageUp && e.KeyCode != Keys.PageDown && e.KeyCode != Keys.Home && e.KeyCode != Keys.End && e.KeyCode != Keys.Space && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right)
+                if (e.KeyCode != Keys.Escape && e.KeyCode != Keys.Enter && e.KeyCode != Keys.D1 && e.KeyCode != Keys.D2 && e.KeyCode != Keys.D3 && !(e.KeyCode >= Keys.D4 && e.KeyCode <= Keys.D6) && e.KeyCode != Keys.D && e.KeyCode != Keys.R && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down && e.KeyCode != Keys.PageUp && e.KeyCode != Keys.PageDown && e.KeyCode != Keys.Home && e.KeyCode != Keys.End && e.KeyCode != Keys.Space && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right)
                     return;
                 HandleMapKey(e);
             }
@@ -359,14 +360,7 @@ namespace ShpilSvoih
 
         void TextAt(Graphics g, string value, float x, float y, float size, Color color, float width, bool bold = false)
         {
-            var key = Tuple.Create(size, bold);
-            Font font;
-            if (!fonts.TryGetValue(key, out font))
-            {
-                font = new Font("Segoe UI", size, bold ? FontStyle.Bold : FontStyle.Regular, GraphicsUnit.Pixel);
-                fonts.Add(key, font);
-            }
-
+            Font font = HudFont(size, bold);
             using (var brush = new SolidBrush(color))
                 g.DrawString(value, font, brush, new RectangleF(x, y, width, 500));
         }
@@ -439,7 +433,7 @@ namespace ShpilSvoih
 
                 TextAt(g, "С / Л", 36, 24, 24, gold, 100, true);
                 TextAt(g, "СВОИ ЛЮДИ", 140, 31, 15, text, 320, true);
-                TextAt(g, "СМОЛЕВИЧИ  /  0.11", 1000, 32, 12, muted, 245);
+                TextAt(g, "СМОЛЕВИЧИ  /  " + GameVersion.Number, 1000, 32, 12, muted, 245);
                 Rect(g, 36, 73, 1208, 1, Color.FromArgb(50, 58, 65));
                 if (preview)
                 {
@@ -508,9 +502,11 @@ namespace ShpilSvoih
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && !resourcesDisposed)
             {
+                resourcesDisposed = true;
                 ResetCombat();
+                mapRoutes.Dispose();
                 howlSound.Dispose();
                 deathVisuals.Dispose();
                 if (sceneBackground != null)

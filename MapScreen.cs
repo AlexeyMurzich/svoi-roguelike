@@ -131,7 +131,7 @@ namespace ShpilSvoih
                 else if (mapRun.Current.Exits.Count == 1)
                     EnterMapNode(mapRun.Current.Exits[0]);
             }
-            else if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D3)
+            else if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D6)
             {
                 int choice = e.KeyCode - Keys.D1;
                 if (choice < mapRun.Current.Exits.Count)
@@ -257,9 +257,13 @@ namespace ShpilSvoih
             Color color = traversed ? Color.FromArgb(166, 224, 168) : next || hover ? gold : Color.FromArgb(230, 239, 226, 198);
             var c1 = new PointF(a.X + dx * .08f, a.Y + (b.Y - a.Y) * .38f);
             var c2 = new PointF(b.X - dx * .08f, b.Y - (b.Y - a.Y) * .38f);
-            using (var path = new GraphicsPath())
+            float camera = mapScroll - MapView.Top;
+            a.Y += camera; b.Y += camera; c1.Y += camera; c2.Y += camera;
+            var path = mapRoutes.Get(mapRun.Map, CanvasWidth, from.Id * mapRun.Map.Nodes.Count + to.Id, a, b, c1, c2);
+            var saved = g.Save();
+            try
             {
-                path.AddBezier(a, c1, c2, b);
+                g.TranslateTransform(0, -camera);
                 foreach (bool shadow in new[]
                 {
                     true,
@@ -283,6 +287,7 @@ namespace ShpilSvoih
                         g.DrawPath(pen, path);
                     }
             }
+            finally { g.Restore(saved); }
         }
 
         void DrawActMap(Graphics g)

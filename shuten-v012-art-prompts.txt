@@ -1,0 +1,10 @@
+﻿Built-in image_gen (imagegen skill), 25 October 2026.
+Final project asset: assets/shuten-combat.png; four square cells, 2x2.
+Sources: approved assets/shuten-attack.png and assets/shuten-defense.png.
+Pass 1: preserve Shuten identity, glasses, short beard, lightning earring, red/turquoise/gold jester costume and stationary black/gold exercise bike; create idle, slingshot draw, release, credit-card guard with exact number 9112 3801 2077 2522; transparent background; lengthen short legs; fixed framing.
+Pass 2: lengthen thighs and shins about 30%, raise saddle, reduce oversized flywheel about 20%; retain face/style/equipment; align legs and bike in all poses.
+Pass 3 (final): preserve corrected anatomy and actions; provide transparent margins in each equal square cell; consistent registration; no labels or cropped bells/bike.
+The final atlas is drawn using whole opaque poses. Source-space offsets for release (-11,+11) and guard (+11,+10) register the bike base to idle. No source bitmap is duplicated per enemy or per frame. Original reference art remains in assets for comparison but the old attack/defense sheets are no longer embedded.
+
+Exact final built-in edit prompt:
+Precise production sprite atlas correction only. Keep this exact character identity, corrected long legs, actions, bike, style. Output 2x2 grid of four equal square cells. SHRINK EVERY FIGURE TO OCCUPY ONLY CENTRAL 72% OF ITS OWN CELL, leaving a FULL 14% EMPTY TRANSPARENT MARGIN on ALL FOUR SIDES of EACH CELL. Existing top row and bottom row touch and cannot be used in game. Separate them with large transparent gutters. Do not crop bells or bike. All four bikes and legs must be EXACT copies of top-left bike+legs, at SAME relative position within their own cell, identical size. Upper body actions unchanged: idle, draw slingshot, release slingshot, credit-card guard with text 9112 3801 2077 2522. SAME head size and head location in all cells. Do not alter anatomy or face or equipment. The task is padding and consistent registration, not redesign. Square transparent canvas.

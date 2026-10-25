@@ -66,13 +66,14 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "rat-attack.png"));
                     Call(game, "AdvanceCombatAnimation", 1f);
                     int attack = fight.Hand.ToList().FindIndex(c => c.Attack);
-                    if (attack < 0)
+                    for (int retry = 0; attack < 0 && retry < 20; retry++)
                     {
                         Call(game, "EndCombatTurn");
                         Call(game, "AdvanceCombatAnimation", 1.1f);
                         attack = fight.Hand.ToList().FindIndex(c => c.Attack);
                     }
 
+                    TestSuite.Check(attack >= 0, "fixture found an attack after shuffled draws");
                     int enemyHp = fight.EnemyHealth;
                     decimal money = fight.Hero.Money;
                     Call(game, "PlayCombatCard", attack);

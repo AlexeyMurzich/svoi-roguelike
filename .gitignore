@@ -13,3 +13,6 @@ test-results/
 *.suo
 .env
 .env.*
+
+# Focused regression renders
+test-results-*/

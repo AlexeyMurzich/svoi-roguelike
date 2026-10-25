@@ -1,2 +1,2 @@
-﻿@echo off
-start "" "%~dp0Svoi-v0.11.exe" --test-dogs
+@echo off
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0launch.ps1" --test-dogs

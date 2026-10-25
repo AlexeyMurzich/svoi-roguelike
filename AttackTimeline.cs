@@ -24,6 +24,10 @@ namespace ShpilSvoih
         public float HitTime { get; private set; }
         Action impact;
         int revision;
+        public float SecondsToBoundary
+        {
+            get { return IsRunning ? Math.Max(.000001f, ((HitApplied ? Duration : HitTime) - Time) / Speed) : 0; }
+        }
 
         public void Start(AttackAnimation kind, Action onImpact)
         {

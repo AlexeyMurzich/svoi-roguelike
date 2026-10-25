@@ -157,6 +157,7 @@ namespace ShpilSvoih
             if (Phase != CombatPhase.Player || Hero.Health <= 0 || index < 0 || index >= hand.Count)
                 return false;
             var card = hand[index];
+            if (!card.IsValid) return false;
             if (card.Family != CardFamily.None && Hero.Hero == 2 && !Hero.CanUseFamily(card.Family))
                 return false;
             decimal price = Cost(card);
@@ -187,11 +188,11 @@ namespace ShpilSvoih
                 int damage = DamageFor(card);
                 Enemies[SelectedTarget].ReceiveDamage(damage);
                 if (!Enemies[SelectedTarget].IsAlive)
-                    SelectedTarget = Enemies.ToList().FindIndex(e => e.IsAlive);
+                    SelectedTarget = NextLivingEnemy(0);
             }
 
             Block = (int)Math.Min(int.MaxValue, (long)Block + card.Block);
-            if (Enemies.All(e => !e.IsAlive))
+            if (NextLivingEnemy(0) < 0)
                 Phase = CombatPhase.Victory;
             return true;
         }

@@ -11,6 +11,7 @@ namespace ShpilSvoih
     {
         private static int assertions;
         private static int passed;
+        private static string filter = "";
         private static readonly List<string> failures = new List<string>();
         private static readonly List<string> results = new List<string>();
         public static string OutputDirectory;
@@ -44,6 +45,7 @@ namespace ShpilSvoih
 
         private static void Run(string name, Action test)
         {
+            if (filter.Length > 0 && name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0) return;
             try
             {
                 test();
@@ -69,6 +71,7 @@ namespace ShpilSvoih
         {
             System.Windows.Forms.Application.SetUnhandledExceptionMode(System.Windows.Forms.UnhandledExceptionMode.ThrowException);
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
+            filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
             Run("All 12 original relic effects", StartingBuffTests.Run);
             Run("Invalid hero state and balance rejected", () =>
@@ -263,6 +266,10 @@ namespace ShpilSvoih
             Run("Repeated battle/map/pause/resize transitions release resources", UiTests.TestSceneResourceStress);
             Run("Death snapshots lifecycle and resource ownership", DeathTests.Lifecycle);
             Run("Separate dog deaths, all hero deaths, rat death and credit-card guard", UiTests.TestDeathsAndGuard);
+            Run("Refactor: atomic capture, invalid input and cleanup", UiTests.TestRefactorBoundaries);
+            Run("Refactor: queued animation timing across frame rates", UiTests.TestRefactorTiming);
+            Run("Refactor: Shuten pose registration and visual contact sheet", UiTests.TestRefactorArt);
+            if (passed == 0 && failures.Count == 0) failures.Add("No tests matched filter");
             string summary = "Suites: " + passed + " passed, " + failures.Count + " failed. Assertions: " + assertions + ".";
             results.Add(summary);
             results.Add("No statement/branch coverage percentage is claimed; this is behavioural regression coverage.");

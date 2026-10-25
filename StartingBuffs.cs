@@ -86,9 +86,14 @@ namespace ShpilSvoih
         public int Damage, Block;
         public CardFamily Family;
 
+        internal bool IsValid
+        {
+            get { return ManaCost >= 0 && GoldCost >= 0 && Damage >= 0 && Block >= 0 && Family >= CardFamily.None && Family <= CardFamily.Feminist; }
+        }
+
         internal void Validate()
         {
-            if (ManaCost < 0 || GoldCost < 0 || Damage < 0 || Block < 0 || !Enum.IsDefined(typeof(CardFamily), Family))
+            if (!IsValid)
                 throw new ArgumentOutOfRangeException("card", "Card costs, damage, block and family must be valid.");
         }
     }
