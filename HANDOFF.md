@@ -32,7 +32,7 @@ HeroState.ShutGod — флаг текущего героя/забега, вкл�
 Добавлены модельные и UI проверки команды/ограничений/паузы/ввода, обновлены проверки источника фона/кэша/карты на6 размерах.40 ресурсов встроено,37 базовых изображений,3 слоя Мимикратора ленивые. Автономный EXE:4 набора,0 ошибок,104 утверждения. Полный прогон:58 наборов,0 ошибок,1 134 046 утверждений; VALIDATION.md / test-results.txt.
 
 Релиз outputs/Svoi-v0.20/Svoi-v0.20.exe и outputs/Svoi-v0.20-Windows.zip, SHA256 D91CB47925163251DCFE88CBFB5C3A87CABA6C1265EC77996452A66CEE5172B4.
-Запрошена загрузка всех накопленных v0.18–v0.20 в origin/main. Текущая локальная ветка codex/hedgehogs. Для bundledGit HTTPS-helper находится в mingw64/bin, поэтому перед fetch/push требуется GIT_EXEC_PATH=C:/Users/Maxim/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/mingw64/bin. В sandbox сеть закрыта; с require_escalated fetch прошёл. Не менять видимость репозитория, не включать EXE/ZIP/личные фото.
+Все накопленные изменения v0.18–v0.20 загружены в origin/main: коммит релиза 9ae69ee4e7e70c83e917ff99e2de139300950207. Текущая локальная ветка codex/hedgehogs синхронизируется с тем же содержимым. Проверенное дерево cc1439d44ccf38156fd3505751ad800658c368ea побайтово совпало с деревом GitHub. Обычный Git push не авторизован через Credential Manager, поэтому публикация выполнена подключёнными GitHub create_blob/create_tree/create_commit/update_ref, без force, с expected_sha. Для fetch публичного репозитория bundledGit требует GIT_EXEC_PATH=C:/Users/Maxim/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/git/mingw64/bin и сеть require_escalated. Не менять видимость репозитория, не включать EXE/ZIP/личные фото.
 
 ## Предыдущая задача: боевой фон Социала v0.19
 
