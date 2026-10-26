@@ -19,3 +19,7 @@
 ## Демонстрация v0.14
 
 v4 согласован. Раздельные рабочие слои: assets/enemies/mimicrator-body.png и mimicrator-props.png; запросы layer-prompts.txt. Native WinForms/GDI+ демонстрация запускается Launch-preview-mimicrator.cmd, в главном меню также есть кнопка. Бой/способности элитки не реализованы.
+
+## Боевые формы v0.15
+
+Мимикратор подключён к элитным комнатам. Fairy → Beacon → Bear → Mussel, затем повтор трёх предметов. Для закрывания раковины встроенным image_gen создан mimicrator-shell.png, запрос shell-animation-prompt.txt. Превращения, атаки, луч, щит и птички оглушения анимируются в игре. Быстрый запуск Launch-test-mimicrator.cmd.

@@ -48,10 +48,13 @@ namespace ShpilSvoih
             if (mimicratorPreview)
                 AdvanceMimicrator(elapsed);
             else if (HasLiveFight)
+            {
+                AdvanceCombatAmbient(elapsed);
                 AdvanceCombatAnimation(elapsed);
+            }
             else
                 AdvanceMapMotion(elapsed);
-            if (!CombatBusy && !LivingScene && !MapMoving && !(mimicratorPreview && !mimicratorPaused))
+            if (!CombatBusy && !CombatAmbientMoving && !LivingScene && !MapMoving && !(mimicratorPreview && !mimicratorPaused))
                 combatTimer.Stop();
         }
 
@@ -68,7 +71,7 @@ namespace ShpilSvoih
                 if (combatTimer != null)
                     combatTimer.Stop();
             }
-            else if (CombatBusy || LivingScene || MapMoving || (mimicratorPreview && !mimicratorPaused))
+            else if (CombatBusy || CombatAmbientMoving || LivingScene || MapMoving || (mimicratorPreview && !mimicratorPaused))
                 WakeMotion();
         }
     }

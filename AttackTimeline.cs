@@ -11,7 +11,12 @@ namespace ShpilSvoih
         DogBite,
         DogHowl,
         HedgehogNeedles,
-        HedgehogBite
+        HedgehogBite,
+        MimicratorMagic,
+        MimicratorBeacon,
+        MimicratorBear,
+        MimicratorShell,
+        MimicratorTransform
     }
 
     // Animation owns its clock and one impact callback, never the combat rules.
@@ -43,6 +48,11 @@ namespace ShpilSvoih
             Kind = kind;
             Duration = kind == AttackAnimation.HedgehogNeedles ? 1.45f : kind == AttackAnimation.HedgehogBite ? 1.05f : kind == AttackAnimation.HeroGuard ? .65f : kind == AttackAnimation.DogHowl ? 1.2f : kind == AttackAnimation.HeroStrike ? .95f : 1.05f;
             HitTime = kind == AttackAnimation.HedgehogNeedles ? 1.12f : kind == AttackAnimation.HedgehogBite ? .62f : kind == AttackAnimation.HeroGuard ? .2f : kind == AttackAnimation.DogHowl ? .6f : kind == AttackAnimation.HeroStrike ? .5f : .52f;
+            if (kind == AttackAnimation.MimicratorMagic) { Duration = 1.05f; HitTime = .6f; }
+            if (kind == AttackAnimation.MimicratorBeacon) { Duration = 1.15f; HitTime = .65f; }
+            if (kind == AttackAnimation.MimicratorBear) { Duration = 1.25f; HitTime = .7f; }
+            if (kind == AttackAnimation.MimicratorShell) { Duration = 1.05f; HitTime = .62f; }
+            if (kind == AttackAnimation.MimicratorTransform) { Duration = .85f; HitTime = .425f; }
             Time = 0;
             HitApplied = false;
             impact = onImpact;

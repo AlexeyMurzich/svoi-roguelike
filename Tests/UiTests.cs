@@ -130,7 +130,7 @@ namespace ShpilSvoih
                 TestSuite.Throws<InvalidDataException>(() => corrupt.Get("missing.png", "missing.png"), "missing required asset fails clearly");
             }
 
-            TestSuite.Check(assembly.GetManifestResourceNames().Distinct().Count() == 35, "35 embedded images including two lazy Mimicrator layers");
+            TestSuite.Check(assembly.GetManifestResourceNames().Distinct().Count() == 36, "36 embedded images including three lazy Mimicrator layers");
             using (var embedded = new ImageAssets(assembly, Path.Combine(directory, "no-overrides")))
             {
                 var atlas = embedded.Get("map-icons.png", "map-icons.png");

@@ -22,6 +22,7 @@ namespace ShpilSvoih
         readonly Dictionary<int, EnemyKind> encounteredEnemies = new Dictionary<int, EnemyKind>();
         EnemyKind EnemyAtNode(int id)
         {
+            if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyKind.Mimicrator;
             EnemyKind enemy;
             return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : EnemyCatalog.ForNode(mapRun.Map.Seed, id);
         }
@@ -31,7 +32,7 @@ namespace ShpilSvoih
         {
             get
             {
-                return mapScreen && mapRun != null && mapRun.Pending != null && mapRun.Pending.Kind == RoomKind.Fight && !mapRun.PendingIsRevisit;
+                return mapScreen && mapRun != null && mapRun.Pending != null && (mapRun.Pending.Kind == RoomKind.Fight || mapRun.Pending.Kind == RoomKind.Elite) && !mapRun.PendingIsRevisit;
             }
         }
 
@@ -58,6 +59,9 @@ namespace ShpilSvoih
 
         void ResetCombat()
         {
+            ClearMimicratorBackdrop();
+            mimicratorCombatSeconds = 0;
+            mimicratorVisualForm = MimicratorForm.Fairy;
             cardArtCache.Clear();
             actorArtCache.Clear();
             livingSeconds = 0;
@@ -86,6 +90,8 @@ namespace ShpilSvoih
         internal void StartTestHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestRabidHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestHedgehogs() { StartTestEncounter(EnemyKind.Hedgehogs); }
+
+        internal void StartTestMimicrator() { StartTestEncounter(EnemyKind.Mimicrator); }
 
         void StartTestEncounter(EnemyKind enemy)
         {
@@ -118,6 +124,11 @@ namespace ShpilSvoih
             combatNode = mapRun.Pending.Id;
             encounteredEnemies[combatNode] = enemy;
             combat = new CombatState(currentHero, new Random(mapRun.Map.Seed ^ combatNode ^ 0xA71), enemy);
+            if (enemy == EnemyKind.Mimicrator)
+            {
+                LoadMimicratorBattleArt();
+                WakeMotion();
+            }
             combatNotice = "Твой ход";
             SyncDeaths();
             WakeMotion();
@@ -146,9 +157,10 @@ namespace ShpilSvoih
                 attackTimeline.Advance(step);
                 remaining = Math.Max(0, remaining - step);
                 SyncDeaths();
-                if (!CombatBusy && combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
+                if (!CombatBusy && NeedsMimicratorTransform) StartMimicratorTransform();
+                else if (!CombatBusy && combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
             }
-            if (!CombatBusy && !LivingScene && combatTimer != null)
+            if (!CombatBusy && !CombatAmbientMoving && !LivingScene && combatTimer != null)
                 combatTimer.Stop();
             // The displayed frame's hit targets remain valid until the next paint.
             Invalidate();
@@ -200,6 +212,11 @@ namespace ShpilSvoih
             actingEnemyIndex = combat.ActingEnemy;
             var actor = combat.Enemies[actingEnemyIndex];
             bool howling = actor.WillHowl;
+            if (actor.Kind == EnemyKind.Mimicrator)
+            {
+                StartMimicratorAction(actor);
+                return;
+            }
             combatNotice = actor.Name + (howling ? " воет" : " атакует");
             if (howling && Visible && ContainsFocus) howlSound.Play();
             StartCombatAnimation(howling ? AttackAnimation.DogHowl : actor.Kind == EnemyKind.StrayDogs ? AttackAnimation.DogBite : actor.Kind == EnemyKind.Hedgehog ? AttackAnimation.HedgehogNeedles : actor.Kind == EnemyKind.RabidHedgehog ? AttackAnimation.HedgehogBite : AttackAnimation.RatBite, () =>

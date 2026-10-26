@@ -13,6 +13,7 @@ namespace ShpilSvoih
         RectangleF EnemyArea(int index)
         {
             float center = EnemyCenter(index);
+            if (combat.Enemies[index].Kind == EnemyKind.Mimicrator) return new RectangleF(center - 220, CombatFloor - 350, 440, 350);
             if (combat.Enemies[index].Kind == EnemyKind.Hedgehog || combat.Enemies[index].Kind == EnemyKind.RabidHedgehog)
                 return combat.Enemies.Count > 1 ? new RectangleF(center - 180, CombatFloor - 280, 360, 280) : new RectangleF(center - 215, CombatFloor - 315, 430, 315);
             return combat.Enemies[index].Kind == EnemyKind.Rat
@@ -51,9 +52,10 @@ namespace ShpilSvoih
             var saved = graphics.Save();
             try
             {
-                if (kind != EnemyKind.StrayDogs)
+                if (kind != EnemyKind.StrayDogs && kind != EnemyKind.Mimicrator)
                     LivingMotion.Body(graphics, area, livingSeconds, kind == EnemyKind.RabidHedgehog ? 7 : 4 + index, false);
-                if (kind == EnemyKind.Rat) DrawRatPose(graphics, area);
+                if (kind == EnemyKind.Mimicrator) DrawMimicratorCombat(graphics, area, index);
+                else if (kind == EnemyKind.Rat) DrawRatPose(graphics, area);
                 else if (kind == EnemyKind.StrayDogs) DrawDogPoseFor(graphics, area, index);
                 else DrawHedgehogPose(graphics, area, kind == EnemyKind.RabidHedgehog, actingEnemyIndex == index);
                 // Mouth anchors belong to the resting poses, never to a different attack frame.

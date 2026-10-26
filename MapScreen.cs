@@ -34,7 +34,7 @@ namespace ShpilSvoih
                     var item = new IntelNode
                     {
                         Kind = node.Kind == RoomKind.Question ? IntelKind.Question : node.Kind == RoomKind.Elite ? IntelKind.Elite : node.Kind == RoomKind.Fight ? IntelKind.Fight : IntelKind.Other,
-                        Identity = node.Kind == RoomKind.Question ? "Событие ещё не задано" : node.Kind == RoomKind.Fight ? EnemyCatalog.Name(EnemyCatalog.ForNode(mapRun.Map.Seed, node.Id)) : "Противник ещё не задан"
+                        Identity = node.Kind == RoomKind.Question ? "Событие ещё не задано" : node.Kind == RoomKind.Fight ? EnemyCatalog.Name(EnemyCatalog.ForNode(mapRun.Map.Seed, node.Id)) : node.Kind == RoomKind.Elite ? EnemyCatalog.Name(EnemyKind.Mimicrator) : "Противник ещё не задан"
                     };
                     mapIntel.Add(node.Id, item);
                     intel.Add(item);
@@ -453,6 +453,12 @@ namespace ShpilSvoih
             var node = mapRun.Pending;
             RelicFrame(g, 323, 211, 634, 416, true);
             TextAt(g, ActMap.DistrictName(node.District), 355, 241, 12, gold, 560, true);
+            if (node.Kind == RoomKind.Elite && mapRun.PendingIsRevisit)
+            {
+                TextAt(g, "Мимикратор побеждена", 355, 281, 30, text, 560, true);
+                Button(g, "Вернуться на карту", 355, 540, 570, 53, CompleteMapRoom, true);
+                return;
+            }
             if (node.Kind == RoomKind.Fight)
             {
                 var enemy = EnemyAtNode(node.Id);

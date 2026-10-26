@@ -186,7 +186,7 @@ namespace ShpilSvoih
                         }
 
                         // Routing fixture: real combat is verified separately; later fights close at the route model.
-                        if (run.Pending.Kind == RoomKind.Fight)
+                        if (run.Pending.Kind == RoomKind.Fight || run.Pending.Kind == RoomKind.Elite)
                         {
                             run.CompleteRoom();
                             Call(game, "ResetCombat");
@@ -202,7 +202,7 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "map-finished.png"));
                     Key(game, Keys.Enter);
                     TestSuite.Check(run.Finished && run.Pending == null, "completed map cannot restart on enter");
-                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 33, "map never duplicates images");
+                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count == 33 || Read<ImageAssets>(game, "assetStore").Count == 36), "elite art is lazy and shared");
                     Call(game, "OpenCheckout");
                     TestSuite.Check(Read<MapRun>(game, "mapRun") == null && !Read<bool>(game, "mapScreen"), "new character run resets route");
                 }

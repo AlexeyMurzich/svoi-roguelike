@@ -7,7 +7,7 @@ $compilerPath=Join-Path $env:WINDIR 'Microsoft.NET/Framework64/v4.0.30319/csc.ex
 $compilerArgs=@('/nologo','/target:winexe','/optimize+','/warn:4','/warnaserror+','/win32manifest:app.manifest',('/out:Svoi-v'+$version+'.exe'),'/reference:System.Drawing.dll','/reference:System.Windows.Forms.dll','/reference:System.Core.dll')
 $assetRoot=Join-Path $PSScriptRoot 'assets'
 $requiredAssets=@('pupsolet.png','illya.png','runtso.png','shuten.png','checkout.png','map-smolevichi.png','map-icons.png','menu-icons.png','hud-texture.png','health-icon.png','coin-icon.png','enemies\giant-rat.png','cards\pupsolet.png','cards\illya.png','cards\runtso.png','cards\shuten.png','enemies\rat-bite.png','enemies\stray-dogs.png','shuten-combat.png','enemies\dog-body.png','enemies\hedgehog-curl.png','enemies\hedgehog-bite.png')
-$requiredAssets+=@('enemies\mimicrator-body.png','enemies\mimicrator-props.png')
+$requiredAssets+=@('enemies\mimicrator-body.png','enemies\mimicrator-props.png','enemies\mimicrator-shell.png')
 $requiredAssets+=@('ring','coupon','phone','id','baton','armor','feather','processor','investigation','exchange','mystery') | ForEach-Object { 'relics\'+$_+'.png' }
 foreach($relativeName in $requiredAssets){
  $imageFile=Get-Item -LiteralPath (Join-Path $assetRoot $relativeName)

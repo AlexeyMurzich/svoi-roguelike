@@ -501,7 +501,8 @@ namespace ShpilSvoih
                 Button(g, "Выбрать: " + names[selected] + "   →", 36, 659, 360, 56, OpenCheckout, true);
                 Button(g, "Загрузить спрайт PNG", 412, 659, 361, 56, Import);
                 Button(g, "Рассмотреть спрайт", 812, 741, 432, 42, () => preview = true);
-                Button(g, "Мимикратор · посмотреть анимацию", 36, 723, 737, 45, StartMimicratorPreview);
+                Button(g, "Мимикратор · модель", 36, 723, 360, 45, StartMimicratorPreview);
+                Button(g, "Мимикратор · бой", 412, 723, 361, 45, StartTestMimicrator);
                 TextAt(g, "Выберите героя и личную реликвию на кассе Евроопта.", 36, 779, 12, muted, 730);
                 TextAt(g, notice.Length > 0 ? notice : "← →  выбор      Enter  к кассе      Esc  назад", 36, 805, 12, muted, 1190);
             }

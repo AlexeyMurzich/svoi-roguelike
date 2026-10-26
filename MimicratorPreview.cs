@@ -19,18 +19,23 @@ namespace ShpilSvoih
 
         public void StartMimicratorPreview()
         {
-            if (mimicratorBody == null)
-            {
-                mimicratorBody = assetStore.Get("enemies/mimicrator-body.png", "enemies.mimicrator-body.png");
-                mimicratorProps = assetStore.Get("enemies/mimicrator-props.png", "enemies.mimicrator-props.png");
-                FindMimicratorProps();
-            }
+            LoadMimicratorArt();
             ReturnToMainMenu();
             mimicratorPreview = true;
             mimicratorPaused = false;
             mimicratorSeconds = 0;
             WakeMotion();
             RefreshScene();
+        }
+
+        void LoadMimicratorArt()
+        {
+            if (mimicratorBody == null)
+            {
+                mimicratorBody = assetStore.Get("enemies/mimicrator-body.png", "enemies.mimicrator-body.png");
+                mimicratorProps = assetStore.Get("enemies/mimicrator-props.png", "enemies.mimicrator-props.png");
+                FindMimicratorProps();
+            }
         }
 
         void FindMimicratorProps()
@@ -198,7 +203,7 @@ namespace ShpilSvoih
             DrawMimicratorBackdrop(g);
             PrepareMimicratorDisplaySprites();
 
-            DrawMimicratorOrbitLayer(g, false);
+            DrawMimicratorOrbitLayer(g, false, mimicratorSeconds);
             var saved = g.Save();
             try
             {
@@ -208,7 +213,7 @@ namespace ShpilSvoih
                 SpriteDrawing.FitBottom(g, mimicratorDisplayBody, new RectangleF(-223, -330, 446, 650), 1);
             }
             finally { g.Restore(saved); }
-            DrawMimicratorOrbitLayer(g, true);
+            DrawMimicratorOrbitLayer(g, true, mimicratorSeconds);
 
             TextAt(g, "МИМИКРАТОР", 38, 29, 29, text, 600, true);
             TextAt(g, "ЭЛИТНЫЙ ПРОТИВНИК", 40, 73, 12, Color.FromArgb(185, 159, 200), 500, true);
@@ -217,29 +222,29 @@ namespace ShpilSvoih
             TextAt(g, "Пробел — пауза   ·   Esc — назад", 257, 769, 13, muted, 700);
         }
 
-        void DrawMimicratorOrbitLayer(Graphics g, bool front)
+        void DrawMimicratorOrbitLayer(Graphics g, bool front, double seconds)
         {
             // Sort only three indices; no per-frame image copies or scene snapshots.
             int first = 0, second = 1, third = 2;
-            if (MimicratorOrbit.Sample(first, mimicratorSeconds).Depth > MimicratorOrbit.Sample(second, mimicratorSeconds).Depth)
+            if (MimicratorOrbit.Sample(first, seconds).Depth > MimicratorOrbit.Sample(second, seconds).Depth)
             { int swap = first; first = second; second = swap; }
-            if (MimicratorOrbit.Sample(second, mimicratorSeconds).Depth > MimicratorOrbit.Sample(third, mimicratorSeconds).Depth)
+            if (MimicratorOrbit.Sample(second, seconds).Depth > MimicratorOrbit.Sample(third, seconds).Depth)
             { int swap = second; second = third; third = swap; }
-            if (MimicratorOrbit.Sample(first, mimicratorSeconds).Depth > MimicratorOrbit.Sample(second, mimicratorSeconds).Depth)
+            if (MimicratorOrbit.Sample(first, seconds).Depth > MimicratorOrbit.Sample(second, seconds).Depth)
             { int swap = first; first = second; second = swap; }
-            DrawMimicratorProp(g, first, front);
-            DrawMimicratorProp(g, second, front);
-            DrawMimicratorProp(g, third, front);
+            DrawMimicratorProp(g, first, front, seconds);
+            DrawMimicratorProp(g, second, front, seconds);
+            DrawMimicratorProp(g, third, front, seconds);
         }
 
-        void DrawMimicratorProp(Graphics g, int item, bool front)
+        void DrawMimicratorProp(Graphics g, int item, bool front, double seconds)
         {
             Color tint = item == 0 ? Color.FromArgb(208, 151, 190) : item == 1
                 ? Color.FromArgb(150, 183, 223) : Color.FromArgb(173, 151, 224);
             const int segments = 22;
             for (int segment = segments; segment > 0; segment--)
             {
-                double time = mimicratorSeconds - segment * .065;
+                double time = seconds - segment * .065;
                 var a = MimicratorOrbit.Sample(item, time);
                 var b = MimicratorOrbit.Sample(item, time + .065);
                 if ((a.Depth >= 0) != front) continue;
@@ -258,10 +263,10 @@ namespace ShpilSvoih
                 }
             }
 
-            var pose = MimicratorOrbit.Sample(item, mimicratorSeconds);
+            var pose = MimicratorOrbit.Sample(item, seconds);
             if ((pose.Depth >= 0) != front) return;
-            float glowAlpha = item == 2 ? 42 + 23 * (float)Math.Sin(mimicratorSeconds * Math.PI * 2) : 40;
-            Color glow = item == 2 && Math.Sin(mimicratorSeconds * Math.PI * 2) > 0
+            float glowAlpha = item == 2 ? 42 + 23 * (float)Math.Sin(seconds * Math.PI * 2) : 40;
+            Color glow = item == 2 && Math.Sin(seconds * Math.PI * 2) > 0
                 ? Color.FromArgb((int)glowAlpha, 190, 79, 123) : Color.FromArgb((int)glowAlpha, tint);
             MimicratorGlow(g, pose.Position, 120 * pose.Scale, 110 * pose.Scale, glow);
             var saved = g.Save();

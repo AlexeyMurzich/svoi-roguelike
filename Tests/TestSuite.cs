@@ -278,6 +278,10 @@ namespace ShpilSvoih
             Run("Mimicrator: depth, perspective and frame-rate independence", MimicratorTests.Orbits);
             Run("Mimicrator: layers, pause, focus, resize, menu and resource ownership", UiTests.TestMimicratorPreview);
             Run("Mimicrator: four orbit phases for visual review", UiTests.TestMimicratorContactSheet);
+            Run("Mimicrator combat: forms, stun, auto cards and enemy block", MimicratorCombatTests.Rules);
+            Run("Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes", UiTests.TestMimicratorCombat);
+            Run("Mimicrator combat: real elite room, investigation, victory and revisit", UiTests.TestMimicratorEliteRoom);
+            Run("Mimicrator combat: animation contact sheet", UiTests.TestMimicratorAnimationSheet);
             if (passed == 0 && failures.Count == 0) failures.Add("No tests matched filter");
             string summary = "Suites: " + passed + " passed, " + failures.Count + " failed. Assertions: " + assertions + ".";
             results.Add(summary);

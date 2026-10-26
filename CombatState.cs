@@ -29,6 +29,10 @@ namespace ShpilSvoih
         public readonly HeroState Hero;
         public readonly EnemyKind Enemy;
         public int WeakTurns { get; private set; }
+        bool pendingStun;
+        public int CardsPlayedThisTurn { get; private set; }
+        public int CardPlayLimit { get; private set; }
+        public bool IsStunned { get { return CardPlayLimit == 1; } }
         public bool Rabies { get; private set; }
         public int Strength { get { return Rabies ? 2 : 0; } }
         public int Dexterity { get { return Rabies ? -2 : 0; } }
@@ -116,6 +120,9 @@ namespace ShpilSvoih
         void BeginPlayerTurn()
         {
             Turn++;
+            CardPlayLimit = pendingStun ? 1 : int.MaxValue;
+            CardsPlayedThisTurn = 0;
+            pendingStun = false;
             Energy = 3;
             Hero.BeginTurn();
             if (Hero.Health <= 0)
@@ -172,7 +179,7 @@ namespace ShpilSvoih
 
         public bool CanPlay(int index)
         {
-            if (Phase != CombatPhase.Player || Hero.Health <= 0 || index < 0 || index >= hand.Count)
+            if (Phase != CombatPhase.Player || Hero.Health <= 0 || CardsPlayedThisTurn >= CardPlayLimit || index < 0 || index >= hand.Count)
                 return false;
             var card = hand[index];
             if (!card.IsValid) return false;
@@ -188,6 +195,7 @@ namespace ShpilSvoih
                 return false;
             var card = hand[index];
             LastRetaliation = 0;
+            CardsPlayedThisTurn++;
             if (Hero.Hero == 3)
                 Hero.ChangeMoney(-Cost(card));
             else
@@ -225,6 +233,7 @@ namespace ShpilSvoih
             discard.AddRange(hand);
             hand.Clear();
             if (WeakTurns > 0) WeakTurns--;
+            CardPlayLimit = int.MaxValue;
             Phase = CombatPhase.Enemy;
             ActingEnemy = NextLivingEnemy(0);
             return true;
@@ -251,13 +260,16 @@ namespace ShpilSvoih
                 return false;
             var actor = Enemies[ActingEnemy];
             int before = Hero.Health;
-            if (actor.WillHowl)
+            actor.BeginAction();
+            if (actor.WillDefend) actor.Defend();
+            else if (actor.WillHowl)
             {
                 if (Hero.Effects.AcceptDebuff()) WeakTurns = Math.Max(WeakTurns, 1);
             }
             else
             {
                 int lost = ReceiveHit(actor.AttackDamage);
+                if (actor.WillStun && Hero.Health > 0 && Hero.Effects.AcceptDebuff()) pendingStun = true;
                 if (actor.Kind == EnemyKind.RabidHedgehog && lost > 0 && Hero.Health > 0 && Hero.Effects.AcceptDebuff())
                     Rabies = true;
             }
