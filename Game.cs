@@ -168,6 +168,8 @@ namespace ShpilSvoih
                 return;
             }
 
+            if (HandleMimicratorKey(e)) return;
+
             if (e.Alt || e.Control)
                 return;
             if (!mapScreen && (inventoryView == "pause" || (e.KeyCode == Keys.Escape && !checkout && !preview)))
@@ -421,6 +423,11 @@ namespace ShpilSvoih
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
                 Rect(g, 0, 0, 1280, 840, background);
+                if (mimicratorPreview)
+                {
+                    DrawMimicratorPreview(g);
+                    return;
+                }
                 if (mapScreen)
                 {
                     DrawActMap(g);
@@ -485,7 +492,8 @@ namespace ShpilSvoih
                 Button(g, "Выбрать: " + names[selected] + "   →", 36, 659, 360, 56, OpenCheckout, true);
                 Button(g, "Загрузить спрайт PNG", 412, 659, 361, 56, Import);
                 Button(g, "Рассмотреть спрайт", 812, 741, 432, 42, () => preview = true);
-                TextAt(g, "Выберите персонажа и заберите личную реликвию на кассе.\nЗатем отправляйтесь по улицам Смолевичей.", 36, 737, 16, muted, 730);
+                Button(g, "Мимикратор · посмотреть анимацию", 36, 723, 737, 45, StartMimicratorPreview);
+                TextAt(g, "Выберите героя и личную реликвию на кассе Евроопта.", 36, 779, 12, muted, 730);
                 TextAt(g, notice.Length > 0 ? notice : "← →  выбор      Enter  к кассе      Esc  назад", 36, 805, 12, muted, 1190);
             }
             finally
@@ -508,6 +516,7 @@ namespace ShpilSvoih
             {
                 resourcesDisposed = true;
                 ResetCombat();
+                ClearMimicratorBackdrop();
                 mapRoutes.Dispose();
                 howlSound.Dispose();
                 deathVisuals.Dispose();

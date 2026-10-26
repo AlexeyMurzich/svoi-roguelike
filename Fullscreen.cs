@@ -42,7 +42,7 @@ namespace ShpilSvoih
         {
             base.OnActivated(e);
             ResetMotionClock();
-            if (CombatBusy || MapMoving) WakeMotion();
+            if (CombatBusy || MapMoving || (mimicratorPreview && !mimicratorPaused)) WakeMotion();
             if (isFullscreen)
                 TopMost = true;
         }

@@ -273,6 +273,9 @@ namespace ShpilSvoih
             Run("Hedgehogs: full pose extraction, animation, pause and resize", UiTests.TestHedgehogUi);
             Run("Hedgehogs pair: switching target per card, queue and deaths", HedgehogPairTests.Rules);
             Run("Hedgehogs pair: real clicks target different enemies in one turn", UiTests.TestHedgehogPairUi);
+            Run("Mimicrator: depth, perspective and frame-rate independence", MimicratorTests.Orbits);
+            Run("Mimicrator: layers, pause, focus, resize, menu and resource ownership", UiTests.TestMimicratorPreview);
+            Run("Mimicrator: four orbit phases for visual review", UiTests.TestMimicratorContactSheet);
             if (passed == 0 && failures.Count == 0) failures.Add("No tests matched filter");
             string summary = "Suites: " + passed + " passed, " + failures.Count + " failed. Assertions: " + assertions + ".";
             results.Add(summary);

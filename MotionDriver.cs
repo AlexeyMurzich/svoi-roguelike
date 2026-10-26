@@ -44,11 +44,13 @@ namespace ShpilSvoih
             // Preserve real elapsed time on slower frames; focus/overlay transitions
             // reset the clock separately, rather than slowing every animation down.
             elapsed = Motion.FrameDelta(elapsed);
-            if (HasLiveFight)
+            if (mimicratorPreview)
+                AdvanceMimicrator(elapsed);
+            else if (HasLiveFight)
                 AdvanceCombatAnimation(elapsed);
             else
                 AdvanceMapMotion(elapsed);
-            if (!CombatBusy && !MapMoving)
+            if (!CombatBusy && !MapMoving && !(mimicratorPreview && !mimicratorPaused))
                 combatTimer.Stop();
         }
 
@@ -65,7 +67,7 @@ namespace ShpilSvoih
                 if (combatTimer != null)
                     combatTimer.Stop();
             }
-            else if (CombatBusy || MapMoving)
+            else if (CombatBusy || MapMoving || (mimicratorPreview && !mimicratorPaused))
                 WakeMotion();
         }
     }

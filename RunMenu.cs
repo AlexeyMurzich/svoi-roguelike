@@ -12,6 +12,9 @@ namespace ShpilSvoih
         bool legendOpen;
         void ReturnToMainMenu()
         {
+            ClearMimicratorBackdrop();
+            mimicratorPreview = false;
+            mimicratorPaused = false;
             StopMapMotion();
             ResetCombat();
             mapRoutes.Clear();

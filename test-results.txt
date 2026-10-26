@@ -25,7 +25,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 42,6 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 32,3 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -46,9 +46,11 @@ PASS Hedgehogs: rabies, dexterity, block, needles and thorns
 PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
-Suites: 45 passed, 0 failed. Assertions: 1130114.
+PASS Mimicrator: depth, perspective and frame-rate independence
+INFO Mimicrator offscreen 1280x840 mean repaint: 34,02 ms (not an FPS guarantee).
+PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
+PASS Mimicrator: four orbit phases for visual review
+Suites: 48 passed, 0 failed. Assertions: 1131633.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-FINAL TARGETED CHECK: paired hedgehogs with real HP-bar clicks and energy-priced attacks: 2 suites, 0 failures, 71 assertions.
-STANDALONE: final EXE without assets, both hedgehogs, target selection, 10+5 damage, rabies, 33 embedded images: PASS.
-RELEASE: eight-file ZIP, pair launcher present, EXE SHA256 matches: PASS.
+Standalone EXE without assets: 3 suites passed, 0 failed, 1519 assertions.

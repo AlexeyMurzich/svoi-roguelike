@@ -13,5 +13,8 @@ try {
  $hash=(Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash
  [IO.File]::WriteAllText((Join-Path $release 'SHA256.txt'),$hash+'  '+[IO.Path]::GetFileName($binary)+"`r`n",[Text.Encoding]::ASCII)
  Compress-Archive -LiteralPath $binary,(Join-Path $release 'README.txt'),(Join-Path $release 'Launch-test-battle.cmd'),(Join-Path $release 'Launch-test-dogs.cmd'),(Join-Path $release 'Launch-test-hedgehog.cmd'),(Join-Path $release 'Launch-test-rabid-hedgehog.cmd'),(Join-Path $release 'Launch-test-hedgehogs.cmd'),(Join-Path $release 'SHA256.txt') -DestinationPath (Join-Path $PSScriptRoot ('outputs\Svoi-v'+$version+'-Windows.zip')) -Force
+ $previewLauncher='@echo off'+"`r`n"+'start "" "%~dp0Svoi-v'+$version+'.exe" --preview-mimicrator'+"`r`n"
+ [IO.File]::WriteAllText((Join-Path $release 'Launch-preview-mimicrator.cmd'),$previewLauncher,[Text.Encoding]::ASCII)
+ Compress-Archive -LiteralPath (Join-Path $release 'Launch-preview-mimicrator.cmd') -DestinationPath (Join-Path $PSScriptRoot ('outputs\Svoi-v'+$version+'-Windows.zip')) -Update
  Write-Output $release
 } finally { Pop-Location }
