@@ -24,8 +24,8 @@ namespace ShpilSvoih
         {
             get
             {
-                return CombatAmbientMoving && combat.Phase == CombatPhase.Player &&
-                    mimicratorVisualForm != combat.Enemies[0].Form;
+                return CombatAmbientMoving && combat.Phase == CombatPhase.Enemy && !combat.EnemyActionPrepared &&
+                    mimicratorVisualForm != combat.Enemies[combat.ActingEnemy].NextForm;
             }
         }
 
@@ -46,31 +46,35 @@ namespace ShpilSvoih
         void StartMimicratorTransform()
         {
             mimicratorTransformFrom = mimicratorVisualForm;
-            mimicratorTransformTo = combat.Enemies[0].Form;
+            mimicratorTransformTo = combat.Enemies[combat.ActingEnemy].NextForm;
             combatNotice = "Мимикратор меняет облик";
             StartCombatAnimation(AttackAnimation.MimicratorTransform, () =>
             {
-                mimicratorVisualForm = mimicratorTransformTo;
-                combatNotice = combat.IsStunned ? "Оглушение · в этом ходу одна карта" : "Твой ход";
+                combat.PrepareNextEnemyAction();
+                mimicratorVisualForm = combat.Enemies[combat.ActingEnemy].Form;
+                combatNotice = mimicratorVisualForm == MimicratorForm.Mussel ? "Мидия · блок получен" :
+                    mimicratorVisualForm == MimicratorForm.Beacon ? "Оглушение · следующий ход: одна карта" :
+                    mimicratorVisualForm == MimicratorForm.Bear ? "Мишка атакует" : "Мимикратор отдыхает";
             });
         }
 
         void StartMimicratorAction(CombatEnemy actor)
         {
             bool stun = actor.WillStun, defend = actor.WillDefend;
-            AttackAnimation kind = actor.Form == MimicratorForm.Fairy ? AttackAnimation.MimicratorMagic :
+            AttackAnimation kind = actor.Form == MimicratorForm.Fairy ? AttackAnimation.MimicratorRest :
                 actor.Form == MimicratorForm.Beacon ? AttackAnimation.MimicratorBeacon :
                 actor.Form == MimicratorForm.Bear ? AttackAnimation.MimicratorBear : AttackAnimation.MimicratorShell;
-            combatNotice = defend ? "Мидия закрывает раковину" : stun ? "Мигалка оглушает" :
-                actor.Form == MimicratorForm.Bear ? "Мишка замахивается" : "Фея колдует";
+            combatNotice = defend ? "Мидия · удар " + (combat.EnemyImpactsResolved + 1) + " / 2" : stun ? "Мигалка атакует" :
+                actor.Form == MimicratorForm.Bear ? "Мишка замахивается" : "Мимикратор отдыхает";
             StartCombatAnimation(kind, () =>
             {
                 int block = combat.Block;
-                combat.ResolveNextEnemyAction();
+                combat.ResolveNextEnemyImpact();
                 if (combat.Block < block) guardVisualTime = .3f;
                 SyncDeaths();
                 combatNotice = combat.Phase == CombatPhase.Defeat ? "Поражение" :
-                    defend ? "Мидия · 12 блока" : stun && combat.IsStunned ? "Оглушение · в этом ходу одна карта" :
+                    defend ? "Раковина · " + combat.LastDamage + " урона" : stun && combat.IsStunned ? "Оглушение · в этом ходу одна карта" :
+                    kind == AttackAnimation.MimicratorRest ? "Мимикратор отдыхает" :
                     combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
             });
         }
@@ -176,7 +180,7 @@ namespace ShpilSvoih
                 if (form == MimicratorForm.Mussel)
                 {
                     int frame = attackTimeline.Kind != AttackAnimation.MimicratorShell || !alive ? 0 :
-                        time < .22f ? 0 : time < .48f ? 1 : 2;
+                        time < .22f ? 0 : time < .48f ? 1 : time < .78f ? 2 : time < .94f ? 1 : 0;
                     mimicratorShellPoses.Draw(g, frame, new RectangleF(-125, -125, 250, 230), 1);
                     if (frame == 2 || combat.Enemies[0].Block > 0)
                         using (var pen = new Pen(Color.FromArgb(145, 141, 206, 234), 3))
@@ -201,6 +205,19 @@ namespace ShpilSvoih
             if (combat.Enemy != EnemyKind.Mimicrator || !attackTimeline.IsRunning) return;
             float time = attackTimeline.Time, hit = attackTimeline.HitTime;
             var kind = attackTimeline.Kind;
+            if (kind == AttackAnimation.MimicratorRest)
+            {
+                float pulse = (float)Math.Sin(time / attackTimeline.Duration * Math.PI);
+                MimicratorGlow(g, new PointF(EnemyCenter(0), CombatFloor - 210), 180 + pulse * 70, 200 + pulse * 50,
+                    Color.FromArgb((int)(25 + pulse * 30), 167, 142, 204));
+            }
+            if (kind == AttackAnimation.MimicratorShell && time > .4f && time <= hit)
+            {
+                float flight = Motion.Ease((time - .4f) / (hit - .4f));
+                float x = EnemyCenter(0) + (HeroCenter - EnemyCenter(0)) * flight;
+                using (var pen = new Pen(Color.FromArgb(180, 147, 202, 233), 3))
+                    g.DrawArc(pen, x - 18, CombatFloor - 220, 36, 65, -80, 160);
+            }
             if (kind == AttackAnimation.MimicratorMagic && time <= hit)
             {
                 float progress = Motion.Ease(time / hit);
@@ -231,7 +248,7 @@ namespace ShpilSvoih
                 }
             }
             if ((kind == AttackAnimation.MimicratorBear || kind == AttackAnimation.MimicratorMagic ||
-                kind == AttackAnimation.MimicratorBeacon) && time >= hit && time < hit + .24f)
+                kind == AttackAnimation.MimicratorBeacon || kind == AttackAnimation.MimicratorShell) && time >= hit && time < hit + .24f)
             {
                 float progress = (time - hit) / .24f;
                 using (var pen = new Pen(Color.FromArgb((int)(195 * (1 - progress)), 233, 201, 239), 4))
@@ -244,7 +261,8 @@ namespace ShpilSvoih
 
         void DrawStunBirds(Graphics g)
         {
-            if (!combat.IsStunned || combat.Phase != CombatPhase.Player || currentHero.Health <= 0) return;
+            if ((!combat.IsStunned && !combat.StunPending) || currentHero.Health <= 0 ||
+                (combat.Phase != CombatPhase.Player && combat.Phase != CombatPhase.Enemy)) return;
             float centerY = CombatFloor - 328;
             for (int i = 0; i < 3; i++)
             {
@@ -263,7 +281,7 @@ namespace ShpilSvoih
                     g.FillEllipse(Brushes.Black, x + 3, y - 4, 2.5f, 2.5f);
                 }
             }
-            TextAt(g, "Оглушение · карт осталось: " + Math.Max(0, 1 - combat.CardsPlayedThisTurn),
+            TextAt(g, combat.StunPending ? "Оглушение · следующий ход: 1 карта" : "Оглушение · карт осталось: " + Math.Max(0, 1 - combat.CardsPlayedThisTurn),
                 HeroCenter - 160, CombatFloor - 416, 14, Color.FromArgb(237, 211, 142), 340, true);
         }
     }

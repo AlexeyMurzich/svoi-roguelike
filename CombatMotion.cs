@@ -69,7 +69,7 @@ namespace ShpilSvoih
                 TextAt(graphics, enemy.Name, center - width / 2, floor - (enemy.Kind == EnemyKind.Mimicrator ? 414 : 315), combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
                 bool howl = active && attackTimeline.IsRunning
                     ? attackTimeline.Kind == AttackAnimation.DogHowl : enemy.WillHowl;
-                TextAt(graphics, enemy.Kind == EnemyKind.Mimicrator ? CombatEnemy.MimicratorIntent(mimicratorVisualForm) : howl ? "Вой · Слабость" : enemy.Kind == EnemyKind.Hedgehog ? "Иглы · 10 / Шипы · 2" : enemy.Kind == EnemyKind.RabidHedgehog ? "Укус · 5 / Бешенство" : "Укус · 5", center - 135, floor - (enemy.Kind == EnemyKind.Mimicrator ? 380 : 280), 15, gold, 300, true);
+                TextAt(graphics, enemy.Kind == EnemyKind.Mimicrator ? enemy.Intent : howl ? "Вой · Слабость" : enemy.Kind == EnemyKind.Hedgehog ? "Иглы · 10 / Шипы · 2" : enemy.Kind == EnemyKind.RabidHedgehog ? "Укус · 5 / Бешенство" : "Укус · 5", center - 135, floor - (enemy.Kind == EnemyKind.Mimicrator ? 380 : 280), 15, gold, 300, true);
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
                 if (enemy.Block > 0) TextAt(graphics, "Блок · " + enemy.Block, center - 40, floor + 34, 15, Color.LightBlue, 180, true);
                 if (selectedTarget && combat.Enemies.Count > 1)
@@ -92,9 +92,9 @@ namespace ShpilSvoih
                 else using (var stroke = new Pen(colors[selected], 4)) graphics.DrawLine(stroke, x - 20, y - 12, x + 20, y + 12);
             }
             float afterHit = time - attackTimeline.HitTime;
-            if ((currentHero.Health > 0 || attackTimeline.Kind != AttackAnimation.HeroStrike) && attackTimeline.IsRunning && attackTimeline.Kind != AttackAnimation.DogHowl && attackTimeline.Kind != AttackAnimation.MimicratorTransform && attackTimeline.Kind != AttackAnimation.MimicratorShell && afterHit >= 0 && afterHit < .18f)
+            if ((currentHero.Health > 0 || attackTimeline.Kind != AttackAnimation.HeroStrike) && attackTimeline.IsRunning && attackTimeline.Kind != AttackAnimation.DogHowl && attackTimeline.Kind != AttackAnimation.MimicratorTransform && attackTimeline.Kind != AttackAnimation.MimicratorRest && afterHit >= 0 && afterHit < .18f)
             {
-                bool enemyHit = attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite || attackTimeline.Kind == AttackAnimation.HedgehogNeedles || attackTimeline.Kind == AttackAnimation.MimicratorMagic || attackTimeline.Kind == AttackAnimation.MimicratorBeacon || attackTimeline.Kind == AttackAnimation.MimicratorBear;
+                bool enemyHit = attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite || attackTimeline.Kind == AttackAnimation.HedgehogNeedles || attackTimeline.Kind == AttackAnimation.MimicratorMagic || attackTimeline.Kind == AttackAnimation.MimicratorBeacon || attackTimeline.Kind == AttackAnimation.MimicratorBear || attackTimeline.Kind == AttackAnimation.MimicratorShell;
                 float x = enemyHit || attackTimeline.Kind == AttackAnimation.HeroGuard ? heroX : target;
                 int alpha = (int)(210 * (1 - Motion.Ease(afterHit / .18f)));
                 using (var pen = new Pen(Color.FromArgb(alpha, 255, 218, 137), 3))

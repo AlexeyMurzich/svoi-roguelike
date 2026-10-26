@@ -157,8 +157,7 @@ namespace ShpilSvoih
                 attackTimeline.Advance(step);
                 remaining = Math.Max(0, remaining - step);
                 SyncDeaths();
-                if (!CombatBusy && NeedsMimicratorTransform) StartMimicratorTransform();
-                else if (!CombatBusy && combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
+                if (!CombatBusy && combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
             }
             if (!CombatBusy && !CombatAmbientMoving && !LivingScene && combatTimer != null)
                 combatTimer.Stop();
@@ -214,7 +213,12 @@ namespace ShpilSvoih
             bool howling = actor.WillHowl;
             if (actor.Kind == EnemyKind.Mimicrator)
             {
-                StartMimicratorAction(actor);
+                if (NeedsMimicratorTransform) StartMimicratorTransform();
+                else
+                {
+                    if (!combat.EnemyActionPrepared) combat.PrepareNextEnemyAction();
+                    StartMimicratorAction(actor);
+                }
                 return;
             }
             combatNotice = actor.Name + (howling ? " воет" : " атакует");

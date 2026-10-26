@@ -30,6 +30,9 @@ namespace ShpilSvoih
         public readonly EnemyKind Enemy;
         public int WeakTurns { get; private set; }
         bool pendingStun;
+        public bool StunPending { get { return pendingStun; } }
+        public bool EnemyActionPrepared { get; private set; }
+        public int EnemyImpactsResolved { get; private set; }
         public int CardsPlayedThisTurn { get; private set; }
         public int CardPlayLimit { get; private set; }
         public bool IsStunned { get { return CardPlayLimit == 1; } }
@@ -254,38 +257,65 @@ namespace ShpilSvoih
             return -1;
         }
 
-        public bool ResolveNextEnemyAction()
+        // Called at form-entry during the enemy turn, before any attack impact.
+        public bool PrepareNextEnemyAction()
         {
-            if (Phase != CombatPhase.Enemy || ActingEnemy < 0)
-                return false;
+            if (Phase != CombatPhase.Enemy || ActingEnemy < 0 || EnemyActionPrepared) return false;
+            var actor = Enemies[ActingEnemy];
+            actor.BeginAction();
+            EnemyActionPrepared = true;
+            EnemyImpactsResolved = 0;
+            if (actor.WillDefend) actor.Defend();
+            if (actor.WillStun && Hero.Health > 0 && Hero.Effects.AcceptDebuff()) pendingStun = true;
+            return true;
+        }
+
+        // Each animation resolves one impact; shell attacks share the same block pool.
+        public bool ResolveNextEnemyImpact()
+        {
+            if (Phase != CombatPhase.Enemy || ActingEnemy < 0) return false;
+            if (!EnemyActionPrepared) PrepareNextEnemyAction();
             var actor = Enemies[ActingEnemy];
             int before = Hero.Health;
-            actor.BeginAction();
-            if (actor.WillDefend) actor.Defend();
-            else if (actor.WillHowl)
+            if (actor.WillHowl)
             {
                 if (Hero.Effects.AcceptDebuff()) WeakTurns = Math.Max(WeakTurns, 1);
             }
-            else
+            else if (!(actor.Kind == EnemyKind.Mimicrator && actor.Form == MimicratorForm.Fairy))
             {
                 int lost = ReceiveHit(actor.AttackDamage);
-                if (actor.WillStun && Hero.Health > 0 && Hero.Effects.AcceptDebuff()) pendingStun = true;
                 if (actor.Kind == EnemyKind.RabidHedgehog && lost > 0 && Hero.Health > 0 && Hero.Effects.AcceptDebuff())
                     Rabies = true;
             }
-            actor.CompleteAction();
+            EnemyImpactsResolved++;
             LastDamage = before - Hero.Health;
-            ActingEnemy = NextLivingEnemy(ActingEnemy + 1);
             if (Hero.Health <= 0)
             {
                 Phase = CombatPhase.Defeat;
                 ActingEnemy = -1;
+                pendingStun = false;
+                EnemyActionPrepared = false;
+                return true;
             }
-            else if (ActingEnemy < 0)
+            if (EnemyImpactsResolved < actor.HitCount) return true;
+            actor.CompleteAction();
+            ActingEnemy = NextLivingEnemy(ActingEnemy + 1);
+            EnemyActionPrepared = false;
+            EnemyImpactsResolved = 0;
+            if (ActingEnemy < 0)
             {
                 Block = 0;
                 BeginPlayerTurn();
             }
+            return true;
+        }
+
+        public bool ResolveNextEnemyAction()
+        {
+            if (Phase != CombatPhase.Enemy || ActingEnemy < 0) return false;
+            int actor = ActingEnemy;
+            do { ResolveNextEnemyImpact(); }
+            while (Phase == CombatPhase.Enemy && ActingEnemy == actor);
             return true;
         }
 

@@ -16,7 +16,8 @@ namespace ShpilSvoih
         MimicratorBeacon,
         MimicratorBear,
         MimicratorShell,
-        MimicratorTransform
+        MimicratorTransform,
+        MimicratorRest
     }
 
     // Animation owns its clock and one impact callback, never the combat rules.
@@ -53,6 +54,7 @@ namespace ShpilSvoih
             if (kind == AttackAnimation.MimicratorBear) { Duration = 1.25f; HitTime = .7f; }
             if (kind == AttackAnimation.MimicratorShell) { Duration = 1.05f; HitTime = .62f; }
             if (kind == AttackAnimation.MimicratorTransform) { Duration = .85f; HitTime = .425f; }
+            if (kind == AttackAnimation.MimicratorRest) { Duration = .95f; HitTime = .48f; }
             Time = 0;
             HitApplied = false;
             impact = onImpact;
