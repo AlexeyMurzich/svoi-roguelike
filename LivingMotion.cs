@@ -72,6 +72,7 @@ namespace ShpilSvoih
         {
             if (!LivingScene || GameplayPaused || !Motion.IsFinite(elapsed) || elapsed <= 0) return;
             livingSeconds += elapsed;
+            if (!CombatBusy) guardVisualTime = Math.Max(0, guardVisualTime - elapsed);
             Invalidate();
         }
     }
