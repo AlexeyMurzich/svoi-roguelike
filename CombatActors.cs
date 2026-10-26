@@ -8,7 +8,7 @@ namespace ShpilSvoih
         float CombatFloor { get { return Math.Min(CanvasHeight - 295, (160 + CanvasHeight - 285) / 2 + 160); } }
         float HeroCenter { get { return CanvasWidth * .24f; } }
 
-        RectangleF HeroDeathArea { get { return new RectangleF(HeroCenter - 170, CombatFloor - 335, 340, 335); } }
+        RectangleF HeroDeathArea { get { return selected == 3 ? new RectangleF(HeroCenter - 170, CombatFloor - 335, 340, 335) : new RectangleF(HeroCenter - 220, CombatFloor - 365, 440, 365); } }
 
         RectangleF EnemyArea(int index)
         {
@@ -31,14 +31,14 @@ namespace ShpilSvoih
         void PaintCombatHero(Graphics graphics)
         {
             float move = attackTimeline.Kind == AttackAnimation.HeroStrike ? HeroAttackOffset(attackTimeline.Time) : 0;
-            float width = selected == 3 ? 310 : 240;
+            float width = selected == 3 ? 310 : 340;
             var area = new RectangleF(HeroCenter - width / 2 + move, CombatFloor - 335, width, 335);
             var saved = graphics.Save();
             try
             {
                 LivingMotion.Body(graphics, area, livingSeconds, selected, selected == 0);
                 if (selected == 3) DrawShutenPose(graphics, area);
-                else Portrait(graphics, selected, area.X, area.Y, area.Width, area.Height);
+                else DrawHeroCombatPose(graphics, area);
             }
             finally { graphics.Restore(saved); }
         }
