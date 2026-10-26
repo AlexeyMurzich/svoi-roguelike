@@ -76,6 +76,7 @@ namespace ShpilSvoih
         void DrawCombat(Graphics g)
         {
             actions.Clear();
+            combatHintAreas.Clear();
             SyncDeaths();
             g.InterpolationMode = InterpolationMode.Bilinear;
             DrawSceneBackground(g, true);
@@ -96,7 +97,7 @@ namespace ShpilSvoih
             if (!CombatBusy)
             {
                 if (combat.Phase == CombatPhase.Victory)
-                    Button(g, "Победа · На карту", CanvasWidth - 235, CanvasHeight - 80, 210, 54, CompleteMapRoom, true);
+                    DrawRouteButton(g);
                 else if (combat.Phase == CombatPhase.Defeat)
                     Button(g, "Поражение · В меню", CanvasWidth - 235, CanvasHeight - 80, 210, 54, ReturnToMainMenu);
                 else
@@ -109,6 +110,7 @@ namespace ShpilSvoih
                 DrawRunInventory(g);
             else if (hoveredRelic)
                 DrawRelicTooltip(g);
+            if (inventoryView == "") DrawCombatTooltip(g);
         }
     }
 }

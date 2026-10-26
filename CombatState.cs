@@ -43,7 +43,7 @@ namespace ShpilSvoih
         public int BlockFor(CardData card)
         {
             if (card == null) throw new ArgumentNullException("card");
-            return card.Block > 0 ? Math.Max(0, card.Block + Dexterity) : 0;
+            return card.Block > 0 ? (int)Math.Min(int.MaxValue, Math.Max(0, (long)card.Block + Dexterity) * Hero.DebugCardMultiplier) : 0;
         }
         int ReceiveHit(int damage)
         {
@@ -177,7 +177,7 @@ namespace ShpilSvoih
             int strength = Turn == 1 ? Hero.Effects.Strength : 0;
             long damage = Math.Max(0, (long)card.Damage + Hero.BonusDamage + strength + (card.Attack ? Strength : 0));
             if (card.Attack && WeakTurns > 0) damage = damage * 3 / 4;
-            return (int)Math.Min(int.MaxValue, damage);
+            return (int)Math.Min(int.MaxValue, damage * Hero.DebugCardMultiplier);
         }
 
         public bool CanPlay(int index)
@@ -189,7 +189,7 @@ namespace ShpilSvoih
             if (card.Family != CardFamily.None && Hero.Hero == 2 && !Hero.CanUseFamily(card.Family))
                 return false;
             decimal price = Cost(card);
-            return price >= 0 && (Hero.Hero == 3 ? Hero.CanBorrow || Hero.Money >= price : Energy >= price);
+            return price >= 0 && (Hero.Hero == 3 ? Hero.ShutGod || Hero.CanBorrow || Hero.Money >= price : Energy >= price);
         }
 
         public bool TryPlay(int index)

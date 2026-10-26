@@ -30,7 +30,7 @@ namespace ShpilSvoih
 
         void AdvanceMapMotion(float elapsed)
         {
-            if (!mapScreen || mapRun == null || mapRun.Pending != null || inventoryView != "" || !MapMoving) return;
+            if (!mapScreen || mapRun == null || mapRun.Pending != null || GameplayPaused || !MapMoving) return;
             float remaining = Motion.FrameDelta(elapsed);
             while (remaining > 0)
             {

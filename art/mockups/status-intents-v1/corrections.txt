@@ -1,0 +1,7 @@
+Edit this exact UI mockup board, preserve all artwork/layout/characters/colors and all other text. Correct only these factual errors:
+1 Remove both blue shield badges with number3 beside the TWO ENEMY health bars. Hedgehogs in this example have zero block. KEEP the hero shield3. Never add enemy block in this battle.
+2 Bottom left 'Замешательство' description must be exactly: 'Добор +2. В начале хода 2 случайные карты играются автоматически.' Replace misleading old text about shuffled cards.
+3 Bottom 'Долг' description must be exactly: 'Разрешён телефоном. Рост долга отнимает HP.' The coin icon may show a minus sign, not a fixed −3. Remove false text about losing3 gold atstartturn. This hero normally loses1gold per turn but debt depends on payment.
+4 In the status catalogue 'Ловкость' green boot icon badge should read '−2', including minus sign. Strengthbadge should read '+3', includingplus. Keep every other statusvalue unchanged.
+5 The first-turn protective status spelling must read 'Саттен-киссюн' exactly.
+All this remains one MOCKUP, not a screenshot of implemented changes. No other edits. High resolution, legible Russian.

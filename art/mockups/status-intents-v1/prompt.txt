@@ -1,0 +1,28 @@
+Create one polished Russian game UI approval board, landscape-to-square 1920x1700 or similarly high resolution. This is MOCKUP 01 for an existing Windows deckbuilding roguelike 'Свои люди'. Reference image 1 is the exact current combat screen EDIT TARGET. Reference image 2 provides approved fairy artwork for a small supporting example only. Preserve existing painted character identities, Shuten's glasses/beard/red teal jester suit/stationary bike, two hedgehog sprites, gold framed cards, dark green narrow top HUD, portrait, heart, coins, deck and gear, and current Smolevichi town background. Remove Windows title bar/border for a fullscreen preview. Do NOT create new combat backgrounds or redesign buttons in this mockup. No website styling.
+
+BOARD COMPOSITION:
+Top 64%: large nearly full width actual battle interface preview based on ref1, carefully reproduced, with revised STATUS and ENEMY INTENT layout inspired by original Slay the Spire, but original richly illustrated miniature icons matching our art. Keep roomy placement. No giant black information strips or long text clutter. Enemy names remain compact. Above each enemy, clearly readable intent icon and number: spiked hedgehog has sharp red/gold needle projectile 10; rabid hedgehog has red jaws 5 plus tiny red infection icon. DO NOT show thorns as planned attack: thorns is a passive below HP. Hero HP33/50 and gold278, enemies24/30. Under hero HP compact active Rabies icon (red infected fangs) with infinity sign. On hover, a tasteful dark plum/gold tooltip near hero reads exactly: "Бешенство" / "+2 силы, −2 ловкости" / "До конца боя. Не складывается." Show a clear cursor pointing at this icon. Under spiked hedgehog HP show thorn crown icon with small 2. Under hero HP separate little strength +2 and dexterity −2 are NOT necessary because tooltip explains derived effects; do not duplicate same buff in main scene. Shield-shaped block badge beside HP, example hero block3 with number3; same visual language applies to enemy block. Remove old orange floating Rabies sentence and generic bottom "Бешенство наложено". Preserve cards and end turn existing placement. Place very small label outside screenshot "01 · Статусы и намерения · Мокап".
+
+Bottom36%: integrated attractive dark green/plum gold thin-framed design catalogue, clean ordered miniature icon samples, Russian labels crisp and legible, NOT overwhelming paragraphs. Three rows / sections:
+A "Эффекты под HP" eight distinct original painted detailed icons with short captions:
+- "Слабость · 1 ход" broken sword purple
+- "Оглушение · 1 карта" yellow cartoon birds circling dazed star
+- "Бешенство · ∞" red infected fangs
+- "Сила · +3" red clenched gauntlet
+- "Ловкость · −2" cracked green wing/boot
+- "Слёзы · 7" emerald anime tear, delicate sparkle anime treatment
+- "Шипы · 2" bronze crown of spikes
+- "Саттен-киссюн · 1 ход" mint anime magical protective barrier.
+Small caption "Число = сила эффекта или срок; подробности — при наведении." Status hover tooltip clearly defines meaning, numbers aren't ambiguous. Rabies strength/dexterity are derived and do not stack independently.
+B "Намерения над врагом" seven grouped samples:
+1 jaws "5" label "Укус"
+2 needles "10" label "Иглы"
+3 howling silhouette + purple downward curl label "Вой → слабость"
+4 jaws5 + infection label "Укус → бешенство"
+5 police beacon + attack6 + birds label "6 + оглушение"
+6 plush bear massive red impact14 label "Удар · 14"
+7 mussel + red doublehit "5 × 2" + blue shield12 label "5 × 2 + 12 блока"
+Then small fairy crescent/rest icon label "Фея · отдых" as eighth sample. Each sample is separate, clear. Small magical form badge is part of mimicrator intents, showing which form comes NEXT, never confuse current sprite and next action. If space use 2 compact rows. Police beacon tooltip says "Оглушит на следующий ход: можно сыграть 1 карту." Mussel tooltip says "Сразу получит 12 блока, затем ударит дважды по 5." Could include these as tiny two-column footnotes only if readable.
+C narrow footer "Состояния героя" four compact original illustrated icons: swirl cards "Замешательство", coin negative "Долг", notebook/pen "Тип карт хода", hourglass-clock birds "Оглушение: следующий ход". These are UI badges for existing character mechanics, not new buffs. Existing relic and card effects stay on relic/card hover tooltips, no duplicate status spam. Include small note "Блок — щит рядом с HP. Намерение — следующий ход врага."
+
+Prioritize real usable UI feel at playable scale, beautifully illustrated readable silhouettes and small gold numerals, no flat emoji icons, no photorealistic new faces, no modern dashboard, no fake implementation claim. Do not invent poison, burning, vulnerable, regeneration or other mechanics not listed. This is a single cohesive first approval mockup; do not include button redesign or background redesign alternatives.

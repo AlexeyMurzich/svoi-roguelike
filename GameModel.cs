@@ -34,6 +34,16 @@ namespace ShpilSvoih
         public readonly StartingEffects Effects;
         public readonly Balance Settings;
         public decimal Money { get; private set; }
+        public bool ShutGod { get; private set; }
+        public string MoneyDisplay { get { return ShutGod ? "∞" : Money.ToString(); } }
+        public int DebugCardMultiplier { get { return ShutGod ? 3 : 1; } }
+        public bool EnableShutGod()
+        {
+            if (Hero != 3 || Health <= 0) return false;
+            ShutGod = true;
+            Money = 0;
+            return true;
+        }
         public int Health { get; private set; }
         public int MaxHealth { get; private set; }
 
@@ -114,6 +124,7 @@ namespace ShpilSvoih
         public void ChangeMoney(decimal amount)
         {
             Settings.Validate();
+            if (ShutGod) return;
             decimal previousDebt = Debt;
             decimal nextMoney = checked(Money + amount);
             if (Hero == 3 && !CanBorrow)
@@ -140,7 +151,7 @@ namespace ShpilSvoih
 
         public bool CanAffordMoneyCard(int price, int? minimumMoney = null)
         {
-            return Hero == 3 && Health > 0 && price >= 0 && (!minimumMoney.HasValue || Money >= minimumMoney.Value) && (CanBorrow || Money >= Effects.GoldPrice(price));
+            return Hero == 3 && Health > 0 && price >= 0 && (ShutGod || ((!minimumMoney.HasValue || Money >= minimumMoney.Value) && (CanBorrow || Money >= Effects.GoldPrice(price))));
         }
 
         public bool PayMoneyCard(int price, int? minimumMoney = null)

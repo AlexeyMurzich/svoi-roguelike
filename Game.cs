@@ -144,6 +144,7 @@ namespace ShpilSvoih
             MouseLeave += OnHudMouseLeave;
             MouseUp += OnMapMouseUp;
             KeyDown += HandleGameKey;
+            KeyPress += OnDebugConsoleKeyPress;
         }
 
         private void RefreshScene()
@@ -170,6 +171,7 @@ namespace ShpilSvoih
                 return;
             }
 
+            if (HandleDebugConsoleKey(e)) return;
             if (HandleMimicratorKey(e)) return;
 
             if (e.Alt || e.Control)
@@ -229,6 +231,8 @@ namespace ShpilSvoih
         {
             base.OnResize(e);
             hoveredRelic = false;
+            combatPointer = null;
+            routePressed = false;
             CancelMapDrag();
             if (mapScreen)
             {
@@ -335,7 +339,7 @@ namespace ShpilSvoih
 
         void OnClick(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left)
+            if (debugConsoleOpen || e.Button != MouseButtons.Left)
                 return;
             if (mapScreen && (suppressMapClick || (mapDragging && mapDragMoved)))
             {
@@ -512,6 +516,7 @@ namespace ShpilSvoih
                 {
                     if (!mapScreen && inventoryView == "pause")
                         DrawRunInventory(g);
+                    DrawDebugConsole(g);
                 }
                 finally
                 {

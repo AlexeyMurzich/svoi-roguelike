@@ -67,6 +67,8 @@ namespace ShpilSvoih
 
         void OnHudMouseLeave(object sender, EventArgs e)
         {
+            combatPointer = null;
+            routePressed = false;
             SetRelicHover(false);
             hoveredMapNode = -1;
             Invalidate();

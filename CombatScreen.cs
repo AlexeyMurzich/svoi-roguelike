@@ -54,6 +54,10 @@ namespace ShpilSvoih
             shutenPoses = new PoseAtlas(assetStore.Get("shuten-combat.png", "shuten-combat.png"), 2, 2, actorArtCache);
             hedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-curl.png", "enemies.hedgehog-curl.png"), false, actorArtCache);
             rabidHedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-bite.png", "enemies.hedgehog-bite.png"), true, actorArtCache);
+            eliteCombatBackground = assetStore.Get("combat-mimicrator.png", "combat-mimicrator.png");
+            ordinaryCombatBackground = assetStore.Get("combat-social.png", "combat-social.png");
+            routeButtonArt = assetStore.Get("route-button.png", "route-button.png");
+            combatIcons = assetStore.Get("combat-icons.png", "combat-icons.png");
             InitializeMotionTimer();
         }
 
@@ -68,6 +72,9 @@ namespace ShpilSvoih
             howlSound.Stop();
             if (combatTimer != null && !MapMoving)
                 combatTimer.Stop();
+            combatHintAreas.Clear();
+            combatPointer = null;
+            routePressed = false;
             combat = null;
             combatNode = -1;
             attackTimeline.Cancel();
@@ -144,7 +151,7 @@ namespace ShpilSvoih
 
         void AdvanceCombatAnimation(float elapsed)
         {
-            if (!CombatBusy || combat == null || inventoryView != "" || !Motion.IsFinite(elapsed) || elapsed <= 0)
+            if (!CombatBusy || combat == null || GameplayPaused || !Motion.IsFinite(elapsed) || elapsed <= 0)
                 return;
             // Split at impacts/completion so death starts at impact, and a queued
             // enemy receives the remainder of the frame instead of losing it.

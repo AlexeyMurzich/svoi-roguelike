@@ -38,7 +38,7 @@ namespace ShpilSvoih
 
         void AdvanceCombatAmbient(float elapsed)
         {
-            if (!CombatAmbientMoving || inventoryView != "") return;
+            if (!CombatAmbientMoving || GameplayPaused) return;
             mimicratorCombatSeconds += Motion.FrameDelta(elapsed);
             Invalidate();
         }
@@ -281,8 +281,6 @@ namespace ShpilSvoih
                     g.FillEllipse(Brushes.Black, x + 3, y - 4, 2.5f, 2.5f);
                 }
             }
-            TextAt(g, combat.StunPending ? "Оглушение · следующий ход: 1 карта" : "Оглушение · карт осталось: " + Math.Max(0, 1 - combat.CardsPlayedThisTurn),
-                HeroCenter - 160, CombatFloor - 416, 14, Color.FromArgb(237, 211, 142), 340, true);
         }
     }
 }

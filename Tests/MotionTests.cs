@@ -71,7 +71,7 @@ namespace ShpilSvoih
                     using (var frame = Render(game)) frame.Save(Path.Combine(TestSuite.OutputDirectory, "bite-" + Read<AttackTimeline>(game, "attackTimeline").Time.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) + ".png"));
                 }
                 TestSuite.Check(Read<CombatState>(game, "combat").Hero.Health == 45, "entire bite animation hits exactly once");
-                TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 33, "pose changes reuse cached atlases");
+                TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 37, "pose changes reuse cached atlases");
             }
         }
     }

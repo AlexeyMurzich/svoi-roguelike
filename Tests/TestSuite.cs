@@ -73,6 +73,10 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Debug console: infinite gold and exact triple multiplier", DebugModeTests.Rules);
+            Run("Debug console: input, pause and scene isolation", UiTests.TestDebugConsole);
+            Run("Battle backdrop: source, cache and six sizes", UiTests.TestBattleBackground);
+            Run("Combat hints: statuses, intents and scaled hover", UiTests.TestCombatHints);
             Run("Living: lifecycle and fixed paws", UiTests.TestLivingScenes);
             Run("Living: visual gallery", UiTests.TestLivingGallery);
             Run("All 12 original relic effects", StartingBuffTests.Run);

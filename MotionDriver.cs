@@ -22,7 +22,7 @@ namespace ShpilSvoih
 
         void WakeMotion()
         {
-            if (combatTimer == null || inventoryView != "")
+            if (combatTimer == null || GameplayPaused)
                 return;
             if (!combatTimer.Enabled)
                 ResetMotionClock();
@@ -34,7 +34,7 @@ namespace ShpilSvoih
             long now = Stopwatch.GetTimestamp();
             float elapsed = (float)((now - lastMotionTick) / (double)Stopwatch.Frequency);
             lastMotionTick = now;
-            if (inventoryView != "" || !ContainsFocus)
+            if (GameplayPaused || !ContainsFocus)
             {
                 howlSound.Stop();
                 combatTimer.Stop();

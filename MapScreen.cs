@@ -158,7 +158,7 @@ namespace ShpilSvoih
 
         void OnMapWheel(object sender, MouseEventArgs e)
         {
-            if (!mapScreen)
+            if (!mapScreen || debugConsoleOpen)
                 return;
             PointF point;
             if (DrawingViewport.TryMap(e.Location, out point) && MapView.Contains(point))
@@ -182,6 +182,10 @@ namespace ShpilSvoih
 
         void OnMapMouseDown(object sender, MouseEventArgs e)
         {
+            if (debugConsoleOpen) return;
+            PointF routePoint;
+            routePressed = e.Button == MouseButtons.Left && RouteButtonVisible && DrawingViewport.TryMap(e.Location, out routePoint) && RouteButtonArea.Contains(routePoint);
+            if (routePressed) Invalidate();
             if (e.Button == MouseButtons.Left)
                 suppressMapClick = false;
             if (!mapScreen || inventoryView != "" || mapRun.Pending != null || e.Button != MouseButtons.Left)
@@ -203,6 +207,7 @@ namespace ShpilSvoih
             PointF point;
             bool inside = DrawingViewport.TryMap(e.Location, out point);
             SetRelicHover(mapScreen && inside && inventoryView == "" && !mapDragging && RelicHitArea.Contains(point));
+            UpdateCombatHover(point, inside);
             if (!mapScreen || inventoryView != "" || mapRun.Pending != null || !inside)
                 return;
             if (mapDragging)
@@ -234,6 +239,7 @@ namespace ShpilSvoih
 
         void OnMapMouseUp(object sender, MouseEventArgs e)
         {
+            if (routePressed) { routePressed = false; Invalidate(); }
             if (e.Button != MouseButtons.Left || !mapDragging)
                 return;
             CancelMapDrag();

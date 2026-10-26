@@ -1,4 +1,8 @@
-﻿PASS Living: lifecycle and fixed paws
+﻿PASS Debug console: infinite gold and exact triple multiplier
+PASS Debug console: input, pause and scene isolation
+PASS Battle backdrop: source, cache and six sizes
+PASS Combat hints: statuses, intents and scaled hover
+PASS Living: lifecycle and fixed paws
 PASS Living: visual gallery
 PASS All 12 original relic effects
 PASS Invalid hero state and balance rejected
@@ -14,7 +18,7 @@ PASS Exchange callback is atomic and cannot re-enter
 PASS Uniform viewport, click mapping and image crop
 PASS Image ownership, fallback and file unlocking
 PASS UI all heroes and relics at six window sizes
-INFO After 72 resizes: GDI handles 19 -> 19; decoded images 33; cached fonts 9.
+INFO After 72 resizes: GDI handles 19 -> 19; decoded images 37; cached fonts 9.
 PASS Resize/repaint determinism and GDI resources
 PASS Procedural act constraints, determinism and connectivity: 2000 seeds
 PASS Map traversal rejects skips and repeated actions
@@ -27,7 +31,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 36,6 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 46,3 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -37,7 +41,7 @@ PASS Hands of one to six cards preserve controls and aspect ratio
 PASS Reviewed input, capture, focus, overlay and debt-death interactions
 PASS Investigation reveals future enemy identity on map hover
 PASS Dog legs preserve color and opacity through bite and howl frames
-INFO 18 battle/map/pause/resize cycles: GDI handles 22 -> 22; source images 33; font cache 11.
+INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 37; font cache 12.
 PASS Repeated battle/map/pause/resize transitions release resources
 PASS Death snapshots lifecycle and resource ownership
 PASS Separate dog deaths, all hero deaths, rat death and credit-card guard
@@ -49,14 +53,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 35,64 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 80,25 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 54 passed, 0 failed. Assertions: 1133874.
+Suites: 58 passed, 0 failed. Assertions: 1134046.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-Standalone EXE without assets: 4 suites passed, 0 failed, 386 assertions.

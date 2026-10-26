@@ -87,7 +87,8 @@ namespace ShpilSvoih
                 // Decode once into the premultiplied format used by GDI+ compositing.
                 // Otherwise each cropped atlas draw converts the full source again.
                 int displayWidth = source.Width;
-                if (resourceName == "map-icons.png") displayWidth = Math.Min(displayWidth, 384);
+                if (resourceName == "combat-icons.png") displayWidth = Math.Min(displayWidth, 768);
+                else if (resourceName == "map-icons.png") displayWidth = Math.Min(displayWidth, 384);
                 else if (resourceName == "menu-icons.png") displayWidth = Math.Min(displayWidth, 256);
                 else if (resourceName == "health-icon.png" || resourceName == "coin-icon.png") displayWidth = Math.Min(displayWidth, 128);
                 else if (resourceName.StartsWith("relics.", StringComparison.Ordinal)) displayWidth = Math.Min(displayWidth, 256);

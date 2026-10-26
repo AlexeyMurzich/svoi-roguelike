@@ -51,27 +51,23 @@ namespace ShpilSvoih
             TextAt(graphics, "ХОД " + combat.Turn, CanvasWidth / 2 - 42, 100, 14, gold, 140, true);
             if (!deathVisuals.Draw(graphics, -1, HeroDeathArea, null)) PaintCombatHero(graphics);
             DrawStunBirds(graphics);
-            if (combat.Rabies) TextAt(graphics, "Бешенство · +2 силы / −2 ловкости", heroX - 155, floor - 390, 14, Color.OrangeRed, 360, true);
-            if (combat.WeakTurns > 0) TextAt(graphics, "Слабость · −25% · 1 ход", heroX - 125, floor - 365, 14, Color.Plum, 280, true);
             DrawCombatHealth(graphics, heroX - 125, floor + 8, 250, currentHero.Health, currentHero.MaxHealth);
-            if (combat.Block > 0) TextAt(graphics, "Блок · " + combat.Block, heroX - 40, floor + 34, 15, Color.LightBlue, 180, true);
+            DrawBlockBadge(graphics, heroX + 129, floor + 8, combat.Block);
+            DrawHeroStatuses(graphics);
             for (int i = 0; i < combat.Enemies.Count; i++)
             {
                 int index = i;
                 var enemy = combat.Enemies[index];
                 float center = EnemyCenter(index);
-                bool active = actingEnemyIndex == index &&
-                    (attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.DogHowl);
                 if (!deathVisuals.Draw(graphics, enemy.Id, EnemyArea(index), null)) PaintCombatEnemy(graphics, index);
                 if (!enemy.IsAlive) continue;
                 int width = combat.Enemies.Count == 1 ? 250 : 180;
                 bool selectedTarget = combat.SelectedTarget == index;
                 TextAt(graphics, enemy.Name, center - width / 2, floor - (enemy.Kind == EnemyKind.Mimicrator ? 414 : 315), combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
-                bool howl = active && attackTimeline.IsRunning
-                    ? attackTimeline.Kind == AttackAnimation.DogHowl : enemy.WillHowl;
-                TextAt(graphics, enemy.Kind == EnemyKind.Mimicrator ? enemy.Intent : howl ? "Вой · Слабость" : enemy.Kind == EnemyKind.Hedgehog ? "Иглы · 10 / Шипы · 2" : enemy.Kind == EnemyKind.RabidHedgehog ? "Укус · 5 / Бешенство" : "Укус · 5", center - 135, floor - (enemy.Kind == EnemyKind.Mimicrator ? 380 : 280), 15, gold, 300, true);
+                DrawEnemyIntent(graphics, enemy, center, floor - (enemy.Kind == EnemyKind.Mimicrator ? 380 : 280));
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
-                if (enemy.Block > 0) TextAt(graphics, "Блок · " + enemy.Block, center - 40, floor + 34, 15, Color.LightBlue, 180, true);
+                DrawBlockBadge(graphics, center + width / 2 + 4, floor + 8, enemy.Block);
+                if (enemy.Thorns > 0) DrawCombatHint(graphics, new CombatHint(6, enemy.Thorns.ToString(), "Шипы", "За каждую атакующую карту по этому врагу: " + enemy.Thorns + " ответного урона, включая добивающий удар. Блок поглощает этот урон."), new RectangleF(center - 14, floor + 30, 28, 28), true);
                 if (selectedTarget && combat.Enemies.Count > 1)
                 {
                     Stroke(graphics, center - width / 2 - 3, floor + 5, width + 6, 27, gold);

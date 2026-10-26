@@ -1,0 +1,7 @@
+Create a production sprite atlas of exactly 16 richly hand-painted fantasy game UI icons, matching the approved reference board's miniature icons. Transparent background, no text, no numerals, no labels, no frames, no shadows outside icon cells. Perfectly regular 4 columns by 4 rows, square cells, equal size, centered icon with generous 18% transparent padding within every cell, each icon isolated. Overall square 1024x1024. Distinct silhouettes readable at 32 pixels. Gold-edged jewel-toned dark fantasy art, NOT flat vectors/emoji.
+Cell order row-major:
+row1: broken purple sword (weakness); three yellow cartoon birds circling dazed star (stun); red infected fanged mouth (rabies); red clenched gauntlet (strength).
+row2: green winged boot (dexterity); glowing emerald anime tear (tears); golden crown of thorns (thorns); mint anime magic barrier (first-turn immunity).
+row3: red biting jaws (attack bite); three red/gold flying needles (needleattack); purple howling wolf head with downward magiccurl (howl debuff); redblue police beacon (transformationbeacon).
+row4: plushbrown teddy bear with red impactburst (heavyattack); purpleblue mussel shell slightlyopen (shell multiattack); violet fairy wings with crescent moon (rest); blue steel shield with gold rim (block).
+Only these16 icons. Reference is styleguide, do not reproduce UI or captions.

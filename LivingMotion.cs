@@ -70,7 +70,7 @@ namespace ShpilSvoih
 
         void AdvanceLivingAnimation(float elapsed)
         {
-            if (!LivingScene || inventoryView != "" || !Motion.IsFinite(elapsed) || elapsed <= 0) return;
+            if (!LivingScene || GameplayPaused || !Motion.IsFinite(elapsed) || elapsed <= 0) return;
             livingSeconds += elapsed;
             Invalidate();
         }

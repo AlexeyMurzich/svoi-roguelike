@@ -88,7 +88,7 @@ namespace ShpilSvoih
 
         void AdvanceMimicrator(float elapsed)
         {
-            if (!mimicratorPreview || mimicratorPaused || inventoryView != "") return;
+            if (!mimicratorPreview || mimicratorPaused || GameplayPaused) return;
             mimicratorSeconds += Motion.FrameDelta(elapsed);
             Invalidate();
         }

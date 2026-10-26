@@ -12,6 +12,9 @@ namespace ShpilSvoih
         bool legendOpen;
         void ReturnToMainMenu()
         {
+            debugConsoleOpen = false;
+            debugCommand = "";
+            debugReply = "shut_god — Шутен: бесконечное золото, атаки и защита ×3.";
             ClearMimicratorBackdrop();
             mimicratorPreview = false;
             mimicratorPaused = false;
@@ -52,7 +55,7 @@ namespace ShpilSvoih
             FitImage(g, healthIcon, new RectangleF(117, 10, 44, 44));
             TextAt(g, currentHero.Health + " / " + currentHero.MaxHealth, 170, 19, 20, text, 130, true);
             FitImage(g, coinIcon, new RectangleF(292, 12, 40, 40));
-            TextAt(g, currentHero.Money.ToString(), 340, 20, 20, gold, 150, true);
+            TextAt(g, currentHero.MoneyDisplay, 340, 20, 20, gold, 150, true);
             DrawMenuIcon(g, false, new RectangleF(CanvasWidth - 160, 9, 60, 46), () =>
             {
                 SetInventory("deck");
