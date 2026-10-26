@@ -63,7 +63,7 @@ namespace ShpilSvoih
                 Key(game, Keys.D1);
                 TestSuite.Check(Read<float>(game, "mapScrollVelocity") == 0, "entering battle cancels camera momentum");
                 Call(game, "ReturnToMainMenu");
-                TestSuite.Check(!Read<Timer>(game, "combatTimer").Enabled, "menu releases idle animation timer");
+                TestSuite.Check(Read<Timer>(game, "combatTimer").Enabled, "menu keeps the living portraits animated");
                 Call(game, "StartTestBattle"); Call(game, "EndCombatTurn");
                 foreach (float delta in new[] { .1f, .16f, .14f, .14f, .18f, .34f })
                 {

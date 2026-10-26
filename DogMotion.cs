@@ -17,7 +17,7 @@ namespace ShpilSvoih
             bool warm = index == 1;
             float bodyWidth = area.Width - 60;
             var body = new RectangleF(area.X + 50, area.Bottom - bodyWidth * dogBody.Height / dogBody.Width, bodyWidth, bodyWidth * dogBody.Height / dogBody.Width);
-            SpriteDrawing.Image(graphics, dogBody, body, new RectangleF(0, 0, dogBody.Width, dogBody.Height), 1, warm);
+            actorArtCache.Draw(graphics, dogBody, body, new RectangleF(0, 0, dogBody.Width, dogBody.Height), 1, warm);
             bool active = actingEnemyIndex == index;
             float time = attackTimeline.Time;
             if (active && attackTimeline.Kind == AttackAnimation.DogHowl)
@@ -61,7 +61,20 @@ namespace ShpilSvoih
             float scale = body.Height * .92f / dogHeads.Height;
             float anchorX = body.X + body.Width * .28f, anchorY = body.Y + body.Height * .3f;
             var target = new RectangleF(anchorX - DogHeadPivots[frame] * sourceScale * scale, anchorY - dogHeads.Height * .9f * scale, source.Width * scale, dogHeads.Height * scale);
-            SpriteDrawing.Image(graphics, dogHeads, target, source, opacity, warm);
+            var saved = graphics.Save();
+            try
+            {
+                // Only the head moves: the shared body and paws stay opaque and planted.
+                float phase = warm ? 2.3f : .4f;
+                float sway = LivingMotion.Wave(livingSeconds, 1.9, phase);
+                graphics.TranslateTransform(anchorX, anchorY);
+                graphics.RotateTransform(sway * .65f);
+                graphics.TranslateTransform(-anchorX, -anchorY);
+                actorArtCache.Draw(graphics, dogHeads, target, source, opacity, warm);
+                if (frame == 0 && opacity >= 1)
+                    LivingMotion.Saliva(graphics, new PointF(target.Left + target.Width * .25f, target.Top + target.Height * .60f), body.Width / 210, livingSeconds, warm ? .6 : .15);
+            }
+            finally { graphics.Restore(saved); }
         }
     }
 }

@@ -14,8 +14,10 @@ namespace ShpilSvoih
         readonly Bitmap[] frames = new Bitmap[7];
         public int LargeComponents { get; private set; }
         public int FrameCount { get { return 6; } }
-        public HedgehogAtlas(Bitmap source, bool rabid)
+        readonly ActorArtCache cache;
+        public HedgehogAtlas(Bitmap source, bool rabid, ActorArtCache cache = null)
         {
+            this.cache = cache;
             int w = source.Width, h = source.Height;
             var pixels = new byte[w * h * 4];
             var locked = source.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
@@ -85,7 +87,8 @@ namespace ShpilSvoih
         {
             float scale = Math.Min(area.Width / Width, area.Height / Height);
             var target = new RectangleF(area.X + area.Width / 2 - Width * scale / 2, area.Bottom - 520 * scale, Width * scale, Height * scale);
-            SpriteDrawing.Image(graphics, frames[frame], target, new RectangleF(0, 0, Width, Height), opacity, false);
+            if (cache == null) SpriteDrawing.Image(graphics, frames[frame], target, new RectangleF(0, 0, Width, Height), opacity, false);
+            else cache.Draw(graphics, frames[frame], target, new RectangleF(0, 0, Width, Height), opacity, false);
         }
         public void Blend(Graphics graphics, int from, int to, float amount, RectangleF area)
         {

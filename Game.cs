@@ -98,6 +98,7 @@ namespace ShpilSvoih
         string notice = "";
         private ImageAssets assetStore;
         bool resourcesDisposed;
+        readonly ActorArtCache actorArtCache = new ActorArtCache();
         private readonly Dictionary<Tuple<float, bool>, Font> fonts = new Dictionary<Tuple<float, bool>, Font>();
         public Game()
         {
@@ -124,6 +125,7 @@ namespace ShpilSvoih
             }
             catch
             {
+                actorArtCache.Dispose();
                 assetStore.Dispose();
                 howlSound.Dispose();
                 deathVisuals.Dispose();
@@ -388,7 +390,13 @@ namespace ShpilSvoih
             {
                 var im = sprites[id];
                 float r = Math.Min(width / im.Width, height / im.Height);
-                g.DrawImage(im, x + (width - im.Width * r) / 2, y + height - im.Height * r, im.Width * r, im.Height * r);
+                var saved = g.Save();
+                try
+                {
+                    if (!mapScreen) LivingMotion.Body(g, new RectangleF(x, y, width, height), livingSeconds, id, id == 0);
+                    actorArtCache.Draw(g, im, new RectangleF(x + (width - im.Width * r) / 2, y + height - im.Height * r, im.Width * r, im.Height * r), new RectangleF(0, 0, im.Width, im.Height), 1, false);
+                }
+                finally { g.Restore(saved); }
                 return;
             }
 
@@ -411,6 +419,7 @@ namespace ShpilSvoih
             g.Clear(background);
             actions.Clear();
             var viewport = DrawingViewport;
+            actorArtCache.SetScale(viewport.Scale);
             if (viewport.Scale <= 0)
                 return;
             var saved = g.Save();
@@ -532,8 +541,8 @@ namespace ShpilSvoih
                 Array.Clear(cardSheets, 0, cardSheets.Length);
                 sprites.Clear();
                 DisposeCheckoutArt();
-                if (assetStore != null)
-                    assetStore.Dispose();
+                actorArtCache.Dispose();
+                if (assetStore != null) assetStore.Dispose();
                 foreach (var font in fonts.Values)
                     font.Dispose();
                 fonts.Clear();

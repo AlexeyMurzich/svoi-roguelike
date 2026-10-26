@@ -68,6 +68,7 @@ namespace ShpilSvoih
             mimicratorPaused = false;
             if (combatTimer != null) combatTimer.Stop();
             ResetMotionClock();
+            WakeMotion();
             RefreshScene();
         }
 

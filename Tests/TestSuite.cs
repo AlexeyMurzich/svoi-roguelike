@@ -73,6 +73,8 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Living: lifecycle and fixed paws", UiTests.TestLivingScenes);
+            Run("Living: visual gallery", UiTests.TestLivingGallery);
             Run("All 12 original relic effects", StartingBuffTests.Run);
             Run("Invalid hero state and balance rejected", () =>
             {

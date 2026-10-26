@@ -49,16 +49,18 @@ namespace ShpilSvoih
                 cardSheets[i] = assetStore.Get("cards/" + filenames[i], "cards." + filenames[i]);
             dogBody = assetStore.Get("enemies/dog-body.png", "enemies.dog-body.png");
             dogHeads = assetStore.Get("enemies/stray-dogs.png", "enemies.stray-dogs.png");
-            ratPoses = new PoseAtlas(assetStore.Get("enemies/rat-bite.png", "enemies.rat-bite.png"));
-            shutenPoses = new PoseAtlas(assetStore.Get("shuten-combat.png", "shuten-combat.png"), 2, 2);
-            hedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-curl.png", "enemies.hedgehog-curl.png"), false);
-            rabidHedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-bite.png", "enemies.hedgehog-bite.png"), true);
+            ratPoses = new PoseAtlas(assetStore.Get("enemies/rat-bite.png", "enemies.rat-bite.png"), 3, 1, actorArtCache);
+            shutenPoses = new PoseAtlas(assetStore.Get("shuten-combat.png", "shuten-combat.png"), 2, 2, actorArtCache);
+            hedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-curl.png", "enemies.hedgehog-curl.png"), false, actorArtCache);
+            rabidHedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-bite.png", "enemies.hedgehog-bite.png"), true, actorArtCache);
             InitializeMotionTimer();
         }
 
         void ResetCombat()
         {
             cardArtCache.Clear();
+            actorArtCache.Clear();
+            livingSeconds = 0;
             howlSound.Stop();
             if (combatTimer != null && !MapMoving)
                 combatTimer.Stop();
@@ -118,6 +120,7 @@ namespace ShpilSvoih
             combat = new CombatState(currentHero, new Random(mapRun.Map.Seed ^ combatNode ^ 0xA71), enemy);
             combatNotice = "Твой ход";
             SyncDeaths();
+            WakeMotion();
         }
 
         void StartCombatAnimation(AttackAnimation kind, Action impact)
@@ -145,7 +148,7 @@ namespace ShpilSvoih
                 SyncDeaths();
                 if (!CombatBusy && combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
             }
-            if (!CombatBusy && combatTimer != null)
+            if (!CombatBusy && !LivingScene && combatTimer != null)
                 combatTimer.Stop();
             // The displayed frame's hit targets remain valid until the next paint.
             Invalidate();

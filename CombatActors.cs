@@ -32,8 +32,14 @@ namespace ShpilSvoih
             float move = attackTimeline.Kind == AttackAnimation.HeroStrike ? HeroAttackOffset(attackTimeline.Time) : 0;
             float width = selected == 3 ? 310 : 240;
             var area = new RectangleF(HeroCenter - width / 2 + move, CombatFloor - 335, width, 335);
-            if (selected == 3) DrawShutenPose(graphics, area);
-            else Portrait(graphics, selected, area.X, area.Y, area.Width, area.Height);
+            var saved = graphics.Save();
+            try
+            {
+                LivingMotion.Body(graphics, area, livingSeconds, selected, selected == 0);
+                if (selected == 3) DrawShutenPose(graphics, area);
+                else Portrait(graphics, selected, area.X, area.Y, area.Width, area.Height);
+            }
+            finally { graphics.Restore(saved); }
         }
 
         void PaintCombatEnemy(Graphics graphics, int index)
@@ -41,9 +47,28 @@ namespace ShpilSvoih
             var area = EnemyArea(index);
             if (actingEnemyIndex == index && (attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite))
                 area.Offset(BiteOffset(attackTimeline.Time), 0);
-            if (combat.Enemies[index].Kind == EnemyKind.Rat) DrawRatPose(graphics, area);
-            else if (combat.Enemies[index].Kind == EnemyKind.StrayDogs) DrawDogPoseFor(graphics, area, index);
-            else DrawHedgehogPose(graphics, area, combat.Enemies[index].Kind == EnemyKind.RabidHedgehog, actingEnemyIndex == index);
+            var kind = combat.Enemies[index].Kind;
+            var saved = graphics.Save();
+            try
+            {
+                if (kind != EnemyKind.StrayDogs)
+                    LivingMotion.Body(graphics, area, livingSeconds, kind == EnemyKind.RabidHedgehog ? 7 : 4 + index, false);
+                if (kind == EnemyKind.Rat) DrawRatPose(graphics, area);
+                else if (kind == EnemyKind.StrayDogs) DrawDogPoseFor(graphics, area, index);
+                else DrawHedgehogPose(graphics, area, kind == EnemyKind.RabidHedgehog, actingEnemyIndex == index);
+                // Mouth anchors belong to the resting poses, never to a different attack frame.
+                if (!(actingEnemyIndex == index && attackTimeline.IsRunning))
+                {
+                    if (kind == EnemyKind.Rat)
+                    {
+                        var target = ratPoses.Target(area);
+                        LivingMotion.Saliva(graphics, new PointF(target.Left + target.Width * .25f, target.Top + target.Height * .56f), target.Width / 430, livingSeconds, .1);
+                    }
+                    else if (kind == EnemyKind.RabidHedgehog)
+                        LivingMotion.Saliva(graphics, new PointF(area.Left + area.Width * .29f, area.Bottom - area.Height * .19f), area.Width / 360, livingSeconds, .55);
+                }
+            }
+            finally { graphics.Restore(saved); }
         }
     }
 }
