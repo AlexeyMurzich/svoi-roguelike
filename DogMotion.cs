@@ -5,7 +5,7 @@ namespace ShpilSvoih
 {
     public sealed partial class Game
     {
-        static readonly float[] DogHeadStarts = { 0, 780, 1500 }, DogHeadWidths = { 780, 720, 672 }, DogHeadPivots = { 615, 580, 535 };
+        static readonly float[] DogHeadStarts = { 0, 780, 1500 }, DogHeadWidths = { 780, 720, 672 }, DogHeadPivots = { 480, 420, 350 };
 
         void DrawDogPose(Graphics graphics, RectangleF area)
         {
@@ -15,8 +15,7 @@ namespace ShpilSvoih
         void DrawDogPoseFor(Graphics graphics, RectangleF area, int index)
         {
             bool warm = index == 1;
-            float bodyWidth = area.Width - 60;
-            var body = new RectangleF(area.X + 50, area.Bottom - bodyWidth * dogBody.Height / dogBody.Width, bodyWidth, bodyWidth * dogBody.Height / dogBody.Width);
+            var body = DogBodyArea(area);
             actorArtCache.Draw(graphics, dogBody, body, new RectangleF(0, 0, dogBody.Width, dogBody.Height), 1, warm);
             bool active = actingEnemyIndex == index;
             float time = attackTimeline.Time;
@@ -46,11 +45,18 @@ namespace ShpilSvoih
             else DrawDogHead(graphics, body, 0, 1, warm);
         }
 
+        RectangleF DogBodyArea(RectangleF area)
+        {
+            // Uniformly scale offsets as well as the image, including small previews.
+            float unit = area.Width / 270, width = 210 * unit;
+            float height = width * dogBody.Height / dogBody.Width;
+            return new RectangleF(area.X + 50 * unit, area.Bottom - height, width, height);
+        }
+
         void DrawDogHeadBlend(Graphics graphics, RectangleF body, int from, int to, float amount, bool warm)
         {
-            amount = Motion.Ease(amount);
-            DrawDogHead(graphics, body, from, 1 - amount, warm);
-            DrawDogHead(graphics, body, to, amount, warm);
+            // Never dissolve two faces: both the neck and jaw must stay opaque.
+            DrawDogHead(graphics, body, amount < .5f ? from : to, 1, warm);
         }
 
         void DrawDogHead(Graphics graphics, RectangleF body, int frame, float opacity, bool warm)
@@ -59,7 +65,7 @@ namespace ShpilSvoih
             float sourceScale = dogHeads.Width / 2172f;
             var source = new RectangleF(DogHeadStarts[frame] * sourceScale, 0, DogHeadWidths[frame] * sourceScale, dogHeads.Height);
             float scale = body.Height * .92f / dogHeads.Height;
-            float anchorX = body.X + body.Width * .28f, anchorY = body.Y + body.Height * .3f;
+            float anchorX = body.X + body.Width * .28f, anchorY = body.Y + body.Height * .34f;
             var target = new RectangleF(anchorX - DogHeadPivots[frame] * sourceScale * scale, anchorY - dogHeads.Height * .9f * scale, source.Width * scale, dogHeads.Height * scale);
             var saved = graphics.Save();
             try

@@ -77,6 +77,8 @@ namespace ShpilSvoih
             Run("Debug console: input, pause and scene isolation", UiTests.TestDebugConsole);
             Run("Battle backdrop: source, cache and six sizes", UiTests.TestBattleBackground);
             Run("Combat hints: statuses, intents and scaled hover", UiTests.TestCombatHints);
+            Run("Audit: neck attachment", UiTests.TestNeckAttachment);
+            Run("Audit: sprite cache and cadence", UiTests.TestAnimationCachePolicy);
             Run("Living: lifecycle and fixed paws", UiTests.TestLivingScenes);
             Run("Living: visual gallery", UiTests.TestLivingGallery);
             Run("All 12 original relic effects", StartingBuffTests.Run);

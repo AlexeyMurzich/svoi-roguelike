@@ -30,6 +30,13 @@ internal static class RenderBenchmark
             Call(game, "ReturnToMainMenu");
             Call(game, "OpenCheckout"); Call(game, "TakeBuff"); Call(game, "OpenActMap");
             Measure(game, graphics, "map");
+            Call(game, "StartTestMimicrator");
+            foreach (string form in new[] { "Fairy", "Beacon", "Bear", "Mussel" })
+            {
+                var field = gameType.GetField("mimicratorVisualForm", Private);
+                field.SetValue(game, Enum.Parse(field.FieldType, form));
+                Measure(game, graphics, "mimicrator-" + form);
+            }
             object store = Read(game, "assetStore");
             var images = (IDictionary)store.GetType().GetField("images", Private).GetValue(store);
             long bytes = 0;
@@ -46,6 +53,8 @@ internal static class RenderBenchmark
             int collections = GC.CollectionCount(0);
             for (int i = 0; i < samples.Length; i++)
             {
+                Call(game, "AdvanceLivingAnimation", 1f / 30);
+                Call(game, "AdvanceCombatAmbient", 1f / 30);
                 var clock = Stopwatch.StartNew(); Call(game, "OnPaint", paint); clock.Stop();
                 samples[i] = clock.Elapsed.TotalMilliseconds;
             }

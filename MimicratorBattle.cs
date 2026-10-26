@@ -33,7 +33,7 @@ namespace ShpilSvoih
         {
             LoadMimicratorArt();
             if (mimicratorShellPoses == null)
-                mimicratorShellPoses = new PoseAtlas(assetStore.Get("enemies/mimicrator-shell.png", "enemies.mimicrator-shell.png"));
+                mimicratorShellPoses = new PoseAtlas(assetStore.Get("enemies/mimicrator-shell.png", "enemies.mimicrator-shell.png"), 3, 1, actorArtCache);
         }
 
         void AdvanceCombatAmbient(float elapsed)
@@ -192,7 +192,7 @@ namespace ShpilSvoih
                     var crop = mimicratorSources[item];
                     float edge = form == MimicratorForm.Bear ? 220 : 175;
                     float fit = Math.Min(edge / crop.Width, edge / crop.Height);
-                    SpriteDrawing.Image(g, mimicratorProps,
+                    actorArtCache.Draw(g, mimicratorProps,
                         new RectangleF(-crop.Width * fit / 2, -crop.Height * fit / 2, crop.Width * fit, crop.Height * fit),
                         crop, 1, false);
                 }

@@ -26,6 +26,7 @@ namespace ShpilSvoih
                 return;
             if (!combatTimer.Enabled)
                 ResetMotionClock();
+            combatTimer.Interval = CombatBusy || MapMoving ? 16 : 33;
             combatTimer.Start();
         }
 
@@ -54,6 +55,7 @@ namespace ShpilSvoih
             }
             else
                 AdvanceMapMotion(elapsed);
+            combatTimer.Interval = CombatBusy || MapMoving ? 16 : 33;
             if (!CombatBusy && !CombatAmbientMoving && !LivingScene && !MapMoving && !(mimicratorPreview && !mimicratorPaused))
                 combatTimer.Stop();
         }

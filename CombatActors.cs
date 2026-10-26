@@ -43,6 +43,12 @@ namespace ShpilSvoih
             finally { graphics.Restore(saved); }
         }
 
+        bool EnemyIsAnimating(int index)
+        {
+            return actingEnemyIndex == index && attackTimeline.IsRunning &&
+                attackTimeline.Kind != AttackAnimation.HeroStrike && attackTimeline.Kind != AttackAnimation.HeroGuard;
+        }
+
         void PaintCombatEnemy(Graphics graphics, int index)
         {
             var area = EnemyArea(index);
@@ -59,7 +65,7 @@ namespace ShpilSvoih
                 else if (kind == EnemyKind.StrayDogs) DrawDogPoseFor(graphics, area, index);
                 else DrawHedgehogPose(graphics, area, kind == EnemyKind.RabidHedgehog, actingEnemyIndex == index);
                 // Mouth anchors belong to the resting poses, never to a different attack frame.
-                if (!(actingEnemyIndex == index && attackTimeline.IsRunning))
+                if (!EnemyIsAnimating(index))
                 {
                     if (kind == EnemyKind.Rat)
                     {
