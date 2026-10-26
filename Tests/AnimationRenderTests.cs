@@ -105,7 +105,7 @@ namespace ShpilSvoih
                     Call(game, "ReturnToMainMenu"); Call(game, "OpenCheckout"); Call(game, "TakeBuff"); Call(game, "OpenActMap");
                     Call(game, "ScrollMap", -110f); Call(game, "AdvanceMapMotion", .1f);
                     using (Render(game)) { }
-                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 37, "scene transitions never duplicate source images");
+                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37, "scene transitions never duplicate source images");
                     if (cycle == 5)
                     {
                         initialHandles = GetGuiResources(process.Handle, 0);

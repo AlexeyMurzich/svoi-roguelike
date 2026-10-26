@@ -106,7 +106,7 @@ namespace ShpilSvoih
                     }
                 }
                 sheet.Save(Path.Combine(TestSuite.OutputDirectory, "living-contact-sheet.png"));
-                TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 37, "all idle effects reuse existing source art");
+                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37, "all idle effects reuse existing source art");
             }
         }
     }

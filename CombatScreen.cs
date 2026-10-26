@@ -188,13 +188,13 @@ namespace ShpilSvoih
                     combatNotice = combat.Phase == CombatPhase.Victory ? "Победа!" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastRetaliation > 0 ? "Попадание · Шипы: −" + combat.LastRetaliation + " HP" : "Попадание";
                 });
             }
-            else if (selected == 3 && card.Block > 0)
+            else if (card.Block > 0)
             {
                 StartCombatAnimation(AttackAnimation.HeroGuard, () =>
                 {
                     combat.TryPlay(index);
                     SyncDeaths();
-                    combatNotice = combat.Phase == CombatPhase.Defeat ? "Поражение" : "Защита кредиткой";
+                    combatNotice = combat.Phase == CombatPhase.Defeat ? "Поражение" : selected == 3 ? "Защита кредиткой" : "Защита поднята";
                 });
             }
             else

@@ -14,7 +14,7 @@ namespace ShpilSvoih
                 float x = heroX + 70 + (target - heroX - 170) * flight;
                 float y = floor - 245 - (float)Math.Sin(flight * Math.PI) * 28;
                 if (selected == 3) FitImage(graphics, coinIcon, new RectangleF(x - 17, y - 17, 34, 34));
-                else using (var stroke = new Pen(colors[selected], 4)) graphics.DrawLine(stroke, x - 20, y - 12, x + 20, y + 12);
+                else DrawHeroProjectile(graphics, x, y, flight);
             }
             float afterHit = time - attackTimeline.HitTime;
             if ((currentHero.Health > 0 || attackTimeline.Kind != AttackAnimation.HeroStrike) && attackTimeline.IsRunning && attackTimeline.Kind != AttackAnimation.DogHowl && attackTimeline.Kind != AttackAnimation.MimicratorTransform && attackTimeline.Kind != AttackAnimation.MimicratorRest && afterHit >= 0 && afterHit < .18f)
