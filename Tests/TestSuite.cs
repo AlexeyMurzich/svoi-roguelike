@@ -81,6 +81,8 @@ namespace ShpilSvoih
             Run("Debug console: input, pause and scene isolation", UiTests.TestDebugConsole);
             Run("Battle backdrop: source, cache and six sizes", UiTests.TestBattleBackground);
             Run("Combat hints: statuses, intents and scaled hover", UiTests.TestCombatHints);
+            Run("Illya: free automatic cards and confusion costs", IllyaTests.Rules);
+            Run("Illya: live costs and animated payment", UiTests.TestIllyaCosts);
             Run("Hero combat minimum: timing, pause and poses", UiTests.TestHeroCombatMinimum);
             Run("Audit: neck attachment", UiTests.TestNeckAttachment);
             Run("Audit: sprite cache and cadence", UiTests.TestAnimationCachePolicy);

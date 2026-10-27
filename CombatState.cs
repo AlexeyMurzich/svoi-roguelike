@@ -25,6 +25,7 @@ namespace ShpilSvoih
     public sealed class CombatState
     {
         readonly List<CardData> draw = new List<CardData>(), discard = new List<CardData>(), hand = new List<CardData>();
+        readonly Dictionary<CardData, decimal> handCosts = new Dictionary<CardData, decimal>();
         readonly Random random;
         public readonly HeroState Hero;
         public readonly EnemyKind Enemy;
@@ -106,7 +107,7 @@ namespace ShpilSvoih
             var bonus = hero.Effects.StartCombat();
             BeginPlayerTurn();
             if (Phase == CombatPhase.Player)
-                hand.AddRange(bonus);
+                foreach (var card in bonus) AddToHand(card);
         }
 
         void Shuffle(List<CardData> cards)
@@ -149,7 +150,7 @@ namespace ShpilSvoih
                 if (draw.Count == 0)
                     break;
                 int last = draw.Count - 1;
-                hand.Add(draw[last]);
+                AddToHand(draw[last]);
                 draw.RemoveAt(last);
             }
 
@@ -159,7 +160,17 @@ namespace ShpilSvoih
                 foreach (int index in Hero.ChooseAutomaticCards(hand.Count, random))
                     selected.Add(hand[index]);
                 foreach (var card in selected)
-                    TryPlay(hand.IndexOf(card));
+                    TryPlay(hand.IndexOf(card), true);
+            }
+        }
+
+        void AddToHand(CardData card)
+        {
+            hand.Add(card);
+            if (Hero.Hero == 1)
+            {
+                decimal rolled = random.Next(5);
+                handCosts[card] = card.WiecznyApplied ? rolled * .5m : rolled;
             }
         }
 
@@ -167,6 +178,8 @@ namespace ShpilSvoih
         {
             if (card == null)
                 throw new ArgumentNullException("card");
+            decimal cost;
+            if (Hero.Hero == 1 && handCosts.TryGetValue(card, out cost)) return cost;
             return Hero.Hero == 3 ? Hero.Effects.GoldPrice(card.GoldCost) : card.ManaCost;
         }
 
@@ -182,6 +195,11 @@ namespace ShpilSvoih
 
         public bool CanPlay(int index)
         {
+            return CanPlay(index, false);
+        }
+
+        bool CanPlay(int index, bool automatic)
+        {
             if (Phase != CombatPhase.Player || Hero.Health <= 0 || CardsPlayedThisTurn >= CardPlayLimit || index < 0 || index >= hand.Count)
                 return false;
             var card = hand[index];
@@ -189,20 +207,26 @@ namespace ShpilSvoih
             if (card.Family != CardFamily.None && Hero.Hero == 2 && !Hero.CanUseFamily(card.Family))
                 return false;
             decimal price = Cost(card);
-            return price >= 0 && (Hero.Hero == 3 ? Hero.ShutGod || Hero.CanBorrow || Hero.Money >= price : Energy >= price);
+            return price >= 0 && (Hero.Hero == 3 ? Hero.ShutGod || Hero.CanBorrow || Hero.Money >= price : automatic || Energy >= price);
         }
 
         public bool TryPlay(int index)
         {
-            if (!CanPlay(index))
+            return TryPlay(index, false);
+        }
+
+        bool TryPlay(int index, bool automatic)
+        {
+            if (!CanPlay(index, automatic))
                 return false;
             var card = hand[index];
             LastRetaliation = 0;
             CardsPlayedThisTurn++;
             if (Hero.Hero == 3)
                 Hero.ChangeMoney(-Cost(card));
-            else
+            else if (!automatic)
                 Energy -= Cost(card);
+            handCosts.Remove(card);
             hand.RemoveAt(index);
             discard.Add(card);
             if (Hero.Health <= 0)
@@ -235,6 +259,7 @@ namespace ShpilSvoih
                 return false;
             discard.AddRange(hand);
             hand.Clear();
+            handCosts.Clear();
             if (WeakTurns > 0) WeakTurns--;
             CardPlayLimit = int.MaxValue;
             Phase = CombatPhase.Enemy;

@@ -1,25 +1,26 @@
-Merged v0.23: 9 suites, 0 failed, 328 assertions.
+v0.23.1: 7 suites, 0 failures, 1772 assertions.
 
-PASS Music: asynchronous switching, pause, cancellation and disposal
-PASS Music: five embedded tracks preserve all samples
-PASS Music: native loop, pause and resume
-PASS Music: actual hero clicks and elite scene transitions
-Suites: 4 passed, 0 failed. Assertions: 50.
+﻿PASS Illya: free automatic cards and confusion costs
+PASS Illya: live costs and animated payment
+Suites: 2 passed, 0 failed. Assertions: 28.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-PASS Hero combat minimum: timing, pause and poses
+﻿PASS Combat rules, recycling, resources, victory and defeat
+Suites: 1 passed, 0 failed. Assertions: 1389.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+﻿PASS Hero combat minimum: timing, pause and poses
 Suites: 1 passed, 0 failed. Assertions: 24.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-PASS Audit: neck attachment
-PASS Audit: sprite cache and cadence
-Suites: 2 passed, 0 failed. Assertions: 115.
+﻿PASS Mimicrator combat: forms, stun, auto cards and enemy block
+Suites: 1 passed, 0 failed. Assertions: 188.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-PASS Dog legs preserve color and opacity through bite and howl frames
-Suites: 1 passed, 0 failed. Assertions: 115.
+﻿PASS Combat hints: statuses, intents and scaled hover
+Suites: 1 passed, 0 failed. Assertions: 92.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-PASS Image ownership, fallback and file unlocking
-Suites: 1 passed, 0 failed. Assertions: 24.
+﻿PASS All 12 original relic effects
+Suites: 1 passed, 0 failed. Assertions: 51.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
