@@ -35,7 +35,13 @@ namespace ShpilSvoih
                 }
                 catch { bitmap.Dispose(); throw; }
             }
-            graphics.DrawImage(cards[index], area);
+            var interpolation = graphics.InterpolationMode;
+            try
+            {
+                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                graphics.DrawImage(cards[index], area);
+            }
+            finally { graphics.InterpolationMode = interpolation; }
         }
         public void Clear()
         {

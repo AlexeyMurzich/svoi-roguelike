@@ -126,7 +126,10 @@ namespace ShpilSvoih
             var interpolation = graphics.InterpolationMode;
             try
             {
-                graphics.InterpolationMode = InterpolationMode.Bilinear;
+                // Copies are already resampled to device resolution with bicubic filtering.
+                // A second filtered affine draw is extremely slow in GDI+; point sampling
+                // preserves the prepared detail while retaining the exact destination transform.
+                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
                 SpriteDrawing.Image(graphics, bitmap, target, new RectangleF(0, 0, bitmap.Width, bitmap.Height), opacity, false);
             }
             finally { graphics.InterpolationMode = interpolation; }

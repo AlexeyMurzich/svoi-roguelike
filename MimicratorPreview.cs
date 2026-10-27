@@ -28,6 +28,17 @@ namespace ShpilSvoih
             RefreshScene();
         }
 
+        void DrawPreparedMimicratorBody(Graphics g)
+        {
+            var interpolation = g.InterpolationMode;
+            try
+            {
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                SpriteDrawing.FitBottom(g, mimicratorDisplayBody, new RectangleF(-223, -330, 446, 650), 1);
+            }
+            finally { g.InterpolationMode = interpolation; }
+        }
+
         void LoadMimicratorArt()
         {
             if (mimicratorBody == null)
@@ -157,7 +168,7 @@ namespace ShpilSvoih
 
         void PrepareMimicratorDisplaySprites()
         {
-            float scale = DrawingViewport.Scale;
+            float scale = RenderViewport.Scale;
             if (mimicratorDisplayBody != null && mimicratorDisplayScale == scale) return;
             ClearMimicratorDisplaySprites();
             mimicratorDisplayScale = scale;
@@ -170,7 +181,7 @@ namespace ShpilSvoih
 
         void DrawMimicratorBackdrop(Graphics g)
         {
-            var viewport = DrawingViewport;
+            var viewport = RenderViewport;
             var size = new Size(Math.Max(1, (int)Math.Ceiling(1280 * viewport.Scale)),
                 Math.Max(1, (int)Math.Ceiling(840 * viewport.Scale)));
             if (mimicratorBackdrop == null || mimicratorBackdrop.Size != size)
@@ -210,7 +221,7 @@ namespace ShpilSvoih
                 float bob = (float)Math.Sin(mimicratorSeconds * 1.25) * 6;
                 g.TranslateTransform(640, 444 + bob);
                 g.RotateTransform((float)Math.Sin(mimicratorSeconds * .65) * .65f);
-                SpriteDrawing.FitBottom(g, mimicratorDisplayBody, new RectangleF(-223, -330, 446, 650), 1);
+                DrawPreparedMimicratorBody(g);
             }
             finally { g.Restore(saved); }
             DrawMimicratorOrbitLayer(g, true, mimicratorSeconds);

@@ -37,8 +37,8 @@ namespace ShpilSvoih
         void DrawTohaBackground(Graphics graphics)
         {
             LoadTohaArt();
-            int top = (int)Math.Round(MapView.Top * DrawingViewport.Scale);
-            var size = new Size(Math.Max(1, ClientSize.Width), Math.Max(1, ClientSize.Height - top));
+            int top = (int)Math.Round(MapView.Top * RenderViewport.Scale);
+            var size = new Size(Math.Max(1, RenderPixels.Width), Math.Max(1, RenderPixels.Height - top));
             if (tohaDayFrame == null || tohaBackgroundSize != size)
             {
                 ClearTohaBackdrop();
@@ -57,10 +57,12 @@ namespace ShpilSvoih
             {
                 graphics.SetClip(MapView, CombineMode.Intersect);
                 graphics.ResetTransform();
+                graphics.CompositingMode = CompositingMode.SourceCopy;
                 if (dark >= 1) graphics.DrawImageUnscaled(tohaNightFrame, 0, top);
                 else
                 {
                     graphics.DrawImageUnscaled(tohaDayFrame, 0, top);
+                    graphics.CompositingMode = CompositingMode.SourceOver;
                     if (dark > 0)
                         SpriteDrawing.Image(graphics, tohaNightFrame, new RectangleF(0, top, size.Width, size.Height),
                             new RectangleF(0, 0, size.Width, size.Height), dark, false);

@@ -368,10 +368,14 @@ namespace ShpilSvoih
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            var g = e.Graphics;
+            PaintFrame(e.Graphics);
+        }
+
+        void PaintScene(Graphics g)
+        {
             g.Clear(background);
             actions.Clear();
-            var viewport = DrawingViewport;
+            var viewport = RenderViewport;
             actorArtCache.SetScale(viewport.Scale);
             interfaceArtCache.SetScale(viewport.Scale);
             if (viewport.Scale <= 0)
@@ -425,6 +429,7 @@ namespace ShpilSvoih
             if (disposing && !resourcesDisposed)
             {
                 resourcesDisposed = true;
+                ClearRenderSurface();
                 music.Dispose();
                 ResetCombat();
                 ClearMimicratorBackdrop();

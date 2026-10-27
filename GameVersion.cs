@@ -2,6 +2,6 @@
 {
     public static class GameVersion
     {
-        public const string Number = "0.25";
+        public const string Number = "0.26";
     }
 }

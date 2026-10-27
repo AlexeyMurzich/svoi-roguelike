@@ -20,6 +20,11 @@ namespace ShpilSvoih
             Height = height;
         }
 
+        internal Viewport AtDensity(float density)
+        {
+            return new Viewport(Scale * density, OffsetX * density, OffsetY * density, Width, Height);
+        }
+
         public static Viewport Fit(Size client)
         {
             if (client.Width <= 0 || client.Height <= 0)

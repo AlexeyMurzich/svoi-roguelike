@@ -86,6 +86,8 @@ namespace ShpilSvoih
             Run("Toha: frame-rate independent ram and transformation", TohaTests.Motion);
             Run("Toha: battle, backgrounds, pause, death and six sizes", UiTests.TestTohaCombat);
             Run("Toha: real elite room, investigation and revisit", UiTests.TestTohaEliteRoom);
+            Run("Performance: bounded rasterization and native pointer input", UiTests.TestRenderBudget);
+            Run("Performance: alpha and graphics state after fast drawing", UiTests.TestFastCompositing);
             Run("Performance: bounded image cache and LRU", UiTests.TestScaledCacheLimits);
             Run("Performance: interface reuse and cleanup", UiTests.TestInterfaceCacheReuse);
             Run("Illya: free automatic cards and confusion costs", IllyaTests.Rules);

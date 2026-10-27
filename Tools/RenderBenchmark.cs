@@ -45,6 +45,10 @@ internal static class RenderBenchmark
                 field.SetValue(game, Enum.Parse(field.FieldType, form));
                 Measure(game, graphics, "mimicrator-" + form);
             }
+            Call(game, "StartTestIllyaToha");
+            Measure(game, graphics, "toha-light");
+            gameType.GetField("tohaVisualDark", Private).SetValue(game, true);
+            Measure(game, graphics, "toha-dark");
             object store = Read(game, "assetStore");
             var images = (IDictionary)store.GetType().GetField("images", Private).GetValue(store);
             long bytes = 0;

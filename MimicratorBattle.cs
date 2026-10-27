@@ -138,7 +138,7 @@ namespace ShpilSvoih
                     {
                         g.TranslateTransform(640, 444 + bob);
                         g.RotateTransform((float)Math.Sin(mimicratorCombatSeconds * .65) * .65f);
-                        SpriteDrawing.FitBottom(g, mimicratorDisplayBody, new RectangleF(-223, -330, 446, 650), 1);
+                        DrawPreparedMimicratorBody(g);
                     }
                     finally { g.Restore(body); }
                     DrawMimicratorOrbitLayer(g, true, mimicratorCombatSeconds);

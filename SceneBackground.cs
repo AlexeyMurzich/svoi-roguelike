@@ -16,9 +16,9 @@ namespace ShpilSvoih
         {
             bool ordinary = fighting && combat != null && combat.Enemy != EnemyKind.Mimicrator;
             Image source = fighting ? ordinary ? ordinaryCombatBackground : eliteCombatBackground : mapBackground;
-            float scale = DrawingViewport.Scale;
+            float scale = RenderViewport.Scale;
             int top = (int)Math.Round(MapView.Top * scale);
-            var pixels = new Size(ClientSize.Width, Math.Max(1, ClientSize.Height - top));
+            var pixels = new Size(RenderPixels.Width, Math.Max(1, RenderPixels.Height - top));
             if (sceneBackground == null || sceneViewport != pixels || sceneIsCombat != fighting || !object.ReferenceEquals(sceneSource, source))
             {
                 if (sceneBackground != null) sceneBackground.Dispose();
@@ -41,6 +41,8 @@ namespace ShpilSvoih
             {
                 graphics.SetClip(MapView, CombineMode.Intersect);
                 graphics.ResetTransform();
+                // Backdrop is opaque: copy instead of blending every screen pixel.
+                graphics.CompositingMode = CompositingMode.SourceCopy;
                 graphics.DrawImageUnscaled(sceneBackground, 0, top - crop);
             }
             finally { graphics.Restore(saved); }

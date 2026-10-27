@@ -30,7 +30,7 @@ namespace ShpilSvoih
             var area = new RectangleF(slot.X + (slot.Width - source.Width * scale) / 2, slot.Y + (slot.Height - source.Height * scale) / 2, source.Width * scale, source.Height * scale);
             bool standard = card.Name == "Удар" || card.Name == "Защита";
             if (standard)
-                cardArtCache.Draw(g, cardSheets[selected], source, area, DrawingViewport.Scale, card.Attack);
+                cardArtCache.Draw(g, cardSheets[selected], source, area, RenderViewport.Scale, card.Attack);
             else
             {
                 RelicFrame(g, area.X, area.Y, area.Width, area.Height, usable);
