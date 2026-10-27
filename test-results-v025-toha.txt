@@ -1,0 +1,7 @@
+﻿PASS Toha: Illya test launcher preserves free auto plays and confusion
+PASS Toha: threshold, damage and elite generation
+PASS Toha: frame-rate independent ram and transformation
+PASS Toha: battle, backgrounds, pause, death and six sizes
+PASS Toha: real elite room, investigation and revisit
+Suites: 5 passed, 0 failed. Assertions: 2180.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

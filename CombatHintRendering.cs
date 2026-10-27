@@ -19,7 +19,12 @@ namespace ShpilSvoih
 
         void DrawCombatHintIcon(Graphics g, int icon, RectangleF area)
         {
-            if (icon == 16)
+            if (icon == 19)
+            {
+                LoadTohaArt();
+                FitImage(g, combat != null && combat.Enemies[0].IsDarkToha ? tohaDark : tohaLight, area);
+            }
+            else if (icon == 16)
                 DrawInterfaceImage(g, menuIcons, area, new RectangleF(0, 0, menuIcons.Width / 2f, menuIcons.Height));
             else if (icon == 17) FitImage(g, coinIcon, area);
             else if (icon == 18) FitImage(g, relicImages["investigation"], area);

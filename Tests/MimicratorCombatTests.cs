@@ -230,6 +230,7 @@ namespace ShpilSvoih
                 for (int id = parents[elite.Id]; id > 0; id = parents[id]) route.Add(id);
                 route.Reverse();
                 foreach (int id in route) { TestSuite.Check(run.Enter(id), "routing prefix"); run.CompleteRoom(); }
+                Write(game, "testEnemyOverride", (EnemyKind?)EnemyKind.Mimicrator);
                 Call(game, "EnterMapNode", elite.Id);
                 var fight = Read<CombatState>(game, "combat");
                 TestSuite.Check(fight != null && fight.Enemy == EnemyKind.Mimicrator, "elite node starts real Mimicrator");

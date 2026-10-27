@@ -17,7 +17,10 @@ namespace ShpilSvoih
         MimicratorBear,
         MimicratorShell,
         MimicratorTransform,
-        MimicratorRest
+        MimicratorRest,
+        TohaRam,
+        TohaDarkRam,
+        TohaTransform
     }
 
     // Animation owns its clock and one impact callback, never the combat rules.
@@ -55,6 +58,9 @@ namespace ShpilSvoih
             if (kind == AttackAnimation.MimicratorShell) { Duration = 1.05f; HitTime = .62f; }
             if (kind == AttackAnimation.MimicratorTransform) { Duration = .85f; HitTime = .425f; }
             if (kind == AttackAnimation.MimicratorRest) { Duration = .95f; HitTime = .48f; }
+            if (kind == AttackAnimation.TohaRam) { Duration = 1.35f; HitTime = .62f; }
+            if (kind == AttackAnimation.TohaDarkRam) { Duration = 1.5f; HitTime = .58f; }
+            if (kind == AttackAnimation.TohaTransform) { Duration = 1.2f; HitTime = .6f; }
             Time = 0;
             HitApplied = false;
             impact = onImpact;

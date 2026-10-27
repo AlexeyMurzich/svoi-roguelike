@@ -22,7 +22,7 @@ namespace ShpilSvoih
         readonly Dictionary<int, EnemyKind> encounteredEnemies = new Dictionary<int, EnemyKind>();
         EnemyKind EnemyAtNode(int id)
         {
-            if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyKind.Mimicrator;
+            if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id);
             EnemyKind enemy;
             return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : EnemyCatalog.ForNode(mapRun.Map.Seed, id);
         }
@@ -63,6 +63,8 @@ namespace ShpilSvoih
 
         void ResetCombat()
         {
+            ClearTohaBackdrop();
+            tohaVisualDark = false;
             ClearMimicratorBackdrop();
             mimicratorCombatSeconds = 0;
             mimicratorVisualForm = MimicratorForm.Fairy;
@@ -98,12 +100,18 @@ namespace ShpilSvoih
         internal void StartTestRabidHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestHedgehogs() { StartTestEncounter(EnemyKind.Hedgehogs); }
 
+        internal void StartTestToha() { StartTestEncounter(EnemyKind.Toha); }
+
         internal void StartTestMimicrator() { StartTestEncounter(EnemyKind.Mimicrator); }
 
-        void StartTestEncounter(EnemyKind enemy)
+        internal void StartTestIllyaToha() { StartTestEncounter(EnemyKind.Toha, 1); }
+
+        void StartTestEncounter(EnemyKind enemy) { StartTestEncounter(enemy, 3); }
+
+        void StartTestEncounter(EnemyKind enemy, int hero)
         {
             ReturnToMainMenu();
-            selected = 3;
+            selected = hero;
             OpenCheckout();
             TakeBuff();
             OpenActMap();
@@ -130,14 +138,21 @@ namespace ShpilSvoih
             ResetCombat();
             combatNode = mapRun.Pending.Id;
             encounteredEnemies[combatNode] = enemy;
+            mapIntel[combatNode].Identity = EnemyCatalog.Name(enemy);
             combat = new CombatState(currentHero, new Random(mapRun.Map.Seed ^ combatNode ^ 0xA71), enemy);
             if (enemy == EnemyKind.Mimicrator)
             {
                 LoadMimicratorBattleArt();
                 WakeMotion();
             }
+            if (enemy == EnemyKind.Toha)
+            {
+                if (sceneBackground != null) { sceneBackground.Dispose(); sceneBackground = null; }
+                LoadTohaArt();
+            }
             combatNotice = "Твой ход";
             SyncDeaths();
+            TryStartTohaTransform();
             WakeMotion();
         }
 
@@ -164,7 +179,11 @@ namespace ShpilSvoih
                 attackTimeline.Advance(step);
                 remaining = Math.Max(0, remaining - step);
                 SyncDeaths();
-                if (!CombatBusy && combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
+                if (!CombatBusy)
+                {
+                    if (TryStartTohaTransform()) continue;
+                    if (combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
+                }
             }
             if (!CombatBusy && !CombatAmbientMoving && !LivingScene && combatTimer != null)
                 combatTimer.Stop();
@@ -218,6 +237,11 @@ namespace ShpilSvoih
             if (combat.Phase != CombatPhase.Enemy || combat.ActingEnemy < 0) return;
             actingEnemyIndex = combat.ActingEnemy;
             var actor = combat.Enemies[actingEnemyIndex];
+            if (actor.Kind == EnemyKind.Toha)
+            {
+                if (!TryStartTohaTransform()) StartTohaRam(actor);
+                return;
+            }
             bool howling = actor.WillHowl;
             if (actor.Kind == EnemyKind.Mimicrator)
             {

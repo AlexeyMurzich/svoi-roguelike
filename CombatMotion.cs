@@ -63,8 +63,8 @@ namespace ShpilSvoih
                 if (!enemy.IsAlive) continue;
                 int width = combat.Enemies.Count == 1 ? 250 : 180;
                 bool selectedTarget = combat.SelectedTarget == index;
-                TextAt(graphics, enemy.Name, center - width / 2, floor - (enemy.Kind == EnemyKind.Mimicrator ? 414 : 315), combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
-                DrawEnemyIntent(graphics, enemy, center, floor - (enemy.Kind == EnemyKind.Mimicrator ? 380 : 280));
+                TextAt(graphics, enemy.Name, center - width / 2, floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha) ? 414 : 315), combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
+                DrawEnemyIntent(graphics, enemy, center, floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha) ? 380 : 280));
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
                 DrawBlockBadge(graphics, center + width / 2 + 4, floor + 8, enemy.Block);
                 if (enemy.Thorns > 0) DrawCombatHint(graphics, new CombatHint(6, enemy.Thorns.ToString(), "Шипы", "За каждую атакующую карту по этому врагу: " + enemy.Thorns + " ответного урона, включая добивающий удар. Блок поглощает этот урон."), new RectangleF(center - 14, floor + 30, 28, 28), true);

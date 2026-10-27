@@ -48,7 +48,12 @@ namespace ShpilSvoih
         {
             var result = new List<CombatHint>();
             if (!enemy.IsAlive) return result;
-            if (enemy.Kind == EnemyKind.Mimicrator)
+            if (enemy.Kind == EnemyKind.Toha)
+            {
+                result.Add(new CombatHint(19, enemy.AttackDamage.ToString(), enemy.IsDarkToha ? "Тёмный наезд" : "Наезд",
+                    "Нанесёт " + enemy.AttackDamage + " урона машиной. При 30% HP или ниже светлая форма один раз превращается в тёмную. Здоровье не восстанавливается."));
+            }
+            else if (enemy.Kind == EnemyKind.Mimicrator)
             {
                 var form = enemy.IsActing ? enemy.Form : enemy.NextForm;
                 string prefix = enemy.IsActing ? "Текущая форма. " : "В начале своего хода примет эту форму. ";

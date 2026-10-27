@@ -1,0 +1,4 @@
+﻿PASS Illya: free automatic cards and confusion costs
+PASS Illya: live costs and animated payment
+Suites: 2 passed, 0 failed. Assertions: 28.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

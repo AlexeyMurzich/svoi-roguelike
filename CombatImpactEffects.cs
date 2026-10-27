@@ -17,9 +17,9 @@ namespace ShpilSvoih
                 else DrawHeroProjectile(graphics, x, y, flight);
             }
             float afterHit = time - attackTimeline.HitTime;
-            if ((currentHero.Health > 0 || attackTimeline.Kind != AttackAnimation.HeroStrike) && attackTimeline.IsRunning && attackTimeline.Kind != AttackAnimation.DogHowl && attackTimeline.Kind != AttackAnimation.MimicratorTransform && attackTimeline.Kind != AttackAnimation.MimicratorRest && afterHit >= 0 && afterHit < .18f)
+            if ((currentHero.Health > 0 || attackTimeline.Kind != AttackAnimation.HeroStrike) && attackTimeline.IsRunning && attackTimeline.Kind != AttackAnimation.DogHowl && attackTimeline.Kind != AttackAnimation.TohaTransform && attackTimeline.Kind != AttackAnimation.MimicratorTransform && attackTimeline.Kind != AttackAnimation.MimicratorRest && afterHit >= 0 && afterHit < .18f)
             {
-                bool enemyHit = attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite || attackTimeline.Kind == AttackAnimation.HedgehogNeedles || attackTimeline.Kind == AttackAnimation.MimicratorMagic || attackTimeline.Kind == AttackAnimation.MimicratorBeacon || attackTimeline.Kind == AttackAnimation.MimicratorBear || attackTimeline.Kind == AttackAnimation.MimicratorShell;
+                bool enemyHit = IsTohaRamming || attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite || attackTimeline.Kind == AttackAnimation.HedgehogNeedles || attackTimeline.Kind == AttackAnimation.MimicratorMagic || attackTimeline.Kind == AttackAnimation.MimicratorBeacon || attackTimeline.Kind == AttackAnimation.MimicratorBear || attackTimeline.Kind == AttackAnimation.MimicratorShell;
                 float x = enemyHit || attackTimeline.Kind == AttackAnimation.HeroGuard ? heroX : target;
                 int alpha = (int)(210 * (1 - Motion.Ease(afterHit / .18f)));
                 using (var pen = new Pen(Color.FromArgb(alpha, 255, 218, 137), 3))

@@ -6,6 +6,10 @@ PASS Debug console: infinite gold and exact triple multiplier
 PASS Debug console: input, pause and scene isolation
 PASS Battle backdrop: source, cache and six sizes
 PASS Combat hints: statuses, intents and scaled hover
+PASS Toha: threshold, damage and elite generation
+PASS Toha: frame-rate independent ram and transformation
+PASS Toha: battle, backgrounds, pause, death and six sizes
+PASS Toha: real elite room, investigation and revisit
 PASS Performance: bounded image cache and LRU
 PASS Performance: interface reuse and cleanup
 PASS Illya: free automatic cards and confusion costs
@@ -42,7 +46,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 28,7 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 30,6 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -64,12 +68,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 32,74 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 34,81 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 69 passed, 0 failed. Assertions: 1134318.
+Suites: 73 passed, 0 failed. Assertions: 1137584.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

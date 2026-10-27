@@ -202,7 +202,7 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "map-finished.png"));
                     Key(game, Keys.Enter);
                     TestSuite.Check(run.Finished && run.Pending == null, "completed map cannot restart on enter");
-                    TestSuite.Check(((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37 || (Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 40), "elite art is lazy and shared");
+                    TestSuite.Check(((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37 || (Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 40 || (Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 41 || (Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 44), "elite art is lazy and shared");
                     Call(game, "OpenCheckout");
                     TestSuite.Check(Read<MapRun>(game, "mapRun") == null && !Read<bool>(game, "mapScreen"), "new character run resets route");
                 }

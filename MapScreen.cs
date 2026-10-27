@@ -34,7 +34,7 @@ namespace ShpilSvoih
                     var item = new IntelNode
                     {
                         Kind = node.Kind == RoomKind.Question ? IntelKind.Question : node.Kind == RoomKind.Elite ? IntelKind.Elite : node.Kind == RoomKind.Fight ? IntelKind.Fight : IntelKind.Other,
-                        Identity = node.Kind == RoomKind.Question ? "Событие ещё не задано" : node.Kind == RoomKind.Fight ? EnemyCatalog.Name(EnemyCatalog.ForNode(mapRun.Map.Seed, node.Id)) : node.Kind == RoomKind.Elite ? EnemyCatalog.Name(EnemyKind.Mimicrator) : "Противник ещё не задан"
+                        Identity = node.Kind == RoomKind.Question ? "Событие ещё не задано" : node.Kind == RoomKind.Fight ? EnemyCatalog.Name(EnemyCatalog.ForNode(mapRun.Map.Seed, node.Id)) : node.Kind == RoomKind.Elite ? EnemyCatalog.Name(EnemyCatalog.ForEliteNode(mapRun.Map.Seed, node.Id)) : "Противник ещё не задан"
                     };
                     mapIntel.Add(node.Id, item);
                     intel.Add(item);

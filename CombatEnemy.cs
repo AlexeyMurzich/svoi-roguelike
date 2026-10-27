@@ -13,6 +13,7 @@ namespace ShpilSvoih
         public int Block { get; private set; }
         public int CyclePosition { get; private set; }
         public int ActionsTaken { get; private set; }
+        public bool IsDarkToha { get; private set; }
         public bool IsActing { get; private set; }
         public bool IsAlive { get { return Health > 0; } }
         public bool WillHowl { get { return Kind == EnemyKind.StrayDogs && CyclePosition == 2; } }
@@ -25,17 +26,19 @@ namespace ShpilSvoih
         {
             get
             {
+                if (Kind == EnemyKind.Toha) return IsDarkToha ? TohaRules.DarkDamage : TohaRules.LightDamage;
                 if (Kind == EnemyKind.Mimicrator)
                     return Form == MimicratorForm.Beacon ? 6 : Form == MimicratorForm.Bear ? 14 : Form == MimicratorForm.Mussel ? 5 : 0;
                 return Kind == EnemyKind.Hedgehog ? 10 : 5;
             }
         }
         public int Thorns { get { return Kind == EnemyKind.Hedgehog ? 2 : 0; } }
-        public string Name { get { return Kind == EnemyKind.StrayDogs ? (Id == 0 ? "Серый пёс" : "Рыжий пёс") : EnemyCatalog.Name(Kind); } }
+        public string Name { get { return Kind == EnemyKind.StrayDogs ? (Id == 0 ? "Серый пёс" : "Рыжий пёс") : Kind == EnemyKind.Toha ? "Тоха · " + (IsDarkToha ? "Тёмная сторона" : "Светлая сторона") : EnemyCatalog.Name(Kind); } }
         public string Intent
         {
             get
             {
+                if (Kind == EnemyKind.Toha) return (IsDarkToha ? "Тёмный наезд · " : "Наезд · ") + AttackDamage;
                 if (Kind == EnemyKind.Mimicrator)
                     return MimicratorIntent(IsActing ? Form : NextForm);
                 return WillHowl ? "Вой · Слабость" : Kind == EnemyKind.Hedgehog ? "Иглы · 10 / Шипы · 2" :
@@ -53,7 +56,7 @@ namespace ShpilSvoih
         {
             Id = id;
             Kind = kind;
-            Health = MaxHealth = kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
+            Health = MaxHealth = kind == EnemyKind.Toha ? TohaRules.MaxHealth : kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
             CyclePosition = offset;
         }
 
@@ -63,6 +66,8 @@ namespace ShpilSvoih
             int absorbed = Math.Min(Block, damage);
             Block -= absorbed;
             Health = Math.Max(0, Health - (damage - absorbed));
+            if (Kind == EnemyKind.Toha && Health > 0 && (long)Health * 100 <= (long)MaxHealth * TohaRules.DarkThresholdPercent)
+                IsDarkToha = true;
         }
 
         internal void BeginAction()

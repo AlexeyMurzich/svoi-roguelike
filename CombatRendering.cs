@@ -79,7 +79,8 @@ namespace ShpilSvoih
             combatHintAreas.Clear();
             SyncDeaths();
             g.InterpolationMode = InterpolationMode.Bilinear;
-            DrawSceneBackground(g, true);
+            if (combat.Enemy == EnemyKind.Toha) DrawTohaBackground(g);
+            else DrawSceneBackground(g, true);
             float heroX = HeroCenter;
             float floor = CombatFloor;
             DrawCombatActors(g, heroX, floor);

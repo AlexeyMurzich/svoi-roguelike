@@ -81,6 +81,11 @@ namespace ShpilSvoih
             Run("Debug console: input, pause and scene isolation", UiTests.TestDebugConsole);
             Run("Battle backdrop: source, cache and six sizes", UiTests.TestBattleBackground);
             Run("Combat hints: statuses, intents and scaled hover", UiTests.TestCombatHints);
+            Run("Toha: Illya test launcher preserves free auto plays and confusion", UiTests.TestIllyaToha);
+            Run("Toha: threshold, damage and elite generation", TohaTests.Rules);
+            Run("Toha: frame-rate independent ram and transformation", TohaTests.Motion);
+            Run("Toha: battle, backgrounds, pause, death and six sizes", UiTests.TestTohaCombat);
+            Run("Toha: real elite room, investigation and revisit", UiTests.TestTohaEliteRoom);
             Run("Performance: bounded image cache and LRU", UiTests.TestScaledCacheLimits);
             Run("Performance: interface reuse and cleanup", UiTests.TestInterfaceCacheReuse);
             Run("Illya: free automatic cards and confusion costs", IllyaTests.Rules);
