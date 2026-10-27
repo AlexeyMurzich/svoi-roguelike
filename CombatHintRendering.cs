@@ -20,13 +20,13 @@ namespace ShpilSvoih
         void DrawCombatHintIcon(Graphics g, int icon, RectangleF area)
         {
             if (icon == 16)
-                g.DrawImage(menuIcons, area, new RectangleF(0, 0, menuIcons.Width / 2f, menuIcons.Height), GraphicsUnit.Pixel);
+                DrawInterfaceImage(g, menuIcons, area, new RectangleF(0, 0, menuIcons.Width / 2f, menuIcons.Height));
             else if (icon == 17) FitImage(g, coinIcon, area);
             else if (icon == 18) FitImage(g, relicImages["investigation"], area);
             else
             {
                 float w = combatIcons.Width / 4f, h = combatIcons.Height / 4f;
-                g.DrawImage(combatIcons, area, new RectangleF(icon % 4 * w, icon / 4 * h, w, h), GraphicsUnit.Pixel);
+                DrawInterfaceImage(g, combatIcons, area, new RectangleF(icon % 4 * w, icon / 4 * h, w, h));
             }
         }
 

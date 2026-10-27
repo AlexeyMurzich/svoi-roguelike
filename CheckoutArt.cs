@@ -102,7 +102,8 @@ namespace ShpilSvoih
         void FitImage(Graphics g, Image im, RectangleF area)
         {
             float ratio = Math.Min(area.Width / im.Width, area.Height / im.Height);
-            g.DrawImage(im, area.X + (area.Width - im.Width * ratio) / 2, area.Y + (area.Height - im.Height * ratio) / 2, im.Width * ratio, im.Height * ratio);
+            var target = new RectangleF(area.X + (area.Width - im.Width * ratio) / 2, area.Y + (area.Height - im.Height * ratio) / 2, im.Width * ratio, im.Height * ratio);
+            DrawInterfaceImage(g, im, target, new RectangleF(0, 0, im.Width, im.Height));
         }
 
         void ShadowText(Graphics g, string value, float x, float y, float size, Color c, float width, bool bold = false)

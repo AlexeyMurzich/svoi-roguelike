@@ -21,7 +21,7 @@ namespace ShpilSvoih
         void DrawHudBackground(Graphics g)
         {
             var area = new RectangleF(0, 0, CanvasWidth, MapLayout.HudHeight);
-            g.DrawImage(hudTexture, area, Viewport.CoverSource(hudTexture.Size, area.Size), GraphicsUnit.Pixel);
+            DrawInterfaceImage(g, hudTexture, area, Viewport.CoverSource(hudTexture.Size, area.Size));
             using (var shade = new LinearGradientBrush(area, Color.FromArgb(70, 7, 20, 21), Color.FromArgb(175, 6, 19, 20), 90f))
                 g.FillRectangle(shade, area);
             using (var line = new Pen(Color.FromArgb(115, gold)))
@@ -42,7 +42,7 @@ namespace ShpilSvoih
                     clip.AddEllipse(area);
                     g.SetClip(clip, CombineMode.Intersect);
                     Rect(g, area.X, area.Y, area.Width, area.Height, surface);
-                    g.DrawImage(sprite, area, source, GraphicsUnit.Pixel);
+                    DrawInterfaceImage(g, sprite, area, source);
                 }
             }
             finally

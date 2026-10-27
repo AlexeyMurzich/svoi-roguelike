@@ -9,12 +9,12 @@ namespace ShpilSvoih
     sealed class HeroPoseAtlas
     {
         readonly Bitmap image;
-        readonly ActorArtCache cache;
+        readonly ScaledImageCache cache;
         readonly RectangleF[] frames = new RectangleF[4];
         readonly float[] centers = new float[4];
         readonly float width, height;
 
-        public HeroPoseAtlas(Bitmap image, int hero, ActorArtCache cache)
+        public HeroPoseAtlas(Bitmap image, int hero, ScaledImageCache cache)
         {
             this.image = image; this.cache = cache;
             float unit = image.Width / 1280f;

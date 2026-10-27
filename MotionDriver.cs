@@ -6,12 +6,24 @@ namespace ShpilSvoih
 {
     public sealed partial class Game
     {
+        const int ActiveFrameInterval = 16, IdleFrameInterval = 33;
         Timer combatTimer;
         long lastMotionTick;
 
+        bool NeedsMotion
+        {
+            get { return CombatBusy || CombatAmbientMoving || LivingScene || MapMoving ||
+                (mimicratorPreview && !mimicratorPaused); }
+        }
+
+        int MotionInterval
+        {
+            get { return CombatBusy || MapMoving ? ActiveFrameInterval : IdleFrameInterval; }
+        }
+
         void InitializeMotionTimer()
         {
-            combatTimer = new Timer { Interval = 16 };
+            combatTimer = new Timer { Interval = ActiveFrameInterval };
             combatTimer.Tick += OnMotionTick;
         }
 
@@ -26,7 +38,7 @@ namespace ShpilSvoih
                 return;
             if (!combatTimer.Enabled)
                 ResetMotionClock();
-            combatTimer.Interval = CombatBusy || MapMoving ? 16 : 33;
+            combatTimer.Interval = MotionInterval;
             combatTimer.Start();
         }
 
@@ -56,8 +68,8 @@ namespace ShpilSvoih
             else
                 AdvanceMapMotion(elapsed);
             SyncMusic();
-            combatTimer.Interval = CombatBusy || MapMoving ? 16 : 33;
-            if (!CombatBusy && !CombatAmbientMoving && !LivingScene && !MapMoving && !(mimicratorPreview && !mimicratorPaused))
+            combatTimer.Interval = MotionInterval;
+            if (!NeedsMotion)
                 combatTimer.Stop();
         }
 
@@ -75,7 +87,7 @@ namespace ShpilSvoih
                 if (combatTimer != null)
                     combatTimer.Stop();
             }
-            else if (CombatBusy || CombatAmbientMoving || LivingScene || MapMoving || (mimicratorPreview && !mimicratorPaused))
+            else if (NeedsMotion)
                 WakeMotion();
         }
     }

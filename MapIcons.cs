@@ -68,7 +68,7 @@ namespace ShpilSvoih
             float cellWidth = mapIcons.Width / 3f, cellHeight = mapIcons.Height / 2f;
             var source = new RectangleF(index % 3 * cellWidth, index / 3 * cellHeight, cellWidth, cellHeight);
             var target = new RectangleF(center.X - size / 2, center.Y - size / 2, size, size);
-            g.DrawImage(mapIcons, target, source, GraphicsUnit.Pixel);
+            DrawInterfaceImage(g, mapIcons, target, source);
         }
 
         Color RoomColor(RoomKind kind)

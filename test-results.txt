@@ -1,26 +1,75 @@
-v0.23.1: 7 suites, 0 failures, 1772 assertions.
-
-﻿PASS Illya: free automatic cards and confusion costs
+﻿PASS Music: asynchronous switching, pause, cancellation and disposal
+PASS Music: five embedded tracks preserve all samples
+PASS Music: native loop, pause and resume
+PASS Music: actual hero clicks and elite scene transitions
+PASS Debug console: infinite gold and exact triple multiplier
+PASS Debug console: input, pause and scene isolation
+PASS Battle backdrop: source, cache and six sizes
+PASS Combat hints: statuses, intents and scaled hover
+PASS Performance: bounded image cache and LRU
+PASS Performance: interface reuse and cleanup
+PASS Illya: free automatic cards and confusion costs
 PASS Illya: live costs and animated payment
-Suites: 2 passed, 0 failed. Assertions: 28.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-﻿PASS Combat rules, recycling, resources, victory and defeat
-Suites: 1 passed, 0 failed. Assertions: 1389.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-﻿PASS Hero combat minimum: timing, pause and poses
-Suites: 1 passed, 0 failed. Assertions: 24.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-﻿PASS Mimicrator combat: forms, stun, auto cards and enemy block
-Suites: 1 passed, 0 failed. Assertions: 188.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-﻿PASS Combat hints: statuses, intents and scaled hover
-Suites: 1 passed, 0 failed. Assertions: 92.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-﻿PASS All 12 original relic effects
-Suites: 1 passed, 0 failed. Assertions: 51.
+PASS Hero combat minimum: timing, pause and poses
+PASS Audit: neck attachment
+PASS Audit: sprite cache and cadence
+PASS Living: lifecycle and fixed paws
+PASS Living: visual gallery
+PASS All 12 original relic effects
+PASS Invalid hero state and balance rejected
+PASS Unknown and foreign relics cannot be selected
+PASS Damage clamp and tears arithmetic
+PASS Debt gate, wealth requirements and large debt
+PASS Fractional gold discounts
+PASS Eternal cards cannot be unlocked or discounted twice
+PASS Family restriction resets, invalid values rejected
+PASS Automatic cards: 2200 seed/hand combinations
+PASS Investigation is idempotent per map and distinct node
+PASS Exchange callback is atomic and cannot re-enter
+PASS Uniform viewport, click mapping and image crop
+PASS Image ownership, fallback and file unlocking
+PASS UI all heroes and relics at six window sizes
+INFO After 72 resizes: GDI handles 19 -> 19; decoded images 37; cached fonts 9.
+PASS Resize/repaint determinism and GDI resources
+PASS Procedural act constraints, determinism and connectivity: 2000 seeds
+PASS Map traversal rejects skips and repeated actions
+PASS Map UI, modal clicks, investigation and resizing
+PASS Scrollable layout and actual deck model
+PASS Map scrolling, dragging, top bar, deck and relic menus at six sizes
+PASS Fullscreen bounds, taskbar coverage, minimal HUD and pause
+PASS Return to main menu and fresh run at six sizes
+PASS Combat rules, recycling, resources, victory and defeat
+PASS Combat UI, animation, pause and victory at six sizes
+PASS Hero portraits and relic hover across all twelve relics and six sizes
+PASS Smooth camera timing at 30/60/120 Hz
+INFO Map render + camera update at 1280x840: 28,7 ms/frame (offscreen sample, not a live FPS guarantee).
+PASS Smooth camera, pause, pose frames and render timing
+PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
+PASS Dog bite, accelerated timing, howl and pause at six sizes
+PASS Animation lifecycle and timing at 10/30/60/120 Hz
+PASS Debt atomicity, fractional charges, card contracts and configured draw
+PASS Hands of one to six cards preserve controls and aspect ratio
+PASS Reviewed input, capture, focus, overlay and debt-death interactions
+PASS Investigation reveals future enemy identity on map hover
+PASS Dog legs preserve color and opacity through bite and howl frames
+INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 37; font cache 12.
+PASS Repeated battle/map/pause/resize transitions release resources
+PASS Death snapshots lifecycle and resource ownership
+PASS Separate dog deaths, all hero deaths, rat death and credit-card guard
+PASS Refactor: atomic capture, invalid input and cleanup
+PASS Refactor: queued animation timing across frame rates
+PASS Refactor: Shuten pose registration and visual contact sheet
+PASS Hedgehogs: rabies, dexterity, block, needles and thorns
+PASS Hedgehogs: full pose extraction, animation, pause and resize
+PASS Hedgehogs pair: switching target per card, queue and deaths
+PASS Hedgehogs pair: real clicks target different enemies in one turn
+PASS Mimicrator: depth, perspective and frame-rate independence
+INFO Mimicrator offscreen 1280x840 mean repaint: 32,74 ms (not an FPS guarantee).
+PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
+PASS Mimicrator: four orbit phases for visual review
+PASS Mimicrator combat: forms, stun, auto cards and enemy block
+PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
+PASS Mimicrator combat: real elite room, investigation, victory and revisit
+PASS Mimicrator combat: animation contact sheet
+Suites: 69 passed, 0 failed. Assertions: 1134318.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

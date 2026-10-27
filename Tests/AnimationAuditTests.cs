@@ -63,7 +63,7 @@ namespace ShpilSvoih
                 var cache = Read<object>(game, "actorArtCache");
                 var draw = cache.GetType().GetMethod("Draw");
                 for (int i = 0; i < 60; i++)
-                    draw.Invoke(cache, new object[] { g, image, new RectangleF(0, 0, 20 + i, 40), new RectangleF(0, 0, 16, 16), 1f, false });
+                    draw.Invoke(cache, new object[] { g, image, new RectangleF(0, 0, 20 + i * 4, 40), new RectangleF(0, 0, 16, 16), 1f, false });
                 TestSuite.Check((int)cache.GetType().GetProperty("Count").GetValue(cache, null) == 48, "overflow evicts only cold sprites instead of flushing the full cache");
                 Call(game, "StartTestDogs");
                 TestSuite.Check(Read<Timer>(game, "combatTimer").Interval == 33, "idle uses a bounded 30 Hz repaint cadence");

@@ -98,7 +98,7 @@ namespace ShpilSvoih
         string notice = "";
         private ImageAssets assetStore;
         bool resourcesDisposed;
-        readonly ActorArtCache actorArtCache = new ActorArtCache();
+        readonly ScaledImageCache actorArtCache = new ScaledImageCache(24 * 1024 * 1024, 48, 4);
         private readonly Dictionary<Tuple<float, bool>, Font> fonts = new Dictionary<Tuple<float, bool>, Font>();
         public Game()
         {
@@ -127,6 +127,7 @@ namespace ShpilSvoih
             {
                 music.Dispose();
                 actorArtCache.Dispose();
+                interfaceArtCache.Dispose();
                 assetStore.Dispose();
                 howlSound.Dispose();
                 deathVisuals.Dispose();
@@ -364,60 +365,6 @@ namespace ShpilSvoih
             }
         }
 
-        void Rect(Graphics g, float x, float y, float w, float h, Color c)
-        {
-            using (var b = new SolidBrush(c))
-                g.FillRectangle(b, x, y, w, h);
-        }
-
-        void TextAt(Graphics g, string value, float x, float y, float size, Color color, float width, bool bold = false)
-        {
-            Font font = HudFont(size, bold);
-            using (var brush = new SolidBrush(color))
-                g.DrawString(value, font, brush, new RectangleF(x, y, width, 500));
-        }
-
-        void Stroke(Graphics g, float x, float y, float w, float h, Color c)
-        {
-            using (var p = new Pen(c, 1))
-                g.DrawRectangle(p, x, y, w, h);
-        }
-
-        void Button(Graphics g, string label, float x, float y, float w, float h, Action action, bool primary = false)
-        {
-            Rect(g, x, y, w, h, primary ? colors[selected] : Color.FromArgb(40, 48, 58));
-            TextAt(g, label, x + 16, y + (h - 22) / 2, 15, primary ? background : text, w - 25, true);
-            actions.Add(Tuple.Create(new RectangleF(x, y, w, h), action));
-        }
-
-        void Portrait(Graphics g, int id, float x, float y, float width, float height)
-        {
-            if (sprites.ContainsKey(id))
-            {
-                var im = sprites[id];
-                float r = Math.Min(width / im.Width, height / im.Height);
-                var saved = g.Save();
-                try
-                {
-                    if (!mapScreen) LivingMotion.Body(g, new RectangleF(x, y, width, height), livingSeconds, id, id == 0);
-                    actorArtCache.Draw(g, im, new RectangleF(x + (width - im.Width * r) / 2, y + height - im.Height * r, im.Width * r, im.Height * r), new RectangleF(0, 0, im.Width, im.Height), 1, false);
-                }
-                finally { g.Restore(saved); }
-                return;
-            }
-
-            float size = Math.Min(width, height);
-            float xx = x + (width - size) / 2, yy = y + (height - size) / 2;
-            using (var p = new Pen(colors[id], 2))
-            {
-                g.DrawEllipse(p, xx + size * .3f, yy + size * .1f, size * .4f, size * .4f);
-                g.DrawArc(p, xx + size * .16f, yy + size * .52f, size * .68f, size * .6f, 180, 180);
-                g.DrawLine(p, xx + size * .16f, yy + size * .82f, xx + size * .84f, yy + size * .82f);
-            }
-
-            TextAt(g, new[] { "П", "И", "Р", "Ш" }[id], xx + size * .40f, yy + size * .19f, size * .22f, colors[id], size * .4f, true);
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -426,6 +373,7 @@ namespace ShpilSvoih
             actions.Clear();
             var viewport = DrawingViewport;
             actorArtCache.SetScale(viewport.Scale);
+            interfaceArtCache.SetScale(viewport.Scale);
             if (viewport.Scale <= 0)
                 return;
             var saved = g.Save();
@@ -455,62 +403,7 @@ namespace ShpilSvoih
                     return;
                 }
 
-                TextAt(g, "С / Л", 36, 24, 24, gold, 100, true);
-                TextAt(g, "СВОИ ЛЮДИ", 140, 31, 15, text, 320, true);
-                TextAt(g, "СМОЛЕВИЧИ  /  " + GameVersion.Number, 1000, 32, 12, muted, 245);
-                Rect(g, 36, 73, 1208, 1, Color.FromArgb(50, 58, 65));
-                if (preview)
-                {
-                    TextAt(g, names[selected], 40, 102, 34, colors[selected], 700, true);
-                    Portrait(g, selected, 240, 160, 800, 615);
-                    Button(g, "← К выбору персонажа", 940, 102, 300, 50, () => preview = false);
-                    TextAt(g, "← →  другой персонаж      Esc  назад", 40, 805, 12, muted, 1100);
-                    return;
-                }
-
-                TextAt(g, "СВОИ ЛЮДИ. СВОИ ПРАВИЛА.", 36, 104, 12, gold, 800, true);
-                TextAt(g, "Кто сегодня в пати?", 32, 129, 42, text, 1100, true);
-                TextAt(g, "Четыре персонажа. Четыре способа устроить хаос.", 36, 191, 17, muted, 1160);
-                for (int i = 0; i < 4; i++)
-                {
-                    int id = i;
-                    float x = 36 + i * 188;
-                    bool active = selected == i;
-                    Rect(g, x, 246, 173, 390, active ? Color.FromArgb(35, 44, 54) : surface);
-                    if (active)
-                        Stroke(g, x, 246, 173, 390, colors[i]);
-                    Rect(g, x, 246, 173, 3, colors[i]);
-                    TextAt(g, "0" + (i + 1), x + 15, 260, 12, muted, 80);
-                    Portrait(g, i, x + 5, 289, 163, 210);
-                    TextAt(g, names[i], x + 15, 512, 25, active ? colors[i] : text, 150, true);
-                    TextAt(g, summaries[i], x + 15, 555, 14, muted, 148);
-                    actions.Add(Tuple.Create(new RectangleF(x, 246, 173, 390), (Action)(() =>
-                    {
-                        ChooseMenuHero(id);
-                        notice = "";
-                    })));
-                }
-
-                Rect(g, 812, 246, 432, 482, surface);
-                Rect(g, 812, 246, 432, 3, colors[selected]);
-                TextAt(g, tags[selected], 836, 269, 11, colors[selected], 383, true);
-                TextAt(g, names[selected], 832, 300, 34, text, 385, true);
-                TextAt(g, descriptions[selected], 836, 355, 16, text, 380);
-                var r = rules[selected];
-                for (int j = 0; j < 3; j++)
-                {
-                    float yy = 501 + j * 66;
-                    TextAt(g, r[j * 2], 836, yy, 10, muted, 380, true);
-                    TextAt(g, r[j * 2 + 1], 836, yy + 20, 15, text, 380);
-                }
-
-                Button(g, "Выбрать: " + names[selected] + "   →", 36, 659, 360, 56, OpenCheckout, true);
-                Button(g, "Загрузить спрайт PNG", 412, 659, 361, 56, Import);
-                Button(g, "Рассмотреть спрайт", 812, 741, 432, 42, () => preview = true);
-                Button(g, "Мимикратор · модель", 36, 723, 360, 45, StartMimicratorPreview);
-                Button(g, "Мимикратор · бой", 412, 723, 361, 45, StartTestMimicrator);
-                TextAt(g, "Выберите героя и личную реликвию на кассе Евроопта.", 36, 779, 12, muted, 730);
-                TextAt(g, notice.Length > 0 ? notice : "← →  выбор      Enter  к кассе      Esc  назад", 36, 805, 12, muted, 1190);
+                DrawMainMenu(g);
             }
             finally
             {
@@ -551,6 +444,7 @@ namespace ShpilSvoih
                 sprites.Clear();
                 DisposeCheckoutArt();
                 actorArtCache.Dispose();
+                interfaceArtCache.Dispose();
                 if (assetStore != null) assetStore.Dispose();
                 foreach (var font in fonts.Values)
                     font.Dispose();

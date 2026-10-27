@@ -43,7 +43,7 @@ namespace ShpilSvoih
             base.OnActivated(e);
             SyncMusic();
             ResetMotionClock();
-            if (CombatBusy || CombatAmbientMoving || LivingScene || MapMoving || (mimicratorPreview && !mimicratorPaused)) WakeMotion();
+            if (NeedsMotion) WakeMotion();
             if (isFullscreen)
                 TopMost = true;
         }

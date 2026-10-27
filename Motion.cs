@@ -55,10 +55,10 @@ namespace ShpilSvoih
         public readonly RectangleF Bounds;
         public readonly int CellWidth;
         readonly int columns;
-        readonly ActorArtCache cache;
+        readonly ScaledImageCache cache;
         public readonly int FrameCount;
 
-        public PoseAtlas(Bitmap image, int columns = 3, int rows = 1, ActorArtCache cache = null)
+        public PoseAtlas(Bitmap image, int columns = 3, int rows = 1, ScaledImageCache cache = null)
         {
             if (image == null) throw new ArgumentNullException("image");
             if (columns <= 0 || rows <= 0 || image.Width % columns != 0 || image.Height % rows != 0 || image.Width / columns != image.Height / rows)

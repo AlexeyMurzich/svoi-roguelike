@@ -14,8 +14,8 @@ namespace ShpilSvoih
         readonly Bitmap[] frames = new Bitmap[7];
         public int LargeComponents { get; private set; }
         public int FrameCount { get { return 6; } }
-        readonly ActorArtCache cache;
-        public HedgehogAtlas(Bitmap source, bool rabid, ActorArtCache cache = null)
+        readonly ScaledImageCache cache;
+        public HedgehogAtlas(Bitmap source, bool rabid, ScaledImageCache cache = null)
         {
             this.cache = cache;
             int w = source.Width, h = source.Height;

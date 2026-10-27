@@ -80,7 +80,7 @@ namespace ShpilSvoih
             float x = area.X + area.Width / 2, y = area.Y + area.Height / 2;
             float cell = menuIcons.Width / 2f;
             var source = new RectangleF(gear ? cell : 0, 0, cell, menuIcons.Height);
-            g.DrawImage(menuIcons, new RectangleF(x - 30, y - 30, 60, 60), source, GraphicsUnit.Pixel);
+            DrawInterfaceImage(g, menuIcons, new RectangleF(x - 30, y - 30, 60, 60), source);
             actions.Add(Tuple.Create(area, action));
         }
 
