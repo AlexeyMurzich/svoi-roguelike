@@ -41,6 +41,7 @@ namespace ShpilSvoih
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
+            SyncMusic();
             ResetMotionClock();
             if (CombatBusy || CombatAmbientMoving || LivingScene || MapMoving || (mimicratorPreview && !mimicratorPaused)) WakeMotion();
             if (isFullscreen)
@@ -49,6 +50,7 @@ namespace ShpilSvoih
 
         protected override void OnDeactivate(EventArgs e)
         {
+            music.SetTrack(music.Track, true);
             howlSound.Stop();
             CancelMapDrag();
             if (combatTimer != null) combatTimer.Stop();

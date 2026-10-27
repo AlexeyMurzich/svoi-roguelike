@@ -1,0 +1,57 @@
+[
+  {
+    "id": "pupsolet",
+    "original": "Тема Пупсолета.ogg",
+    "source_sha256": "eb7f8dd8e6ddd77981ad8b17da55a9c3d008f5bd6678792bd256565df347552a",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 1955835,
+    "duration_seconds": 44.35,
+    "pcm_bytes": 7823340,
+    "asset_sha256": "b0dd9bbfa5d3af87bcdcb2c7f1b3614bf2e17089b27770f703d72124ec79aa45"
+  },
+  {
+    "id": "illya",
+    "original": "Тема Илли.ogg",
+    "source_sha256": "a9138e9f18f685f9786c4bfab7b5d400e56f3a143cc1e5c7d18ff759ba1d5672",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 1644930,
+    "duration_seconds": 37.3,
+    "pcm_bytes": 6579720,
+    "asset_sha256": "391462ca3ac19801af8b45991a3d2cfa2ff96c760d5dc579e56b7884ce7f4a65"
+  },
+  {
+    "id": "runtso",
+    "original": "Тема Рунцо.ogg",
+    "source_sha256": "556b8e0420a3f11b3ebda703772205a65ba796542b697ea9a7b2efbb99d2fced",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 7673400,
+    "duration_seconds": 174.0,
+    "pcm_bytes": 30693600,
+    "asset_sha256": "d95f683baf80d909dbebfa0c63db5421988adfdb118cfc0d015d286b76da2133"
+  },
+  {
+    "id": "shuten",
+    "original": "Тема Шутен.ogg",
+    "source_sha256": "7e6e8f02d536a00b695347f71b27be5b610c4e0f7d8ac4878114d72855df78d3",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 8061480,
+    "duration_seconds": 182.8,
+    "pcm_bytes": 32245920,
+    "asset_sha256": "04c3e318c72ab280c64bb4af429b9b4a23ced3dca917f5a80ff3334b69bc6c41"
+  },
+  {
+    "id": "mimicrator",
+    "original": "Мимикратор.ogg",
+    "source_sha256": "0a27fc4ba72d7b87587211d37a492639c9fc3e0e52bcc0405586c099e6ee258b",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 8004863,
+    "duration_seconds": 181.5161678004535,
+    "pcm_bytes": 32019452,
+    "asset_sha256": "7d6f662e362020f1b72a8ea51bbe86428dbbb32181ca33cead3082ec7d081d40"
+  }
+]

@@ -125,6 +125,7 @@ namespace ShpilSvoih
             }
             catch
             {
+                music.Dispose();
                 actorArtCache.Dispose();
                 assetStore.Dispose();
                 howlSound.Dispose();
@@ -149,6 +150,7 @@ namespace ShpilSvoih
 
         private void RefreshScene()
         {
+            SyncMusic();
             actions.Clear();
             Invalidate();
         }
@@ -210,12 +212,12 @@ namespace ShpilSvoih
 
                 if (e.KeyCode == Keys.Left)
                 {
-                    selected = (selected + 3) % 4;
+                    ChooseMenuHero((selected + 3) % 4);
                 }
 
                 if (e.KeyCode == Keys.Right)
                 {
-                    selected = (selected + 1) % 4;
+                    ChooseMenuHero((selected + 1) % 4);
                 }
 
                 if (e.KeyCode == Keys.Enter && !preview)
@@ -484,7 +486,7 @@ namespace ShpilSvoih
                     TextAt(g, summaries[i], x + 15, 555, 14, muted, 148);
                     actions.Add(Tuple.Create(new RectangleF(x, 246, 173, 390), (Action)(() =>
                     {
-                        selected = id;
+                        ChooseMenuHero(id);
                         notice = "";
                     })));
                 }
@@ -530,6 +532,7 @@ namespace ShpilSvoih
             if (disposing && !resourcesDisposed)
             {
                 resourcesDisposed = true;
+                music.Dispose();
                 ResetCombat();
                 ClearMimicratorBackdrop();
                 mapRoutes.Dispose();

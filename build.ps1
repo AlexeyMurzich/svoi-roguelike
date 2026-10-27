@@ -16,6 +16,11 @@ foreach($relativeName in $requiredAssets){
  $resourceName=$relativeName.Replace('\','.').Replace('/','.')
  $compilerArgs+=('/resource:assets\'+$relativeName+','+$resourceName)
 }
+$musicIds=@('pupsolet','illya','runtso','shuten','mimicrator')
+foreach($id in $musicIds){
+ $musicFile=Get-Item -LiteralPath (Join-Path $assetRoot ('music\'+$id+'.pcm.gz'))
+ $compilerArgs+=('/resource:assets\music\'+$id+'.pcm.gz,music.'+$id+'.pcm.gz')
+}
 $compilerArgs+=@(Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*.cs' | Sort-Object Name | ForEach-Object { $_.Name })
 & $compilerPath @compilerArgs
 if($LASTEXITCODE -ne 0){throw 'Build failed'}

@@ -55,6 +55,7 @@ namespace ShpilSvoih
             }
             else
                 AdvanceMapMotion(elapsed);
+            SyncMusic();
             combatTimer.Interval = CombatBusy || MapMoving ? 16 : 33;
             if (!CombatBusy && !CombatAmbientMoving && !LivingScene && !MapMoving && !(mimicratorPreview && !mimicratorPaused))
                 combatTimer.Stop();
@@ -67,6 +68,7 @@ namespace ShpilSvoih
             CancelMapDrag();
             inventoryView = view;
             ResetMotionClock();
+            SyncMusic();
             if (view != "")
             {
                 howlSound.Stop();

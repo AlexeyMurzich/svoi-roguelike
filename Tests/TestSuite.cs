@@ -73,6 +73,10 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Music: asynchronous switching, pause, cancellation and disposal", MusicTests.StateAndCancellation);
+            Run("Music: five embedded tracks preserve all samples", MusicTests.EmbeddedSongs);
+            Run("Music: native loop, pause and resume", MusicTests.NativeLoop);
+            Run("Music: actual hero clicks and elite scene transitions", UiTests.TestMusicScenes);
             Run("Debug console: infinite gold and exact triple multiplier", DebugModeTests.Rules);
             Run("Debug console: input, pause and scene isolation", UiTests.TestDebugConsole);
             Run("Battle backdrop: source, cache and six sizes", UiTests.TestBattleBackground);

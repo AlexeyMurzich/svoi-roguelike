@@ -168,6 +168,7 @@ namespace ShpilSvoih
             }
             if (!CombatBusy && !CombatAmbientMoving && !LivingScene && combatTimer != null)
                 combatTimer.Stop();
+            SyncMusic();
             // The displayed frame's hit targets remain valid until the next paint.
             Invalidate();
         }

@@ -26,6 +26,7 @@ namespace ShpilSvoih
             }
             else if (CombatBusy || CombatAmbientMoving || LivingScene || MapMoving || mimicratorPreview)
                 WakeMotion();
+            SyncMusic();
             Invalidate();
         }
 

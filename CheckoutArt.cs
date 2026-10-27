@@ -16,6 +16,8 @@ namespace ShpilSvoih
         readonly Dictionary<string, Image> relicImages = new Dictionary<string, Image>();
         void OpenCheckout()
         {
+            menuMusicHero = -1;
+            music.SetTrack("", true);
             StopMapMotion();
             ResetCombat();
             mapRoutes.Clear();
