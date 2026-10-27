@@ -140,10 +140,15 @@ namespace ShpilSvoih
                     TestSuite.Check(timeline.Time == time, "pause freezes transformation");
                     Call(game, "SetInventory", "");
                     Call(game, "AdvanceCombatAnimation", .3f);
-                    if (size == Sizes[2]) using (var image = Render(game)) image.Save(Path.Combine(TestSuite.OutputDirectory, "toha-transform.png"));
+                    using (var image = Render(game)) if (size == Sizes[2]) image.Save(Path.Combine(TestSuite.OutputDirectory, "toha-transform.png"));
+                    var blend = Read<object>(game, "tohaBlend");
+                    TestSuite.Check(blend != null, "transition owns its native backdrop copies");
+                    using (Render(game)) { }
+                    TestSuite.Check(ReferenceEquals(blend, Read<object>(game, "tohaBlend")), "fade reuses its copies across frames");
                     SettleToha(game);
                     TestSuite.Check(Read<bool>(game, "tohaVisualDark") && f.Phase == CombatPhase.Player && f.Enemies[0].Health == 30, "transformation preserves HP and player turn");
                     using (var image = Render(game)) image.Save(Path.Combine(TestSuite.OutputDirectory, "toha-dark-" + size.Width + "x" + size.Height + ".png"));
+                    TestSuite.Check(Read<object>(game, "tohaBlend") == null, "native backdrop copies are released after transformation");
                     int hp = f.Hero.Health; Call(game, "EndCombatTurn");
                     TestSuite.Check(timeline.Kind == AttackAnimation.TohaDarkRam, "dark form uses stronger ram animation");
                     Call(game, "AdvanceCombatAnimation", timeline.HitTime / AttackTimeline.Speed);

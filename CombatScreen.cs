@@ -170,6 +170,8 @@ namespace ShpilSvoih
                 return;
             // Split at impacts/completion so death starts at impact, and a queued
             // enemy receives the remainder of the frame instead of losing it.
+            bool wasHit = attackTimeline.HitApplied;
+            var oldKind = attackTimeline.Kind;
             float remaining = elapsed;
             while (remaining > 0 && CombatBusy && combat != null)
             {
@@ -188,8 +190,9 @@ namespace ShpilSvoih
             if (!CombatBusy && !CombatAmbientMoving && !LivingScene && combatTimer != null)
                 combatTimer.Stop();
             SyncMusic();
-            // The displayed frame's hit targets remain valid until the next paint.
-            Invalidate();
+            // Impacts and completion also change cards, gold, HP and button availability.
+            if (!CombatBusy || wasHit != attackTimeline.HitApplied || oldKind != attackTimeline.Kind) Invalidate();
+            else InvalidateMotionFrame();
         }
 
         void PlayCombatCard(int index)

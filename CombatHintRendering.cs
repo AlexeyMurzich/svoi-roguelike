@@ -14,7 +14,17 @@ namespace ShpilSvoih
         {
             bool show = inside && !debugConsoleOpen && HasLiveFight && combat != null && inventoryView == "" && !hoveredRelic;
             PointF? next = show ? (PointF?)point : null;
-            if (combatPointer != next) { combatPointer = next; Invalidate(); }
+            int previous = CombatHoverIdentity(combatPointer);
+            combatPointer = next;
+            if (previous != CombatHoverIdentity(next)) Invalidate();
+        }
+
+        int CombatHoverIdentity(PointF? pointer)
+        {
+            if (!pointer.HasValue) return -1;
+            for (int i = 0; i < combatHintAreas.Count; i++)
+                if (combatHintAreas[i].Item1.Contains(pointer.Value)) return i;
+            return RouteButtonVisible && RouteButtonArea.Contains(pointer.Value) ? int.MaxValue : -1;
         }
 
         void DrawCombatHintIcon(Graphics g, int icon, RectangleF area)

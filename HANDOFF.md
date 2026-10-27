@@ -1,3 +1,15 @@
+# Актуальная версия — v0.27, 27 октября 2026
+
+Продолжение оптимизации поверх GitHub main 603f886 (v0.26). Native WinForms/C#5 сохранён. MotionDamage.cs: частичный dirty region обычных боевых анимаций, полный кадр на попадание/завершение/смерть/трансформацию; PaintScene сохраняет системный clip. CombatHintRendering.cs перерисовывает только смену цели наведения. MotionDriver.cs интервалы UI-таймера 15/30 мс вместо 16/33, время по Stopwatch и фокус сохранены. Карта: убрана лишняя заливка, легенда использует UI-кэш.
+
+OpaqueImageBlend.cs: временные native DC/HBITMAP для корректного BitBlt+AlphaBlend непрозрачных дневного/ночного фонов Тохи. TohaBackground.cs владеет ими, очищает после перехода/resize/выхода/Dispose. До 15.8 МиБ только во время перехода; оригиналы не освобождать. Прямоугольный GDI+ fallback. PArgb сохранён, RGB-эксперимент отвергнут.
+
+Живое Full HD окно: обычная анимация ~38→62 отрисовки/с, покой ~21→32, карта ~35→47, превращение ~9→33. Это Paint starts, не monitor scanout; карта/превращение ещё ниже 60. PERFORMANCE-v0.27.md описывает методику, ограничения и отвергнутые варианты. Tools/LiveFrameBenchmark.cs — воспроизводимый native-профайлер без изменения баланса.
+
+Финальная регрессия: 79 наборов / 0 ошибок / 1 137 759 утверждений. Новые Tests/RepaintTests.cs: 100 pixel-identical partial/full кадров и hover/impact; Tests/OpaqueFadeTests.cs: цвет/clip/GDI lifetime; Tests/TohaTests.cs: fade cache на шести размерах. Протокол test-results.txt; подробности VALIDATION.md. Билд outputs/Svoi-v0.27-Windows.zip, Launch-test-illya-toha.cmd. Арт, лица, музыка и игровые правила не менялись.
+
+## История
+
 # Актуальная версия — v0.26, 27 октября 2026
 
 Приоритет — производительность. База GitHub main e04847a (v0.25). Устранена повторная bilinear-фильтрация подготовленных HQ копий спрайтов/карт/тела Мимикратора; opaque backgrounds SourceCopy с восстановлением состояния. Все повороты/движения, арт и механики сохранены.

@@ -11,6 +11,10 @@ PASS Toha: threshold, damage and elite generation
 PASS Toha: frame-rate independent ram and transformation
 PASS Toha: battle, backgrounds, pause, death and six sizes
 PASS Toha: real elite room, investigation and revisit
+INFO fade GDI handles after warmup: 18 -> 18
+PASS Fade: native alpha, clipping and handle cleanup
+PASS Repaint: partial frames are pixel-identical
+PASS Repaint: mouse movement only redraws visual changes
 PASS Performance: bounded rasterization and native pointer input
 PASS Performance: alpha and graphics state after fast drawing
 PASS Performance: bounded image cache and LRU
@@ -49,7 +53,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 20,5 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 20,6 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -59,7 +63,7 @@ PASS Hands of one to six cards preserve controls and aspect ratio
 PASS Reviewed input, capture, focus, overlay and debt-death interactions
 PASS Investigation reveals future enemy identity on map hover
 PASS Dog legs preserve color and opacity through bite and howl frames
-INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 37; font cache 12.
+INFO 18 battle/map/pause/resize cycles: GDI handles 22 -> 22; source images 37; font cache 12.
 PASS Repeated battle/map/pause/resize transitions release resources
 PASS Death snapshots lifecycle and resource ownership
 PASS Separate dog deaths, all hero deaths, rat death and credit-card guard
@@ -71,12 +75,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 16,37 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 17,08 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 76 passed, 0 failed. Assertions: 1137607.
+Suites: 79 passed, 0 failed. Assertions: 1137759.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

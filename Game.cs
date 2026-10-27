@@ -373,7 +373,7 @@ namespace ShpilSvoih
 
         void PaintScene(Graphics g)
         {
-            g.Clear(background);
+            Rect(g, 0, 0, RenderPixels.Width, RenderPixels.Height, background);
             actions.Clear();
             var viewport = RenderViewport;
             actorArtCache.SetScale(viewport.Scale);
@@ -385,11 +385,10 @@ namespace ShpilSvoih
             {
                 g.TranslateTransform(viewport.OffsetX, viewport.OffsetY);
                 g.ScaleTransform(viewport.Scale, viewport.Scale);
-                g.SetClip(new RectangleF(0, 0, viewport.Width, viewport.Height));
+                g.SetClip(new RectangleF(0, 0, viewport.Width, viewport.Height), CombineMode.Intersect);
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-                Rect(g, 0, 0, 1280, 840, background);
                 if (mimicratorPreview)
                 {
                     DrawMimicratorPreview(g);

@@ -9,13 +9,42 @@ namespace ShpilSvoih
     {
         Bitmap tohaDayFrame, tohaNightFrame;
         Size tohaBackgroundSize;
+        OpaqueImageBlend tohaBlend;
+        bool tohaBlendFailed;
 
         void ClearTohaBackdrop()
         {
+            ClearTohaBlend();
+            tohaBlendFailed = false;
             if (tohaDayFrame != null) tohaDayFrame.Dispose();
             if (tohaNightFrame != null) tohaNightFrame.Dispose();
             tohaDayFrame = tohaNightFrame = null;
             tohaBackgroundSize = Size.Empty;
+        }
+
+        void ClearTohaBlend()
+        {
+            if (tohaBlend != null) tohaBlend.Dispose();
+            tohaBlend = null;
+        }
+
+        void BlendTohaBackdrop(Graphics graphics, int top, float opacity)
+        {
+            if (tohaBlend == null && !tohaBlendFailed)
+            {
+                try { tohaBlend = new OpaqueImageBlend(tohaDayFrame, tohaNightFrame); }
+                catch (InvalidOperationException) { tohaBlendFailed = true; }
+                catch (System.Runtime.InteropServices.ExternalException) { tohaBlendFailed = true; }
+                catch (OutOfMemoryException) { tohaBlendFailed = true; }
+            }
+            if (tohaBlend != null && tohaBlend.Draw(graphics, 0, top, opacity)) return;
+            // A rectangular GDI+ fallback is still much faster than an affine color-matrix draw.
+            using (var attributes = new ImageAttributes())
+            {
+                var color = new ColorMatrix(); color.Matrix33 = opacity; attributes.SetColorMatrix(color);
+                graphics.DrawImage(tohaNightFrame, new Rectangle(0, top, tohaNightFrame.Width, tohaNightFrame.Height),
+                    0, 0, tohaNightFrame.Width, tohaNightFrame.Height, GraphicsUnit.Pixel, attributes);
+            }
         }
 
         static Bitmap PrepareTohaBackdrop(Image source, Size size)
@@ -51,6 +80,7 @@ namespace ShpilSvoih
                 catch { ClearTohaBackdrop(); throw; }
             }
             bool transform = attackTimeline.Kind == AttackAnimation.TohaTransform;
+            if (!transform) ClearTohaBlend();
             float dark = transform ? Motion.Ease(attackTimeline.Time / attackTimeline.Duration) : tohaVisualDark ? 1 : 0;
             var saved = graphics.Save();
             try
@@ -64,8 +94,7 @@ namespace ShpilSvoih
                     graphics.DrawImageUnscaled(tohaDayFrame, 0, top);
                     graphics.CompositingMode = CompositingMode.SourceOver;
                     if (dark > 0)
-                        SpriteDrawing.Image(graphics, tohaNightFrame, new RectangleF(0, top, size.Width, size.Height),
-                            new RectangleF(0, 0, size.Width, size.Height), dark, false);
+                        BlendTohaBackdrop(graphics, top, dark);
                 }
             }
             finally { graphics.Restore(saved); }

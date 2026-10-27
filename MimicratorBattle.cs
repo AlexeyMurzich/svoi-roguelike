@@ -40,7 +40,7 @@ namespace ShpilSvoih
         {
             if (!CombatAmbientMoving || GameplayPaused) return;
             mimicratorCombatSeconds += Motion.FrameDelta(elapsed);
-            Invalidate();
+            InvalidateMotionFrame();
         }
 
         void StartMimicratorTransform()

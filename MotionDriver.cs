@@ -6,7 +6,9 @@ namespace ShpilSvoih
 {
     public sealed partial class Game
     {
-        const int ActiveFrameInterval = 16, IdleFrameInterval = 33;
+        // Values just below 16/32 ms avoid an extra coarse WM_TIMER quantum.
+        // Actual elapsed time still drives all animation and camera math.
+        const int ActiveFrameInterval = 15, IdleFrameInterval = 30;
         Timer combatTimer;
         long lastMotionTick;
 

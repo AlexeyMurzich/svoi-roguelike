@@ -305,7 +305,6 @@ namespace ShpilSvoih
                 return;
             }
 
-            Rect(g, 0, 0, CanvasWidth, CanvasHeight, background);
             g.InterpolationMode = InterpolationMode.Bilinear;
             DrawSceneBackground(g, false);
             var saved = g.Save();
@@ -405,7 +404,7 @@ namespace ShpilSvoih
             {
             })));
             Rect(g, area.X + 4, area.Y + 5, area.Width, area.Height, Color.FromArgb(125, 0, 0, 0));
-            g.DrawImage(hudTexture, area, Viewport.CoverSource(hudTexture.Size, area.Size), GraphicsUnit.Pixel);
+            DrawInterfaceImage(g, hudTexture, area, Viewport.CoverSource(hudTexture.Size, area.Size));
             using (var shade = new LinearGradientBrush(area, Color.FromArgb(150, 9, 28, 24), Color.FromArgb(225, 7, 20, 20), 90f))
                 g.FillRectangle(shade, area);
             Stroke(g, area.X, area.Y, area.Width, area.Height, Color.FromArgb(160, gold));

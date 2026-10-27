@@ -86,6 +86,9 @@ namespace ShpilSvoih
             Run("Toha: frame-rate independent ram and transformation", TohaTests.Motion);
             Run("Toha: battle, backgrounds, pause, death and six sizes", UiTests.TestTohaCombat);
             Run("Toha: real elite room, investigation and revisit", UiTests.TestTohaEliteRoom);
+            Run("Fade: native alpha, clipping and handle cleanup", UiTests.TestOpaqueFade);
+            Run("Repaint: partial frames are pixel-identical", UiTests.TestPartialRepaint);
+            Run("Repaint: mouse movement only redraws visual changes", UiTests.TestHoverInvalidation);
             Run("Performance: bounded rasterization and native pointer input", UiTests.TestRenderBudget);
             Run("Performance: alpha and graphics state after fast drawing", UiTests.TestFastCompositing);
             Run("Performance: bounded image cache and LRU", UiTests.TestScaledCacheLimits);
