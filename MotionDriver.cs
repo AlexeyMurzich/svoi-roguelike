@@ -51,6 +51,7 @@ namespace ShpilSvoih
             lastMotionTick = now;
             if (GameplayPaused || !ContainsFocus)
             {
+                tohaSound.SetPaused(true);
                 howlSound.Stop();
                 combatTimer.Stop();
                 return;

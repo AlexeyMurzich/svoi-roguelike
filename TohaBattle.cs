@@ -6,6 +6,7 @@ namespace ShpilSvoih
     {
         Image tohaLight, tohaDark, tohaDay, tohaNight;
         bool tohaVisualDark;
+        readonly TohaAttackSound tohaSound = new TohaAttackSound();
 
         bool IsTohaRamming
         {
@@ -37,6 +38,7 @@ namespace ShpilSvoih
         void StartTohaRam(CombatEnemy actor)
         {
             combat.PrepareNextEnemyAction();
+            if (Visible && ContainsFocus) tohaSound.Play(actor.IsDarkToha, GameplayPaused);
             combatNotice = actor.IsDarkToha ? "Тоха · тёмный наезд" : "Тоха разгоняется";
             StartCombatAnimation(actor.IsDarkToha ? AttackAnimation.TohaDarkRam : AttackAnimation.TohaRam, () =>
             {

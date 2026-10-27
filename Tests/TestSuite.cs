@@ -73,6 +73,10 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Toha sound: lifecycle, cache, pause and failure", TohaSoundTests.Lifecycle);
+            Run("Toha sound: approved embedded previews", TohaSoundTests.Embedded);
+            Run("Toha sound: native one-shot and pause", TohaSoundTests.NativeOneShot);
+            Run("Toha sound: focus, menus, console and exit", UiTests.TestTohaSoundScenes);
             Run("Music: asynchronous switching, pause, cancellation and disposal", MusicTests.StateAndCancellation);
             Run("Music: five embedded tracks preserve all samples", MusicTests.EmbeddedSongs);
             Run("Music: native loop, pause and resume", MusicTests.NativeLoop);

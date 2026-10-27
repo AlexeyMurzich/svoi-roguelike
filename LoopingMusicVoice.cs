@@ -48,7 +48,9 @@ namespace ShpilSvoih
         {
             if (result != 0) throw new InvalidOperationException("Windows audio error: " + result);
         }
-        public LoopingMusicVoice(MusicPcm pcm)
+        public LoopingMusicVoice(MusicPcm pcm) : this(pcm, true) { }
+        // One-shot effects share the native PCM transport without a loop or polling thread.
+        public LoopingMusicVoice(MusicPcm pcm, bool loop)
         {
             if (pcm == null) throw new ArgumentNullException("pcm");
             var format = new Format { Tag = 1, Channels = pcm.Channels, Rate = (uint)pcm.SampleRate,
@@ -64,7 +66,7 @@ namespace ShpilSvoih
                 Marshal.StructureToPtr(value, header, false);
                 Check(waveOutPrepareHeader(device, header, HeaderSize)); prepared = true;
                 value = (Header)Marshal.PtrToStructure(header, typeof(Header));
-                value.Flags |= 4 | 8; value.Loops = uint.MaxValue;
+                if (loop) { value.Flags |= 4 | 8; value.Loops = uint.MaxValue; }
                 Marshal.StructureToPtr(value, header, false);
                 Check(waveOutWrite(device, header, HeaderSize));
             }

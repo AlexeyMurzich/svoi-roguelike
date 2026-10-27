@@ -1,0 +1,18 @@
+[
+  {
+    "id": "toha-light",
+    "rate": 48000,
+    "channels": 2,
+    "frames": 68160,
+    "pcm_sha256": "7cb88b317647f0a832e00b75f3bb7b091887986f8a974a7450d6bf14894d7135",
+    "source_wav_sha256": "a89f4df0d7f506f7e42a8fce815f6f0b9719c5c031dbc7232e25bd0d2f2403e1"
+  },
+  {
+    "id": "toha-dark",
+    "rate": 48000,
+    "channels": 2,
+    "frames": 74400,
+    "pcm_sha256": "b7e27f2ad10a5e1f943f5a9a462840fc86a90ea63bfadb1c0dd005f29e0a7d2e",
+    "source_wav_sha256": "ce4ce29d8859051dfd36425c5174076462539c32a11da19f5e05d947c1f5ec51"
+  }
+]

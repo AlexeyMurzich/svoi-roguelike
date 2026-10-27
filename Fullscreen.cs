@@ -51,6 +51,7 @@ namespace ShpilSvoih
         protected override void OnDeactivate(EventArgs e)
         {
             music.SetTrack(music.Track, true);
+            tohaSound.SetPaused(true);
             howlSound.Stop();
             CancelMapDrag();
             if (combatTimer != null) combatTimer.Stop();

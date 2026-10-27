@@ -24,6 +24,7 @@
         void SyncMusic()
         {
             if (resourcesDisposed) return;
+            tohaSound.SetPaused(GameplayPaused || !ContainsFocus || !Visible);
             // Offscreen regression windows never open an audio device.
             music.SetTrack(Visible ? DesiredMusicTrack : "", GameplayPaused || !ContainsFocus);
         }
