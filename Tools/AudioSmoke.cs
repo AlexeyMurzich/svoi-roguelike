@@ -43,20 +43,27 @@ internal static class AudioSmoke
             var cards = Read<CardSoundPlayer>("cardSounds"); var music = Read<MusicPlayer>("music");
             if (stage == 0)
             {
-                Call("StartTestBattle"); Next();
+                Call("ChooseMenuHero", 3);
+                Check(music.Track == "shuten", "hero selection owns the menu song");
+                Call("StartTestMimicrator"); Next();
             }
             else if (stage == 1 && !music.IsLoading && clock.Elapsed.TotalSeconds - since > .2)
             {
-                Check(music.Track == "shuten" && music.LastError == "", "standalone battle has hero music");
+                Check(music.Track == "mimicrator" && music.Gain == AudioLevels.Music && music.LastError == "", "battle music starts at fixed quiet level");
                 Play(true); Check(cards.ActiveVoices == 1 && !cards.IsPaused, "accepted attack starts one native effect"); Next();
+                Check(LoopingMusicVoice.OpenDeviceCount == 1, "music and card use exactly one Windows output");
             }
             else if (stage == 2 && clock.Elapsed.TotalSeconds - since > .13)
             {
-                Check(music.Gain < .12, "real game timer ducks music for card preparation");
+                Check(music.Gain == AudioLevels.Music, "card preparation does not change music level");
+                Check(CardVoice().Volume == AudioLevels.Card, "card uses reduced software level");
                 Call("SetInventory", "pause");
                 var voice = CardVoice(); uint at = voice.PlayedBytes;
-                System.Threading.Thread.Sleep(150);
+                System.Threading.Thread.Sleep(60);
+                uint deviceAt = LoopingMusicVoice.OutputPlayedBytes;
+                System.Threading.Thread.Sleep(90);
                 Check(cards.IsPaused && music.IsPaused && voice.PlayedBytes == at, "pause holds both channels at exact positions");
+                Check(LoopingMusicVoice.OutputPlayedBytes == deviceAt, "pause also holds the physical Windows output position");
                 Call("SetInventory", ""); Check(!cards.IsPaused && !music.IsPaused, "resume keeps both existing native voices"); Next();
             }
             else if (stage == 3 && clock.Elapsed.TotalSeconds - since > .82)
@@ -69,7 +76,7 @@ internal static class AudioSmoke
             }
             else if (stage == 4 && clock.Elapsed.TotalSeconds - since > 1.9)
             {
-                Check(cards.ActiveVoices == 0 && music.Gain > .26, "finished effects release voices and restore background level");
+                Check(cards.ActiveVoices == 0 && music.Gain == AudioLevels.Music, "finished effects release voices without a music swell");
                 Call("StartTestMimicrator"); Check(cards.ActiveVoices == 0, "scene change clears old effects"); Next();
             }
             else if (stage == 5 && !music.IsLoading && clock.Elapsed.TotalSeconds - since > .2)
@@ -79,7 +86,7 @@ internal static class AudioSmoke
             }
             else if (stage == 6 && !music.IsLoading && clock.Elapsed.TotalSeconds - since > .3)
             {
-                Check(music.Track == "illya" && music.LastError == "", "Toha battle keeps Illya theme");
+                Check(music.Track == "" && music.LastError == "", "Toha battle does not borrow Illya menu theme");
                 Check(cards.ActiveVoices <= 1 && cards.LastError == "", "automatic opening cards produce a single bounded accent");
                 timer.Stop(); game.Close();
             }
@@ -102,6 +109,9 @@ internal static class AudioSmoke
             game.Shown += delegate { clock.Start(); timer.Start(); };
             Application.Run(game);
         }
+        var cleanup = Stopwatch.StartNew();
+        while (LoopingMusicVoice.OpenDeviceCount != 0 && cleanup.ElapsedMilliseconds < 1000) System.Threading.Thread.Sleep(5);
+        Check(LoopingMusicVoice.OpenDeviceCount == 0, "closing game releases the shared output and worker");
         File.WriteAllText(Path.Combine(output, "audio-live-smoke.txt"), log);
         Console.WriteLine(log); return Environment.ExitCode;
     }

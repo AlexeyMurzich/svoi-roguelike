@@ -73,7 +73,10 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
-            Run("Card audio: frame independent ducking and release", CardAudioTests.Ducking);
+            Run("Software mixer: bit-exact background isolation", SoftwareMixerTests.Isolation);
+            Run("Software mixer: resampling, one-shot and quiet peaks", SoftwareMixerTests.ResamplingAndHeadroom);
+            Run("Software mixer: static song calibration and source ownership", SoftwareMixerTests.SongCalibration);
+            Run("Card audio: constant battle background level", UiTests.TestConstantBattleMusic);
             Run("Card audio: bounded voices, tails, cache, pause and failure", CardAudioTests.Voices);
             Run("Card audio: eight complete embedded effects", CardAudioTests.Embedded);
             Run("Card audio: late music gain and simultaneous native playback", CardAudioTests.MusicGainAndNativeMix);

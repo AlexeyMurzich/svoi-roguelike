@@ -14,21 +14,6 @@ namespace ShpilSvoih
             public void SetVolume(double gain) { Gain = gain; }
             public void Dispose() { Disposed = true; }
         }
-        public static void Ducking()
-        {
-            var a = new AudioMixEnvelope(); var b = new AudioMixEnvelope();
-            a.Advance(.14, true);
-            for (int i = 0; i < 14; i++) b.Advance(.01, true);
-            TestSuite.Check(Math.Abs(a.Gain - b.Gain) < 1e-10, "ducking follows time rather than frame rate");
-            TestSuite.Check(a.Gain < .10 && a.Gain >= .095, "fast duck leaves music audible at -9.4 dB relative");
-            a.Advance(.1, false);
-            TestSuite.Check(a.Gain < .16, "release is gradual, no abrupt music jump");
-            a.Advance(2, false);
-            TestSuite.Check(a.IsSettled && Math.Abs(a.Gain - .28) < .001, "music fully recovers");
-            double before = a.Gain;
-            a.Advance(double.NaN, true); a.Advance(-1, true); a.Advance(double.PositiveInfinity, true);
-            TestSuite.Check(a.Gain == before, "invalid deltas cannot poison volume");
-        }
         public static void Voices()
         {
             var made = new List<Voice>(); int loads = 0;
@@ -38,11 +23,11 @@ namespace ShpilSvoih
                 player.Prepare(3); player.Prepare(3);
                 TestSuite.Check(loads == 2, "both hero clips cached before click");
                 player.Play(3, true, false);
-                TestSuite.Check(!made[0].Paused && Math.Abs(made[0].Gain - .76) < .0001, "foreground starts once at reserved gain");
+                TestSuite.Check(!made[0].Paused && made[0].Gain == AudioLevels.Card, "foreground starts once at central quiet level");
                 player.Advance(.2); player.Play(3, false, false);
                 TestSuite.Check(player.ActiveVoices == 2, "new sound keeps only one previous tail");
                 player.Advance(.045);
-                TestSuite.Check(made[0].Gain < .4 && made[1].Gain == .65, "old tail fades without reducing new transient");
+                TestSuite.Check(made[0].Gain < AudioLevels.Card * .6 && made[1].Gain == AudioLevels.Card, "old tail fades without reducing new transient");
                 player.SetPaused(true); player.Advance(10);
                 TestSuite.Check(player.ActiveVoices == 2 && made[0].Paused && made[1].Paused, "pause freezes voices and fade time");
                 player.SetPaused(false); player.Advance(.05);
@@ -95,22 +80,29 @@ namespace ShpilSvoih
             var made = new Voice();
             using (var player = new MusicPlayer((id, token) => new MusicPcm(44100, 2, new byte[17640]), pcm => made))
             {
-                player.SetVolume(.095); player.SetTrack("shuten", false);
+                player.SetVolume(AudioLevels.Music); player.SetTrack("shuten", false);
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 while (player.IsLoading && watch.ElapsedMilliseconds < 5000) Thread.Sleep(5);
-                TestSuite.Check(!player.IsLoading && made.Gain == .095 && !made.Paused, "late load inherits current duck before unpausing");
-                player.SetVolume(.28);
-                TestSuite.Check(made.Gain == .28, "gain changes do not restart song");
+                TestSuite.Check(!player.IsLoading && made.Gain == AudioLevels.Music && !made.Paused, "late load starts at fixed central level");
+                player.SetVolume(AudioLevels.Music);
+                TestSuite.Check(made.Gain == AudioLevels.Music, "repeated synchronization cannot change background level");
             }
             var pcmSilence = new MusicPcm(44100, 2, new byte[17640]);
             using (var music = new LoopingMusicVoice(pcmSilence))
             using (var effect = new LoopingMusicVoice(pcmSilence, false))
             {
-                music.SetVolume(.28); effect.SetVolume(.76);
+                music.SetVolume(AudioLevels.Music); effect.SetVolume(AudioLevels.Card);
+                TestSuite.Check(LoopingMusicVoice.OpenDeviceCount == 1, "music and effect share one output device");
                 music.SetPaused(false); Thread.Sleep(130);
                 uint before = music.PlayedBytes;
+                uint actualBefore = LoopingMusicVoice.OutputPlayedBytes;
                 effect.SetPaused(false); Thread.Sleep(200);
+                var deadline = System.Diagnostics.Stopwatch.StartNew();
+                while (effect.PlayedBytes < pcmSilence.Data.Length && deadline.ElapsedMilliseconds < 500) Thread.Sleep(5);
+                TestSuite.Note("Mixer positions: music " + before + " -> " + music.PlayedBytes + "; effect " + effect.PlayedBytes + "/" + pcmSilence.Data.Length + "; error=" + LoopingMusicVoice.OutputError);
+                TestSuite.Check(music.Volume == AudioLevels.Music, "effect level cannot change music channel");
                 TestSuite.Check(music.PlayedBytes > before && effect.PlayedBytes >= pcmSilence.Data.Length, "native effect finishes without stopping looping music");
+                TestSuite.Check(LoopingMusicVoice.OutputPlayedBytes > actualBefore, "real Windows output advances, not only the software cursor");
                 music.SetPaused(true); effect.SetPaused(true); Thread.Sleep(60);
                 uint held = music.PlayedBytes; Thread.Sleep(70);
                 TestSuite.Check(music.PlayedBytes == held, "native mix pauses exactly");

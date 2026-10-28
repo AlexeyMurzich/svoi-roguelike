@@ -4,19 +4,18 @@
     {
         readonly MusicPlayer music = new MusicPlayer();
         readonly CardSoundPlayer cardSounds = new CardSoundPlayer();
-        readonly AudioMixEnvelope audioMix = new AudioMixEnvelope();
         int audioPlayerTurn = -1;
-        bool AudioNeedsMotion { get { return cardSounds.ActiveVoices > 0 || !audioMix.IsSettled; } }
+        bool AudioNeedsMotion { get { return cardSounds.ActiveVoices > 0; } }
+        double DesiredMusicGain { get { return AudioLevels.Music; } }
         int menuMusicHero = -1;
         string DesiredMusicTrack
         {
             get
             {
-                if (mimicratorPreview) return "mimicrator";
-                if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Mimicrator &&
-                    (combat.Phase == CombatPhase.Player || combat.Phase == CombatPhase.Enemy || CombatBusy))
+                if (mimicratorPreview || checkout) return "";
+                if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Mimicrator)
                     return "mimicrator";
-                return MusicTracks.Hero(!mapScreen && !checkout && menuMusicHero >= 0 ? menuMusicHero : selected);
+                return !mapScreen && menuMusicHero >= 0 ? MusicTracks.Hero(menuMusicHero) : "";
             }
         }
         void ChooseMenuHero(int hero)
@@ -43,16 +42,12 @@
                 }
             }
             // Offscreen regression windows never open an audio device.
-            music.SetVolume(audioMix.Gain);
+            music.SetVolume(DesiredMusicGain);
             music.SetTrack(Visible ? DesiredMusicTrack : "", pause);
         }
         void AdvanceAudio(float seconds)
         {
             cardSounds.Advance(seconds);
-            bool foreground = cardSounds.ActiveVoices > 0 || (attackTimeline.IsRunning &&
-                (attackTimeline.Kind == AttackAnimation.DogHowl || attackTimeline.Kind == AttackAnimation.TohaRam ||
-                 attackTimeline.Kind == AttackAnimation.TohaDarkRam));
-            audioMix.Advance(seconds, foreground);
         }
         void StartCardSound(bool attack)
         {

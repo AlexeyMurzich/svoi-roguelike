@@ -80,7 +80,7 @@ namespace ShpilSvoih
         IMusicVoice voice;
         string track = "", error = "";
         bool paused = true, disposed, loading;
-        double gain = .28;
+        double gain = AudioLevels.Music;
         long generation;
         public MusicPlayer() : this(LoadEmbedded, pcm => new LoopingMusicVoice(pcm)) { }
         public MusicPlayer(Func<string, CancellationToken, MusicPcm> loader, Func<MusicPcm, IMusicVoice> factory)
@@ -153,6 +153,7 @@ namespace ShpilSvoih
             try
             {
                 var pcm = load(id, source.Token);
+                pcm = AudioLevels.PrepareMusic(pcm, source.Token);
                 source.Token.ThrowIfCancellationRequested();
                 candidate = createVoice(pcm); // Newly created voices are paused.
                 lock (gate)

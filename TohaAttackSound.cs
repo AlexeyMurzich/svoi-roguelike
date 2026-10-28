@@ -39,7 +39,7 @@ namespace ShpilSvoih
                 if (clips[index] == null) clips[index] = load(dark);
                 voice = create(clips[index]);
                 var volume = voice as IAudioVolumeVoice;
-                if (volume != null) volume.SetVolume(.60);
+                if (volume != null) volume.SetVolume(AudioLevels.Enemy);
                 paused = true;
                 SetPaused(pause);
                 LastError = "";

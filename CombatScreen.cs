@@ -64,7 +64,6 @@ namespace ShpilSvoih
         void ResetCombat()
         {
             cardSounds.Stop();
-            audioMix.Reset();
             audioPlayerTurn = -1;
             tohaSound.Stop();
             ClearBabaiBackdrop();

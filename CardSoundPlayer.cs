@@ -102,7 +102,7 @@ namespace ShpilSvoih
             try
             {
                 candidate = create(pcm);
-                var item = new Playing { Voice = candidate, Duration = pcm.Data.Length / (double)(pcm.SampleRate * pcm.Channels * 2), Gain = attack ? .76 : .65 };
+                var item = new Playing { Voice = candidate, Duration = pcm.Data.Length / (double)(pcm.SampleRate * pcm.Channels * 2), Gain = AudioLevels.Card };
                 Volume(item);
                 candidate.SetPaused(suspend);
                 voices.Add(item); candidate = null; paused = suspend; LastError = "";
@@ -145,19 +145,4 @@ namespace ShpilSvoih
         }
     }
 
-    // One envelope, driven by the existing monotonic animation clock. No audio timer.
-    public sealed class AudioMixEnvelope
-    {
-        public double Gain { get; private set; }
-        public AudioMixEnvelope() { Gain = .28; }
-        public void Advance(double seconds, bool foreground)
-        {
-            if (double.IsNaN(seconds) || double.IsInfinity(seconds) || seconds <= 0) return;
-            double target = foreground ? .095 : .28;
-            double tau = foreground ? .035 : .32;
-            Gain = target + (Gain - target) * Math.Exp(-seconds / tau);
-        }
-        public bool IsSettled { get { return Math.Abs(Gain - .28) < .001; } }
-        public void Reset() { Gain = .28; }
-    }
 }

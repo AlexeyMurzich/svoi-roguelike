@@ -63,7 +63,7 @@ namespace ShpilSvoih
                 var bytes = new byte[SampleCount * 2];
                 Buffer.BlockCopy(wave, 44, bytes, 0, bytes.Length);
                 voice = new LoopingMusicVoice(new MusicPcm(SampleRate, 1, bytes), false);
-                ((IAudioVolumeVoice)voice).SetVolume(.55);
+                ((IAudioVolumeVoice)voice).SetVolume(AudioLevels.Howl);
                 paused = true;
                 SetPaused(false);
             }
