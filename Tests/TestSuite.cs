@@ -96,6 +96,7 @@ namespace ShpilSvoih
             Run("Debug console: infinite gold and exact triple multiplier", DebugModeTests.Rules);
             Run("Debug console: input, pause and scene isolation", UiTests.TestDebugConsole);
             Run("Battle backdrop: source, cache and six sizes", UiTests.TestBattleBackground);
+            Run("Battle backdrop: actual node, regional boundaries and ordinary enemies", UiTests.TestDistrictBackgrounds);
             Run("Combat hints: statuses, intents and scaled hover", UiTests.TestCombatHints);
             Run("Toha: Illya test launcher preserves free auto plays and confusion", UiTests.TestIllyaToha);
             Run("Toha: threshold, damage and elite generation", TohaTests.Rules);

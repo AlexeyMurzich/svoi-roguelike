@@ -21,7 +21,7 @@ namespace ShpilSvoih
             using (var game = new Game())
             {
                 game.CreateControl(); Call(game, "StartTestBabai");
-                Bitmap prior = null; Image wall = null;
+                Bitmap prior = null; Image region = null;
                 foreach (var size in Sizes)
                 {
                     game.ClientSize = size;
@@ -31,11 +31,12 @@ namespace ShpilSvoih
                     if (prior != null) TestSuite.Throws<ArgumentException>(() => prior.GetPixel(0, 0), "resize releases former composed backdrop");
                     float floor = (float)typeof(Game).GetProperty("CombatFloor", PrivateInstance).GetValue(game, null);
                     var bed = (RectangleF)typeof(Game).GetProperty("BabaiBedArea", PrivateInstance).GetValue(game, null);
-                    TestSuite.Check(Math.Abs(bed.Bottom - floor) < .0001f && BabaiStageLayout.WallBase(floor) < bed.Bottom - 40, "bed feet and hero share a standing plane below wall seam");
-                    TestSuite.Check(backdrop.GetPixel(0, 0).A == 255 && backdrop.GetPixel(backdrop.Width - 1, backdrop.Height - 1).A == 255, "composed wall and ground are opaque");
+                    TestSuite.Check(Math.Abs(bed.Bottom - floor) < .0001f, "bed feet and hero share the district ground plane");
+                    TestSuite.Check(backdrop.GetPixel(0, 0).A == 255 && backdrop.GetPixel(backdrop.Width - 1, backdrop.Height - 1).A == 255, "regional backdrop is opaque");
                     TestSuite.Check((long)backdrop.Width * backdrop.Height <= 1920L * 1080, "background obeys rendering pixel budget");
                     TestSuite.Check(Read<Bitmap>(game, "sceneBackground") == null, "inactive map background is not retained alongside battle cache");
-                    wall = Read<Image>(game, "babaiWall");
+                    region = Read<Image>(game, "babaiBackdropSource");
+                    TestSuite.Check(ReferenceEquals(region, Read<Image>(game, "ordinaryCombatBackground")), "Babai uses same Social source as the rat in this district");
                     int images = Read<ImageAssets>(game, "assetStore").Count;
                     Call(game, "AdvanceLivingAnimation", .1f);
                     using (Render(game)) { }
@@ -47,7 +48,7 @@ namespace ShpilSvoih
                 Call(game, "ReturnToMainMenu");
                 TestSuite.Check(Read<Bitmap>(game, "babaiBackdrop") == null, "leaving battle clears scene cache");
                 TestSuite.Throws<ArgumentException>(() => prior.GetPixel(0, 0), "leaving battle disposes final cached bitmap");
-                TestSuite.Check(wall.Width > 0, "original texture still belongs to ImageAssets");
+                TestSuite.Check(region.Width > 0, "original regional source still belongs to ImageAssets");
             }
         }
     }

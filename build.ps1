@@ -1,4 +1,4 @@
-$ErrorActionPreference='Stop'
+﻿$ErrorActionPreference='Stop'
 Push-Location -LiteralPath $PSScriptRoot
 try {
 $version=[regex]::Match((Get-Content (Join-Path $PSScriptRoot 'GameVersion.cs') -Raw), 'Number = "([^"]+)"').Groups[1].Value
@@ -11,7 +11,7 @@ $requiredAssets+=@('combat-babai-wall.png','combat-babai-floor.png')
 $requiredAssets+=@('enemies\babai-poses.png','enemies\babai-bed.png')
 $requiredAssets+=@('enemies\toha-light.png','enemies\toha-dark.png','combat-toha-light.png','combat-toha-dark.png')
 $requiredAssets+=@('heroes\pupsolet.png','heroes\illya.png','heroes\runtso.png')
-$requiredAssets+=@('combat-icons.png','route-button.png','combat-social.png','combat-mimicrator.png')
+$requiredAssets+=@('combat-icons.png','route-button.png','combat-social.png','combat-old-centre.png','combat-fomchenko.png','combat-mimicrator.png')
 $requiredAssets+=@('enemies\mimicrator-body.png','enemies\mimicrator-props.png','enemies\mimicrator-shell.png')
 $requiredAssets+=@('ring','coupon','phone','id','baton','armor','feather','processor','investigation','exchange','mystery') | ForEach-Object { 'relics\'+$_+'.png' }
 foreach($relativeName in $requiredAssets){

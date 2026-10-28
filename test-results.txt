@@ -1,4 +1,13 @@
-﻿PASS Software mixer: bit-exact background isolation
+﻿v0.31 verification
+Full initial run: 95 passed, 1 failed (bicubic edge alpha).
+The edge alpha defect was fixed by an opaque base fill.
+Post-fix verification: 10 suites passed, 0 failed, 41658 assertions.
+This combines the full initial run and targeted post-fix checks; no second full run is claimed.
+EXE SHA256 BC925F846257C1192B877E9BDF6CD72ECBC2444CE931AAA20EED72DFFE738665
+ZIP verified; packaged and tested EXE match.
+
+=== FULL RUN BEFORE EDGE FIX ===
+PASS Software mixer: bit-exact background isolation
 PASS Software mixer: resampling, one-shot and quiet peaks
 PASS Software mixer: static song calibration and source ownership
 PASS Card audio: constant battle background level
@@ -6,7 +15,11 @@ PASS Card audio: bounded voices, tails, cache, pause and failure
 PASS Card audio: eight complete embedded effects
 INFO Mixer positions: music 18432 -> 49152; effect 17640/17640; error=
 PASS Card audio: late music gain and simultaneous native playback
-PASS Babai: grounded bed, separate planes and cache lifetime
+FAIL Babai: grounded bed, separate planes and cache lifetime
+System.Exception: regional backdrop is opaque
+   в ShpilSvoih.TestSuite.Check(Boolean condition, String message)
+   в ShpilSvoih.UiTests.TestBabaiGrounding()
+   в ShpilSvoih.TestSuite.Run(String name, Action test)
 PASS Babai: lasso, block, capture and victory
 PASS Babai: hard pool and legal route previews
 PASS Babai: pure motion and frame-rate independence
@@ -22,6 +35,7 @@ PASS Music: actual hero clicks and elite scene transitions
 PASS Debug console: infinite gold and exact triple multiplier
 PASS Debug console: input, pause and scene isolation
 PASS Battle backdrop: source, cache and six sizes
+PASS Battle backdrop: actual node, regional boundaries and ordinary enemies
 PASS Combat hints: statuses, intents and scaled hover
 PASS Toha: Illya test launcher preserves free auto plays and confusion
 PASS Toha: threshold, damage and elite generation
@@ -70,7 +84,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 47,9 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 22,7 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -92,12 +106,35 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 27,45 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 32,52 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 95 passed, 0 failed. Assertions: 1279521.
+Suites: 95 passed, 1 failed. Assertions: 1279553.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+=== POST-FIX: DISTRICT BACKGROUNDS ===
+PASS Battle backdrop: source, cache and six sizes
+PASS Battle backdrop: actual node, regional boundaries and ordinary enemies
+Suites: 2 passed, 0 failed. Assertions: 110.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+=== POST-FIX: REPAINT AND RESIZE ===
+PASS Repaint: partial frames are pixel-identical
+PASS Repaint: mouse movement only redraws visual changes
+INFO After 72 resizes: GDI handles 19 -> 19; decoded images 37; cached fonts 9.
+PASS Resize/repaint determinism and GDI resources
+Suites: 3 passed, 0 failed. Assertions: 131.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+=== POST-FIX: BABAI ===
+PASS Babai: grounded bed, separate planes and cache lifetime
+PASS Babai: lasso, block, capture and victory
+PASS Babai: hard pool and legal route previews
+PASS Babai: pure motion and frame-rate independence
+PASS Babai: animated battle, pause, capture and six sizes
+Suites: 5 passed, 0 failed. Assertions: 41417.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

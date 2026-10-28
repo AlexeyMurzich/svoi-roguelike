@@ -7,7 +7,7 @@ namespace ShpilSvoih
 {
     public sealed partial class Game
     {
-        Image babaiWall, babaiFloorArt;
+        Image babaiBackdropSource;
         Bitmap babaiBackdrop;
         Size babaiBackdropPixels;
         SizeF babaiBackdropLogical;
@@ -16,13 +16,6 @@ namespace ShpilSvoih
         {
             if (babaiBackdrop != null) babaiBackdrop.Dispose();
             babaiBackdrop = null;
-        }
-        void LoadBabaiBackdropArt()
-        {
-            LoadBabaiArt();
-            if (babaiWall != null) return;
-            babaiWall = assetStore.Get("combat-babai-wall.png", "combat-babai-wall.png");
-            babaiFloorArt = assetStore.Get("combat-babai-floor.png", "combat-babai-floor.png");
         }
         static void SoftGroundShadow(Graphics graphics, RectangleF area, int alpha)
         {
@@ -57,12 +50,13 @@ namespace ShpilSvoih
         }
         void DrawBabaiBackdrop(Graphics graphics)
         {
-            LoadBabaiBackdropArt();
+            LoadBabaiArt();
+            Image source = DistrictCombatBackground();
             float scale = RenderViewport.Scale;
             int top = (int)Math.Round(MapView.Top * scale);
             var pixels = new Size(Math.Max(1, RenderPixels.Width), Math.Max(1, RenderPixels.Height - top));
             var logical = new SizeF(CanvasWidth, CanvasHeight);
-            if (babaiBackdrop == null || babaiBackdropPixels != pixels || babaiBackdropLogical != logical || babaiBackdropFloor != CombatFloor)
+            if (babaiBackdrop == null || babaiBackdropPixels != pixels || babaiBackdropLogical != logical || babaiBackdropFloor != CombatFloor || !ReferenceEquals(babaiBackdropSource, source))
             {
                 ClearBabaiBackdrop();
                 // Keep only the active opaque scene cache; the map is rebuilt on return.
@@ -72,22 +66,19 @@ namespace ShpilSvoih
                 {
                     using (var canvas = Graphics.FromImage(frame))
                     {
-                        int seam = Math.Max(1, Math.Min(pixels.Height - 1, (int)Math.Round(BabaiStageLayout.WallBase(CombatFloor) * scale) - top));
-                        canvas.Clear(Color.FromArgb(18, 17, 16));
+                        // Bicubic filtering can leave fractional alpha at the outermost pixels.
+                        canvas.Clear(Color.FromArgb(7, 16, 21));
                         canvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        // Separate planes: the wall never extends under the standing strip.
-                        canvas.DrawImage(babaiWall, new Rectangle(0, 0, pixels.Width, seam));
-                        canvas.DrawImage(babaiFloorArt, new Rectangle(0, seam, pixels.Width, pixels.Height - seam));
-                        using (var ambient = new LinearGradientBrush(new Rectangle(0, seam, pixels.Width, pixels.Height - seam), Color.FromArgb(95, 4, 8, 12), Color.FromArgb(90, 4, 6, 9), 90f))
-                            canvas.FillRectangle(ambient, 0, seam, pixels.Width, pixels.Height - seam);
+                        canvas.DrawImage(source, new Rectangle(Point.Empty, pixels), Viewport.CoverSource(source.Size, pixels), GraphicsUnit.Pixel);
+                        using (var shade = new SolidBrush(Color.FromArgb(32, 7, 16, 21)))
+                            canvas.FillRectangle(shade, new Rectangle(Point.Empty, pixels));
                         canvas.ScaleTransform(scale, scale);
                         canvas.TranslateTransform(0, -MapView.Top);
-                        using (var edge = new Pen(Color.FromArgb(180, 10, 8, 6), 4))
-                            canvas.DrawLine(edge, 0, BabaiStageLayout.WallBase(CombatFloor), CanvasWidth, BabaiStageLayout.WallBase(CombatFloor));
                         DrawBabaiBedContact(canvas);
                     }
                     babaiBackdrop = frame; frame = null;
                     babaiBackdropPixels = pixels; babaiBackdropLogical = logical; babaiBackdropFloor = CombatFloor;
+                    babaiBackdropSource = source;
                 }
                 finally { if (frame != null) frame.Dispose(); }
             }
