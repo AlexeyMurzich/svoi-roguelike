@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 namespace ShpilSvoih
 {
     // A native buffer loop has no end-of-track timer or silence between repeats.
-    // waveOut is independent of SoundPlayer, so dog howls do not stop the music.
-    public sealed class LoopingMusicVoice : IMusicVoice
+    // Independent waveOut handles let effects coexist with the music loop.
+    public sealed class LoopingMusicVoice : IMusicVoice, IAudioVolumeVoice
     {
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
         struct Format
@@ -85,6 +85,14 @@ namespace ShpilSvoih
         public void SetPaused(bool value)
         {
             if (!disposed) Check(value ? waveOutPause(device) : waveOutRestart(device));
+        }
+        public void SetVolume(double gain)
+        {
+            if (double.IsNaN(gain) || double.IsInfinity(gain) || gain < 0 || gain > 1)
+                throw new ArgumentOutOfRangeException("gain");
+            if (disposed) return;
+            uint level = (uint)Math.Round(gain * 65535);
+            Check(waveOutSetVolume(device, level | (level << 16)));
         }
         public void Dispose()
         {

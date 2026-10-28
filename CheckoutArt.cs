@@ -17,7 +17,6 @@ namespace ShpilSvoih
         void OpenCheckout()
         {
             menuMusicHero = -1;
-            music.SetTrack("", true);
             StopMapMotion();
             ResetCombat();
             mapRoutes.Clear();

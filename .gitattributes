@@ -6,4 +6,5 @@
 *.png binary
 
 *.ogg binary
+*.wav binary
 *.gz binary

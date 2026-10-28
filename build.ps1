@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference='Stop'
+$ErrorActionPreference='Stop'
 Push-Location -LiteralPath $PSScriptRoot
 try {
 $version=[regex]::Match((Get-Content (Join-Path $PSScriptRoot 'GameVersion.cs') -Raw), 'Number = "([^"]+)"').Groups[1].Value
@@ -27,6 +27,13 @@ foreach($id in $musicIds){
 foreach($id in @('toha-light','toha-dark')) {
  $soundFile=Get-Item -LiteralPath (Join-Path $assetRoot ('sfx\'+$id+'.pcm.gz'))
  $compilerArgs+=('/resource:assets\sfx\'+$id+'.pcm.gz,sfx.'+$id+'.pcm.gz')
+}
+foreach($hero in @('pupsolet','illya','runtso','shuten')) {
+ foreach($kind in @('attack','guard')) {
+  $id=$hero+'-'+$kind
+  $soundFile=Get-Item -LiteralPath (Join-Path $assetRoot ('sfx\cards\runtime\'+$id+'.pcm.gz'))
+  $compilerArgs+=('/resource:assets\sfx\cards\runtime\'+$id+'.pcm.gz,sfx.cards.'+$id+'.pcm.gz')
+ }
 }
 $compilerArgs+=@(Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*.cs' | Sort-Object Name | ForEach-Object { $_.Name })
 & $compilerPath @compilerArgs

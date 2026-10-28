@@ -73,6 +73,10 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Card audio: frame independent ducking and release", CardAudioTests.Ducking);
+            Run("Card audio: bounded voices, tails, cache, pause and failure", CardAudioTests.Voices);
+            Run("Card audio: eight complete embedded effects", CardAudioTests.Embedded);
+            Run("Card audio: late music gain and simultaneous native playback", CardAudioTests.MusicGainAndNativeMix);
             Run("Babai: grounded bed, separate planes and cache lifetime", UiTests.TestBabaiGrounding);
             Run("Babai: lasso, block, capture and victory", BabaiTests.Rules);
             Run("Babai: hard pool and legal route previews", BabaiTests.Pools);

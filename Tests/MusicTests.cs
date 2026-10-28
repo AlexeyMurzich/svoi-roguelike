@@ -111,7 +111,7 @@ namespace ShpilSvoih
             using (var game = new Game())
             {
                 game.CreateControl();
-                TestSuite.Check(MusicChoice(game) == "", "startup waits for hero selection");
+                TestSuite.Check(MusicChoice(game) == "pupsolet", "startup plays the initially selected hero theme");
                 using (Render(game)) { }
                 for (int i = 0; i < 4; i++)
                 {
@@ -120,16 +120,16 @@ namespace ShpilSvoih
                     using (Render(game)) { }
                 }
                 Key(game, Keys.Enter);
-                TestSuite.Check(MusicChoice(game) == "", "checkout stops hero theme");
+                TestSuite.Check(MusicChoice(game) == "shuten", "checkout keeps selected hero theme");
                 Call(game, "StartTestMimicrator");
                 TestSuite.Check(MusicChoice(game) == "mimicrator", "elite combat selects elite theme");
                 var fight = Read<CombatState>(game, "combat");
                 Call(game, "EndCombatTurn"); Call(game, "AdvanceCombatAnimation", 5f);
                 TestSuite.Check(MusicChoice(game) == "mimicrator" && fight.Turn == 2, "form and turn changes do not change theme");
                 Call(game, "ReturnToMainMenu");
-                TestSuite.Check(MusicChoice(game) == "", "return to menu stops elite theme");
+                TestSuite.Check(MusicChoice(game) == "shuten", "return to menu restores selected hero theme");
                 Call(game, "StartTestDogs");
-                TestSuite.Check(MusicChoice(game) == "", "ordinary battle has no assigned elite theme");
+                TestSuite.Check(MusicChoice(game) == "shuten", "ordinary battles play the hero theme");
                 Call(game, "ReturnToMainMenu");
                 TestSuite.Check(Read<MusicPlayer>(game, "music").Track == "", "offscreen windows never open audio device");
             }

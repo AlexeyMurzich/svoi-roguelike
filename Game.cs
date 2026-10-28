@@ -126,6 +126,7 @@ namespace ShpilSvoih
             catch
             {
                 music.Dispose();
+                cardSounds.Dispose();
                 tohaSound.Dispose();
                 actorArtCache.Dispose();
                 interfaceArtCache.Dispose();
@@ -431,6 +432,7 @@ namespace ShpilSvoih
                 resourcesDisposed = true;
                 ClearRenderSurface();
                 music.Dispose();
+                cardSounds.Dispose();
                 tohaSound.Dispose();
                 ResetCombat();
                 ClearMimicratorBackdrop();

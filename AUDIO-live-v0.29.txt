@@ -1,0 +1,12 @@
+PASS standalone battle has hero music
+PASS accepted attack starts one native effect
+PASS real game timer ducks music for card preparation
+PASS pause holds both channels at exact positions
+PASS resume keeps both existing native voices
+PASS card animation completes after resumed impact
+PASS second card bounds overlap
+PASS finished effects release voices and restore background level
+PASS scene change clears old effects
+PASS standalone elite loads separate music
+PASS Toha battle keeps Illya theme
+PASS automatic opening cards produce a single bounded accent

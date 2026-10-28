@@ -13,7 +13,6 @@ namespace ShpilSvoih
         void ReturnToMainMenu()
         {
             menuMusicHero = -1;
-            music.SetTrack("", true);
             debugConsoleOpen = false;
             debugCommand = "";
             debugReply = "shut_god — Шутен: бесконечное золото, атаки и защита ×3.";

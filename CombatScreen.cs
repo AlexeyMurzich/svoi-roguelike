@@ -63,6 +63,9 @@ namespace ShpilSvoih
 
         void ResetCombat()
         {
+            cardSounds.Stop();
+            audioMix.Reset();
+            audioPlayerTurn = -1;
             tohaSound.Stop();
             ClearBabaiBackdrop();
             ClearTohaBackdrop();
@@ -144,6 +147,7 @@ namespace ShpilSvoih
             encounteredEnemies[combatNode] = enemy;
             mapIntel[combatNode].Identity = EnemyCatalog.Name(enemy);
             combat = new CombatState(currentHero, new Random(mapRun.Map.Seed ^ combatNode ^ 0xA71), enemy);
+            cardSounds.Prepare(selected);
             if (enemy == EnemyKind.Mimicrator)
             {
                 LoadMimicratorBattleArt();
@@ -163,6 +167,9 @@ namespace ShpilSvoih
         void StartCombatAnimation(AttackAnimation kind, Action impact)
         {
             attackTimeline.Start(kind, impact);
+            if (kind == AttackAnimation.HeroStrike || kind == AttackAnimation.HeroGuard)
+                StartCardSound(kind == AttackAnimation.HeroStrike);
+            else cardSounds.SoftenPrevious();
             ResetMotionClock();
             WakeMotion();
             RefreshScene();
@@ -191,7 +198,7 @@ namespace ShpilSvoih
                     if (combat.Phase == CombatPhase.Enemy) StartNextEnemyAnimation();
                 }
             }
-            if (!CombatBusy && !CombatAmbientMoving && !LivingScene && combatTimer != null)
+            if (!CombatBusy && !CombatAmbientMoving && !LivingScene && !AudioNeedsMotion && combatTimer != null)
                 combatTimer.Stop();
             SyncMusic();
             // Impacts and completion also change cards, gold, HP and button availability.
