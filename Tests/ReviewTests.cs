@@ -176,7 +176,7 @@ namespace ShpilSvoih
                 Call(game, "OnMapMouseMove", game, new MouseEventArgs(MouseButtons.None, 0, position.X, position.Y, 0));
                 TestSuite.Check(Read<int>(game, "hoveredMapNode") == node.Id, "revealed room can be inspected before entering");
                 string identity = (string)typeof(Game).GetMethod("RevealedIdentity", PrivateInstance).Invoke(game, new object[] { node.Id });
-                TestSuite.Check(identity == EnemyCatalog.Name(EnemyCatalog.ForNode(run.Map.Seed, node.Id)), "preview names the enemy actually generated for this room");
+                TestSuite.Check(identity == OrdinaryEncounters.Preview(run, node.Id), "preview names the enemy actually generated for this room");
                 TestSuite.Check(run.Pending == null && run.Current.Floor == 0, "inspection does not enter or consume a room");
                 using (var frame = Render(game)) frame.Save(Path.Combine(TestSuite.OutputDirectory, "review-investigation-preview.png"));
                 var hidden = run.Map.Nodes.First(n => !intel[n.Id].Revealed);

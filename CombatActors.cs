@@ -8,11 +8,12 @@ namespace ShpilSvoih
         float CombatFloor { get { return Math.Min(CanvasHeight - 295, (160 + CanvasHeight - 285) / 2 + 160); } }
         float HeroCenter { get { return CanvasWidth * .24f; } }
 
-        RectangleF HeroDeathArea { get { return selected == 3 ? new RectangleF(HeroCenter - 170, CombatFloor - 335, 340, 335) : new RectangleF(HeroCenter - 220, CombatFloor - 365, 440, 365); } }
+        RectangleF HeroDeathArea { get { return selected == 3 ? new RectangleF(HeroSpriteCenter - 170, CombatFloor - 335, 340, 335) : new RectangleF(HeroSpriteCenter - 220, CombatFloor - 365, 440, 365); } }
 
         RectangleF EnemyArea(int index)
         {
             float center = EnemyCenter(index);
+            if (combat.Enemies[index].Kind == EnemyKind.Babai) return BabaiBodyArea;
             if (combat.Enemies[index].Kind == EnemyKind.Toha) return new RectangleF(center - 260, CombatFloor - 350, 520, 350);
             if (combat.Enemies[index].Kind == EnemyKind.Mimicrator) return new RectangleF(center - 220, CombatFloor - 350, 440, 350);
             if (combat.Enemies[index].Kind == EnemyKind.Hedgehog || combat.Enemies[index].Kind == EnemyKind.RabidHedgehog)
@@ -31,13 +32,15 @@ namespace ShpilSvoih
 
         void PaintCombatHero(Graphics graphics)
         {
+            if (combat.Babai != null && combat.Babai.Caught && BabaiDisplayDistance <= .01f) return;
             float move = attackTimeline.Kind == AttackAnimation.HeroStrike ? HeroAttackOffset(attackTimeline.Time) : 0;
             float width = selected == 3 ? 310 : 340;
-            var area = new RectangleF(HeroCenter - width / 2 + move, CombatFloor - 335, width, 335);
+            var area = new RectangleF(HeroSpriteCenter - width / 2 + move, CombatFloor - 335, width, 335);
             var saved = graphics.Save();
             try
             {
                 ApplyTohaHeroRecoil(graphics);
+                ApplyBabaiCapture(graphics, area);
                 LivingMotion.Body(graphics, area, livingSeconds, selected, selected == 0);
                 if (selected == 3) DrawShutenPose(graphics, area);
                 else DrawHeroCombatPose(graphics, area);
@@ -60,9 +63,10 @@ namespace ShpilSvoih
             var saved = graphics.Save();
             try
             {
-                if (kind != EnemyKind.StrayDogs && kind != EnemyKind.Mimicrator && kind != EnemyKind.Toha)
+                if (kind != EnemyKind.StrayDogs && kind != EnemyKind.Mimicrator && kind != EnemyKind.Toha && kind != EnemyKind.Babai)
                     LivingMotion.Body(graphics, area, livingSeconds, kind == EnemyKind.RabidHedgehog ? 7 : 4 + index, false);
-                if (kind == EnemyKind.Toha) DrawToha(graphics, area);
+                if (kind == EnemyKind.Babai) DrawBabaiBody(graphics);
+                else if (kind == EnemyKind.Toha) DrawToha(graphics, area);
                 else if (kind == EnemyKind.Mimicrator) DrawMimicratorCombat(graphics, area, index);
                 else if (kind == EnemyKind.Rat) DrawRatPose(graphics, area);
                 else if (kind == EnemyKind.StrayDogs) DrawDogPoseFor(graphics, area, index);

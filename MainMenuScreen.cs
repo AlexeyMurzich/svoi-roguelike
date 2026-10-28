@@ -62,7 +62,7 @@ namespace ShpilSvoih
             Button(g, "Мимикратор · модель", 36, 723, 360, 45, StartMimicratorPreview);
             Button(g, "Мимикратор · бой", 412, 723, 361, 45, StartTestMimicrator);
             Button(g, "Илля против Тохи", 812, 792, 432, 35, StartTestIllyaToha);
-            TextAt(g, "Выберите героя и личную реликвию на кассе Евроопта.", 36, 779, 12, muted, 730);
+            Button(g, "Бабай · бой", 36, 775, 360, 28, StartTestBabai);
             TextAt(g, notice.Length > 0 ? notice : "← →  выбор      Enter  к кассе      Esc  назад", 36, 805, 12, muted, 1190);
         }
     }

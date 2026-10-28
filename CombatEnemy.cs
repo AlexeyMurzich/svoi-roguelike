@@ -26,6 +26,7 @@ namespace ShpilSvoih
         {
             get
             {
+                if (Kind == EnemyKind.Babai) return BabaiRules.Damage;
                 if (Kind == EnemyKind.Toha) return IsDarkToha ? TohaRules.DarkDamage : TohaRules.LightDamage;
                 if (Kind == EnemyKind.Mimicrator)
                     return Form == MimicratorForm.Beacon ? 6 : Form == MimicratorForm.Bear ? 14 : Form == MimicratorForm.Mussel ? 5 : 0;
@@ -38,6 +39,7 @@ namespace ShpilSvoih
         {
             get
             {
+                if (Kind == EnemyKind.Babai) return "Лассо · " + BabaiRules.Damage + " / Притягивание · 1";
                 if (Kind == EnemyKind.Toha) return (IsDarkToha ? "Тёмный наезд · " : "Наезд · ") + AttackDamage;
                 if (Kind == EnemyKind.Mimicrator)
                     return MimicratorIntent(IsActing ? Form : NextForm);
@@ -56,7 +58,7 @@ namespace ShpilSvoih
         {
             Id = id;
             Kind = kind;
-            Health = MaxHealth = kind == EnemyKind.Toha ? TohaRules.MaxHealth : kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
+            Health = MaxHealth = kind == EnemyKind.Babai ? BabaiRules.MaxHealth : kind == EnemyKind.Toha ? TohaRules.MaxHealth : kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
             CyclePosition = offset;
         }
 

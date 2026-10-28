@@ -162,6 +162,8 @@ namespace ShpilSvoih
             return true;
         }
 
+        internal void DefeatByCapture() { Health = 0; }
+
         public void ReceiveDamage(int actualHealthLost)
         {
             Settings.Validate();

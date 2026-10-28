@@ -73,6 +73,10 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Babai: lasso, block, capture and victory", BabaiTests.Rules);
+            Run("Babai: hard pool and legal route previews", BabaiTests.Pools);
+            Run("Babai: pure motion and frame-rate independence", BabaiTests.Motion);
+            Run("Babai: animated battle, pause, capture and six sizes", UiTests.TestBabaiBattle);
             Run("Toha sound: lifecycle, cache, pause and failure", TohaSoundTests.Lifecycle);
             Run("Toha sound: approved embedded previews", TohaSoundTests.Embedded);
             Run("Toha sound: native one-shot and pause", TohaSoundTests.NativeOneShot);

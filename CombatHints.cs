@@ -21,6 +21,8 @@ namespace ShpilSvoih
             var result = new List<CombatHint>();
             var hero = fight.Hero;
             if (hero.Health <= 0 || (fight.Phase != CombatPhase.Player && fight.Phase != CombatPhase.Enemy)) return result;
+            if (fight.Babai != null)
+                result.Add(new CombatHint(20, fight.Babai.Distance.ToString(), "До кровати", "Каждое лассо притягивает на 1 даже через полный блок. На расстоянии 0 — немедленная смерть. Начальная дистанция: 5."));
             if (fight.WeakTurns > 0)
                 result.Add(new CombatHint(0, fight.WeakTurns.ToString(), "Слабость", "Урон атак снижен на 25%, с округлением вниз. Осталось ходов: " + fight.WeakTurns + "."));
             if (fight.StunPending)
@@ -48,7 +50,9 @@ namespace ShpilSvoih
         {
             var result = new List<CombatHint>();
             if (!enemy.IsAlive) return result;
-            if (enemy.Kind == EnemyKind.Toha)
+            if (enemy.Kind == EnemyKind.Babai)
+                result.Add(new CombatHint(20, BabaiRules.Damage.ToString(), "Лассо · притягивание", "Нанесёт 10 урона и притянет на 1 независимо от блока. Под кроватью герой мгновенно погибает."));
+            else if (enemy.Kind == EnemyKind.Toha)
             {
                 result.Add(new CombatHint(19, enemy.AttackDamage.ToString(), enemy.IsDarkToha ? "Тёмный наезд" : "Наезд",
                     "Нанесёт " + enemy.AttackDamage + " урона машиной. При 30% HP или ниже светлая форма один раз превращается в тёмную. Здоровье не восстанавливается."));

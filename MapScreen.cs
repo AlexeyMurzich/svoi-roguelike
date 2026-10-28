@@ -34,7 +34,7 @@ namespace ShpilSvoih
                     var item = new IntelNode
                     {
                         Kind = node.Kind == RoomKind.Question ? IntelKind.Question : node.Kind == RoomKind.Elite ? IntelKind.Elite : node.Kind == RoomKind.Fight ? IntelKind.Fight : IntelKind.Other,
-                        Identity = node.Kind == RoomKind.Question ? "Событие ещё не задано" : node.Kind == RoomKind.Fight ? EnemyCatalog.Name(EnemyCatalog.ForNode(mapRun.Map.Seed, node.Id)) : node.Kind == RoomKind.Elite ? EnemyCatalog.Name(EnemyCatalog.ForEliteNode(mapRun.Map.Seed, node.Id)) : "Противник ещё не задан"
+                        Identity = node.Kind == RoomKind.Question ? "Событие ещё не задано" : node.Kind == RoomKind.Fight ? OrdinaryEncounters.Preview(mapRun, node.Id) : node.Kind == RoomKind.Elite ? EnemyCatalog.Name(EnemyCatalog.ForEliteNode(mapRun.Map.Seed, node.Id)) : "Противник ещё не задан"
                     };
                     mapIntel.Add(node.Id, item);
                     intel.Add(item);
@@ -65,7 +65,12 @@ namespace ShpilSvoih
             }
 
             if (mapRun.CompleteRoom())
+            {
+                foreach (var future in mapRun.Map.Nodes)
+                    if (future.Kind == RoomKind.Fight && !mapRun.Visited(future.Id))
+                        mapIntel[future.Id].Identity = OrdinaryEncounters.Preview(mapRun, future.Id);
                 MoveMapTo(FocusMap(mapRun.Current));
+            }
             ResetCombat();
             hoveredMapNode = -1;
         }
@@ -479,6 +484,7 @@ namespace ShpilSvoih
                     DrawHedgehogPose(g, new RectangleF(550, 324, 185, 205), false, false);
                     DrawHedgehogPose(g, new RectangleF(750, 324, 185, 205), true, false);
                 }
+                else if (enemy == EnemyKind.Babai) { LoadBabaiArt(); FitImage(g, babaiBed, new RectangleF(575, 324, 350, 205)); }
                 else if (enemy == EnemyKind.Rat) FitImage(g, ratEnemy, new RectangleF(575, 324, 350, 205));
                 else DrawHedgehogPose(g, new RectangleF(575, 324, 350, 205), enemy == EnemyKind.RabidHedgehog, false);
                 Button(g, mapRun.PendingIsRevisit ? "Вернуться на карту" : "Продолжить тестовый маршрут  →", 355, 540, 570, 53, CompleteMapRoom, true);

@@ -20,7 +20,8 @@ namespace ShpilSvoih
         MimicratorRest,
         TohaRam,
         TohaDarkRam,
-        TohaTransform
+        TohaTransform,
+        BabaiLasso
     }
 
     // Animation owns its clock and one impact callback, never the combat rules.
@@ -61,6 +62,7 @@ namespace ShpilSvoih
             if (kind == AttackAnimation.TohaRam) { Duration = 1.35f; HitTime = .62f; }
             if (kind == AttackAnimation.TohaDarkRam) { Duration = 1.5f; HitTime = .58f; }
             if (kind == AttackAnimation.TohaTransform) { Duration = 1.2f; HitTime = .6f; }
+            if (kind == AttackAnimation.BabaiLasso) { Duration = BabaiMotion.Duration; HitTime = BabaiMotion.Hit; }
             Time = 0;
             HitApplied = false;
             impact = onImpact;

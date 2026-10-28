@@ -29,7 +29,8 @@ namespace ShpilSvoih
 
         void DrawCombatHintIcon(Graphics g, int icon, RectangleF area)
         {
-            if (icon == 19)
+            if (icon == 20) { LoadBabaiArt(); FitImage(g, babaiBed, area); }
+            else if (icon == 19)
             {
                 LoadTohaArt();
                 FitImage(g, combat != null && combat.Enemies[0].IsDarkToha ? tohaDark : tohaLight, area);

@@ -24,7 +24,7 @@ namespace ShpilSvoih
         {
             if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id);
             EnemyKind enemy;
-            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : EnemyCatalog.ForNode(mapRun.Map.Seed, id);
+            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : OrdinaryEncounters.Select(mapRun.Map.Seed, id, OrdinaryEncounters.Completed(mapRun));
         }
         readonly HowlSound howlSound = new HowlSound();
         string combatNotice = "";
@@ -100,6 +100,8 @@ namespace ShpilSvoih
         internal void StartTestHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestRabidHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestHedgehogs() { StartTestEncounter(EnemyKind.Hedgehogs); }
+
+        internal void StartTestBabai() { StartTestEncounter(EnemyKind.Babai); }
 
         internal void StartTestToha() { StartTestEncounter(EnemyKind.Toha); }
 
@@ -241,6 +243,7 @@ namespace ShpilSvoih
             if (combat.Phase != CombatPhase.Enemy || combat.ActingEnemy < 0) return;
             actingEnemyIndex = combat.ActingEnemy;
             var actor = combat.Enemies[actingEnemyIndex];
+            if (actor.Kind == EnemyKind.Babai) { StartBabaiLasso(); return; }
             if (actor.Kind == EnemyKind.Toha)
             {
                 if (!TryStartTohaTransform()) StartTohaRam(actor);
@@ -280,7 +283,7 @@ namespace ShpilSvoih
                 if (!enemy.IsAlive && deathVisuals.Start(enemy.Id))
                     deathVisuals.Capture(enemy.Id, EnemyArea(index), canvas => PaintCombatEnemy(canvas, index));
             }
-            if (currentHero.Health <= 0 && deathVisuals.Start(-1))
+            if (currentHero.Health <= 0 && !(combat.Babai != null && combat.Babai.Caught) && deathVisuals.Start(-1))
                 deathVisuals.Capture(-1, HeroDeathArea, PaintCombatHero);
             if (deathVisuals.IsRunning) WakeMotion();
         }

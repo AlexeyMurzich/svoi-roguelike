@@ -39,7 +39,7 @@ namespace ShpilSvoih
         public static void TestPartialRepaint()
         {
             foreach (var size in new[] { new Size(1280, 840), new Size(1920, 1080) })
-                foreach (string launch in new[] { "StartTestBattle", "StartTestDogs", "StartTestHedgehogs", "StartTestMimicrator", "StartTestIllyaToha" })
+                foreach (string launch in new[] { "StartTestBattle", "StartTestDogs", "StartTestHedgehogs", "StartTestMimicrator", "StartTestIllyaToha", "StartTestBabai" })
                     using (var game = new Game())
                     using (var partial = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb))
                     using (var full = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb))
@@ -52,7 +52,7 @@ namespace ShpilSvoih
                         {
                             if (animated)
                             {
-                                var kind = launch == "StartTestIllyaToha" ? AttackAnimation.TohaRam : launch == "StartTestMimicrator" ? AttackAnimation.MimicratorBeacon : launch == "StartTestDogs" ? AttackAnimation.DogBite : AttackAnimation.HeroStrike;
+                                var kind = launch == "StartTestBabai" ? AttackAnimation.BabaiLasso : launch == "StartTestIllyaToha" ? AttackAnimation.TohaRam : launch == "StartTestMimicrator" ? AttackAnimation.MimicratorBeacon : launch == "StartTestDogs" ? AttackAnimation.DogBite : AttackAnimation.HeroStrike;
                                 Write(game, "actingEnemyIndex", 0); timeline.Start(kind, () => { });
                                 PaintClient(game, partial, all);
                             }

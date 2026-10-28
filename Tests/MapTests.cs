@@ -202,7 +202,12 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "map-finished.png"));
                     Key(game, Keys.Enter);
                     TestSuite.Check(run.Finished && run.Pending == null, "completed map cannot restart on enter");
-                    TestSuite.Check(((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37 || (Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 40 || (Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 41 || (Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 44), "elite art is lazy and shared");
+                    int expectedArt = 37 + HeroArtCount(game);
+                    if (Read<object>(game, "mimicratorBody") != null) expectedArt += 2;
+                    if (Read<object>(game, "mimicratorShellPoses") != null) expectedArt++;
+                    if (Read<object>(game, "tohaLight") != null) expectedArt += 4;
+                    if (Read<object>(game, "babaiBodies") != null) expectedArt += 2;
+                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == expectedArt, "only encountered art sets are decoded once and shared");
                     Call(game, "OpenCheckout");
                     TestSuite.Check(Read<MapRun>(game, "mapRun") == null && !Read<bool>(game, "mapScreen"), "new character run resets route");
                 }

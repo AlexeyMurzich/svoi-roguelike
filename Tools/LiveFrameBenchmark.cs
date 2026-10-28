@@ -100,7 +100,7 @@ internal static class LiveFrameBenchmark
                     }
                 }
             };
-            game.Shown += (sender, e) => { Call("StartTestIllyaToha"); clock.Start(); control.Start(); };
+            game.Shown += (sender, e) => { Call(args.Length > 3 ? args[3] : "StartTestIllyaToha"); clock.Start(); control.Start(); };
             Application.Run(game);
         }
     }

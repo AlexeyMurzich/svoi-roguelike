@@ -29,6 +29,7 @@ namespace ShpilSvoih
         readonly Random random;
         public readonly HeroState Hero;
         public readonly EnemyKind Enemy;
+        public readonly BabaiTrap Babai;
         public int WeakTurns { get; private set; }
         bool pendingStun;
         public bool StunPending { get { return pendingStun; } }
@@ -94,6 +95,7 @@ namespace ShpilSvoih
             Hero = hero;
             if (!Enum.IsDefined(typeof(EnemyKind), enemy)) throw new ArgumentOutOfRangeException("enemy");
             Enemy = enemy;
+            if (enemy == EnemyKind.Babai) Babai = new BabaiTrap();
             this.random = random;
             Hand = hand.AsReadOnly();
             var enemies = new List<CombatEnemy> { new CombatEnemy(0, enemy == EnemyKind.Hedgehogs ? EnemyKind.Hedgehog : enemy, 0) };
@@ -309,6 +311,7 @@ namespace ShpilSvoih
             else if (!(actor.Kind == EnemyKind.Mimicrator && actor.Form == MimicratorForm.Fairy))
             {
                 int lost = ReceiveHit(actor.AttackDamage);
+                if (actor.Kind == EnemyKind.Babai && Hero.Health > 0) Babai.Pull(Hero);
                 if (actor.Kind == EnemyKind.RabidHedgehog && lost > 0 && Hero.Health > 0 && Hero.Effects.AcceptDebuff())
                     Rabies = true;
             }
@@ -317,6 +320,7 @@ namespace ShpilSvoih
             if (Hero.Health <= 0)
             {
                 Phase = CombatPhase.Defeat;
+                Block = 0;
                 ActingEnemy = -1;
                 pendingStun = false;
                 EnemyActionPrepared = false;

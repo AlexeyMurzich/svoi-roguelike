@@ -24,6 +24,7 @@ namespace ShpilSvoih
                     if (Array.IndexOf(args, "--test-rabid-hedgehog") >= 0) game.StartTestRabidHedgehog();
                     if (Array.IndexOf(args, "--test-hedgehogs") >= 0) game.StartTestHedgehogs();
                     if (Array.IndexOf(args, "--preview-mimicrator") >= 0) game.StartMimicratorPreview();
+                    if (Array.IndexOf(args, "--test-babai") >= 0) game.StartTestBabai();
                     if (Array.IndexOf(args, "--test-toha") >= 0) game.StartTestToha();
                     if (Array.IndexOf(args, "--test-illya-toha") >= 0) game.StartTestIllyaToha();
                     if (Array.IndexOf(args, "--test-mimicrator") >= 0) game.StartTestMimicrator();
