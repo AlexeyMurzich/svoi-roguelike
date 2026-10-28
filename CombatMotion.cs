@@ -49,6 +49,7 @@ namespace ShpilSvoih
         {
             float time = attackTimeline.Time;
             TextAt(graphics, "ХОД " + combat.Turn, CanvasWidth / 2 - 42, 100, 14, gold, 140, true);
+            DrawBabaiHeroContact(graphics);
             if (!deathVisuals.Draw(graphics, -1, HeroDeathArea, null)) PaintCombatHero(graphics);
             DrawStunBirds(graphics);
             DrawBabaiBed(graphics);

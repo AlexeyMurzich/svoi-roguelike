@@ -5,6 +5,7 @@ namespace ShpilSvoih
     public sealed partial class Game
     {
         Image babaiBodies, babaiBed;
+        RectangleF babaiBedSource;
         int babaiDistanceAtStart = BabaiRules.InitialDistance;
         bool IsBabaiLasso { get { return attackTimeline.Kind == AttackAnimation.BabaiLasso; } }
         float BabaiDisplayDistance
@@ -26,6 +27,7 @@ namespace ShpilSvoih
             if (babaiBodies != null) return;
             babaiBodies = assetStore.Get("enemies/babai-poses.png", "enemies.babai-poses.png");
             babaiBed = assetStore.Get("enemies/babai-bed.png", "enemies.babai-bed.png");
+            babaiBedSource = BabaiStageLayout.FootCrop((Bitmap)babaiBed);
         }
         void StartBabaiLasso()
         {

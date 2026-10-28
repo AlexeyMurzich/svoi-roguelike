@@ -73,6 +73,7 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Babai: grounded bed, separate planes and cache lifetime", UiTests.TestBabaiGrounding);
             Run("Babai: lasso, block, capture and victory", BabaiTests.Rules);
             Run("Babai: hard pool and legal route previews", BabaiTests.Pools);
             Run("Babai: pure motion and frame-rate independence", BabaiTests.Motion);

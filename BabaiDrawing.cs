@@ -11,13 +11,15 @@ namespace ShpilSvoih
             get { float width = Math.Min(480, CanvasWidth * .4f); return new RectangleF(EnemyCenter(0) - width / 2, CombatFloor - width, width, width); }
         }
         PointF BabaiTargetPoint { get { var area = BabaiBodyArea; return new PointF(area.X + area.Width * .12f, CombatFloor - area.Height * .2f); } }
+        RectangleF BabaiBedArea
+        {
+            get { LoadBabaiArt(); var body = BabaiBodyArea; return BabaiStageLayout.Bed(body.X, CombatFloor, body.Width, babaiBedSource.Size); }
+        }
         void DrawBabaiBed(Graphics graphics)
         {
             if (combat.Babai == null) return;
             LoadBabaiArt();
-            var body = BabaiBodyArea;
-            var bed = new RectangleF(body.X, CombatFloor - body.Width * .84f, body.Width, body.Width * .84f);
-            actorArtCache.Draw(graphics, babaiBed, bed, new RectangleF(0, 0, babaiBed.Width, babaiBed.Height), 1, false);
+            actorArtCache.Draw(graphics, babaiBed, BabaiBedArea, babaiBedSource, 1, false);
         }
         void DrawBabaiBody(Graphics graphics)
         {

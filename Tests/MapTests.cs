@@ -207,6 +207,7 @@ namespace ShpilSvoih
                     if (Read<object>(game, "mimicratorShellPoses") != null) expectedArt++;
                     if (Read<object>(game, "tohaLight") != null) expectedArt += 4;
                     if (Read<object>(game, "babaiBodies") != null) expectedArt += 2;
+                    if (Read<object>(game, "babaiWall") != null) expectedArt += 2;
                     TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == expectedArt, "only encountered art sets are decoded once and shared");
                     Call(game, "OpenCheckout");
                     TestSuite.Check(Read<MapRun>(game, "mapRun") == null && !Read<bool>(game, "mapScreen"), "new character run resets route");

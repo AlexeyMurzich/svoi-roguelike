@@ -64,6 +64,7 @@ namespace ShpilSvoih
         void ResetCombat()
         {
             tohaSound.Stop();
+            ClearBabaiBackdrop();
             ClearTohaBackdrop();
             tohaVisualDark = false;
             ClearMimicratorBackdrop();
