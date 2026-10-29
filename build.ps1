@@ -15,7 +15,7 @@ $requiredAssets+=@('enemies\toha-light.png','enemies\toha-dark.png','combat-toha
 $requiredAssets+=@('heroes\pupsolet.png','heroes\illya.png','heroes\runtso.png')
 $requiredAssets+=@('combat-icons.png','combat-dock-icons.png','route-button.png','combat-mimicrator.png')
 $requiredAssets+=@('enemies\mimicrator-body.png','enemies\mimicrator-props.png','enemies\mimicrator-shell.png')
-$requiredAssets+=@('ring','coupon','phone','id','baton','armor','feather','processor','investigation','exchange','mystery') | ForEach-Object { 'relics\'+$_+'.png' }
+$requiredAssets+=@('ring','coupon','phone','id','baton','armor','feather','processor','investigation','exchange','mystery','soten-kisshun','zoltraak') | ForEach-Object { 'relics\'+$_+'.png' }
 foreach($relativeName in $requiredAssets){
  $imageFile=Get-Item -LiteralPath (Join-Path $assetRoot $relativeName)
  $resourceName=$relativeName.Replace('\','.').Replace('/','.')

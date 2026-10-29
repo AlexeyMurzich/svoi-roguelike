@@ -1,0 +1,22 @@
+[
+  {
+    "file": "soten-kisshun.png",
+    "width": 1254,
+    "height": 1254,
+    "pixel_format": "Format32bppArgb",
+    "transparent_samples": 3993,
+    "partial_alpha_samples": 2247,
+    "opaque_samples": 1,
+    "sha256": "763E45C901167CBAF1A717A39F6859C341A4FF7F16CD8FFE813E373F61F9F8A3"
+  },
+  {
+    "file": "zoltraak.png",
+    "width": 1254,
+    "height": 1254,
+    "pixel_format": "Format32bppArgb",
+    "transparent_samples": 4447,
+    "partial_alpha_samples": 1794,
+    "opaque_samples": 0,
+    "sha256": "24602421C36AC9107F0ED01811DD32437072C6139C2C416D1615F951DC6DB441"
+  }
+]
