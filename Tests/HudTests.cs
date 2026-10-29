@@ -95,7 +95,7 @@ namespace ShpilSvoih
 
                     HoverRelic(game, 90, 90);
                     TestSuite.Check(!Read<bool>(game, "hoveredRelic"), "moving beyond icon hides tooltip");
-                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 36, "HUD reuses sprite and icon cache across resizes");
+                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37, "HUD reuses sprite and icon cache across resizes");
                 }
 
                 game.ClientSize = new Size(1280, 840);

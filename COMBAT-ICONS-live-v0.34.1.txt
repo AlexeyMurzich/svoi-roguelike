@@ -1,0 +1,23 @@
+PASS native frame presented: dock-shuten-native
+PASS GPU presenter remains active: dock-shuten-native
+PASS native pointer selects first card
+PASS native frame presented: dock-hover-native
+PASS GPU presenter remains active: dock-hover-native
+PASS raised native card click starts one action
+PASS native card applies exactly one cost
+PASS native draw pile opens correct overlay
+PASS native frame presented: dock-draw-native
+PASS GPU presenter remains active: dock-draw-native
+PASS pile overlay freezes ambient time
+PASS native end turn clears hover and starts enemy turn
+PASS native frame presented: dock-enemy-turn-native
+PASS GPU presenter remains active: dock-enemy-turn-native
+PASS native enemy action returns control
+PASS native frame presented: dock-energy-native
+PASS GPU presenter remains active: dock-energy-native
+PASS native frame presented: dock-energy-hover-native
+PASS GPU presenter remains active: dock-energy-hover-native
+PASS native frame presented: dock-4k-native
+PASS GPU presenter remains active: dock-4k-native
+PASS menu transition clears card selection
+PASS native close releases audio output

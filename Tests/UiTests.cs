@@ -130,7 +130,7 @@ namespace ShpilSvoih
                 TestSuite.Throws<InvalidDataException>(() => corrupt.Get("missing.png", "missing.png"), "missing required asset fails clearly");
             }
 
-            TestSuite.Check(typeof(Game).Assembly.GetManifestResourceNames().Count() == 66, "50 images, six music tracks, two Toha and eight card sounds");
+            TestSuite.Check(typeof(Game).Assembly.GetManifestResourceNames().Count() == 67, "51 images, six music tracks, two Toha and eight card sounds");
             using (var embedded = new ImageAssets(assembly, Path.Combine(directory, "no-overrides")))
             {
                 var atlas = embedded.Get("map-icons.png", "map-icons.png");
@@ -160,7 +160,7 @@ namespace ShpilSvoih
             {
                 game.CreateControl();
                 var store = Read<ImageAssets>(game, "assetStore");
-                TestSuite.Check((store.Count - HeroArtCount(game)) == 36, "all art loaded once");
+                TestSuite.Check((store.Count - HeroArtCount(game)) == 37, "all art loaded once");
                 TestSuite.Check(Read<Dictionary<int, Image>>(game, "sprites").Count == 4, "four portraits");
                 TestSuite.Check(Read<Dictionary<string, Image>>(game, "relicImages").Count == 11, "eleven unique icons");
                 foreach (var size in Sizes)
@@ -237,10 +237,10 @@ namespace ShpilSvoih
                     }
                 }
 
-                TestSuite.Check((store.Count - HeroArtCount(game)) == 36, "resizes never reload or duplicate art");
+                TestSuite.Check((store.Count - HeroArtCount(game)) == 37, "resizes never reload or duplicate art");
                 Call(game, "DisposeCheckoutArt");
                 Call(game, "LoadCheckoutArt");
-                TestSuite.Check((store.Count - HeroArtCount(game)) == 36, "view reopening reuses owned art");
+                TestSuite.Check((store.Count - HeroArtCount(game)) == 37, "view reopening reuses owned art");
                 game.Dispose();
                 TestSuite.Check(store.Count == 0, "form disposes all images");
             }
@@ -282,11 +282,11 @@ namespace ShpilSvoih
                     TestSuite.Check(Digest(frame) == baseline, "resize roundtrip produces same pixels, no trails/duplicates");
                 using (var frame = Render(game))
                     TestSuite.Check(Digest(frame) == baseline, "repeated paint is deterministic");
-                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 36, "constant bitmap cache");
+                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37, "constant bitmap cache");
                 TestSuite.Check(Read<Dictionary<Tuple<float, bool>, Font>>(game, "fonts").Count == initialFonts, "fonts reused across repaint/resize");
                 uint finalHandles = GetGuiResources(process.Handle, 0);
                 TestSuite.Check(finalHandles <= initialHandles + 6, "bounded GDI handles: " + initialHandles + " -> " + finalHandles);
-                TestSuite.Note("After 72 resizes: GDI handles " + initialHandles + " -> " + finalHandles + "; decoded images 36; cached fonts " + initialFonts + ".");
+                TestSuite.Note("After 72 resizes: GDI handles " + initialHandles + " -> " + finalHandles + "; decoded images 37; cached fonts " + initialFonts + ".");
                 process.Dispose();
             }
         }

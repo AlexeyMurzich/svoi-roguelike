@@ -355,6 +355,11 @@ namespace ShpilSvoih
             PointF point;
             if (!DrawingViewport.TryMap(e.Location, out point))
                 return;
+            if (HasLiveFight && combat != null && !GameplayPaused)
+            {
+                int card = CombatCardAt(point, false);
+                if (card >= 0) { PlayCombatCard(card); RefreshScene(); return; }
+            }
             for (int i = actions.Count - 1; i >= 0; i--)
             {
                 if (!actions[i].Item1.Contains(point))

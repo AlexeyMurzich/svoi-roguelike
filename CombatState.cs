@@ -87,6 +87,14 @@ namespace ShpilSvoih
             }
         }
 
+        // A detached, sorted view prevents a pile inspection from revealing draw order.
+        public ReadOnlyCollection<CardData> PileCards(bool discarded)
+        {
+            return (discarded ? discard : draw).OrderBy(card => card.Name, StringComparer.Ordinal)
+                .ThenBy(card => card.ManaCost).ThenBy(card => card.GoldCost).ThenBy(card => card.Damage)
+                .ThenBy(card => card.Block).ThenBy(card => card.Family).ToList().AsReadOnly();
+        }
+
         public int LastDamage { get; private set; }
 
         public CombatState(HeroState hero, Random random) : this(hero, random, EnemyKind.Rat) { }

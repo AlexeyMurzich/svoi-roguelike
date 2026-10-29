@@ -97,9 +97,9 @@ namespace ShpilSvoih
             {
                 if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.D && inventoryView == "deck") || (e.KeyCode == Keys.R && inventoryView == "relics"))
                     SetInventory("");
-                else if (e.KeyCode == Keys.Right && inventoryView == "deck")
+                else if (e.KeyCode == Keys.Right && IsCardInventory)
                     deckPage = Math.Min(MaxDeckPage, deckPage + 1);
-                else if (e.KeyCode == Keys.Left && inventoryView == "deck")
+                else if (e.KeyCode == Keys.Left && IsCardInventory)
                     deckPage = Math.Max(0, deckPage - 1);
                 return;
             }

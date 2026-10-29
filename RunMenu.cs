@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 
 namespace ShpilSvoih
@@ -42,11 +43,14 @@ namespace ShpilSvoih
             RefreshScene();
         }
 
+        bool IsCardInventory { get { return inventoryView == "deck" || inventoryView == "draw" || inventoryView == "discard"; } }
+        IList<CardData> InventoryCards { get { return combat != null && (inventoryView == "draw" || inventoryView == "discard") ? combat.PileCards(inventoryView == "discard") : currentHero.Deck; } }
+        int InventoryCardCount { get { return combat != null && inventoryView == "draw" ? combat.DrawCount : combat != null && inventoryView == "discard" ? combat.DiscardCount : currentHero.Deck.Count; } }
         int MaxDeckPage
         {
             get
             {
-                return Math.Max(0, (currentHero.Deck.Count - 1) / 8);
+                return Math.Max(0, (InventoryCardCount - 1) / 8);
             }
         }
 
@@ -103,9 +107,11 @@ namespace ShpilSvoih
         void DrawRunInventoryContent(Graphics g)
         {
             RelicFrame(g, 205, 174, 870, 570, true);
-            bool isDeck = inventoryView == "deck";
+            bool isDeck = IsCardInventory;
+            var cards = isDeck ? InventoryCards : null;
+            string pileTitle = inventoryView == "draw" ? "Колода добора" : inventoryView == "discard" ? "Сброс" : "Колода";
             bool isPause = inventoryView == "pause";
-            TextAt(g, isPause ? "Пауза" : isDeck ? "Колода · " + currentHero.Deck.Count : "Реликвии · 1", 237, 202, 29, gold, 650, true);
+            TextAt(g, isPause ? "Пауза" : isDeck ? pileTitle + " · " + cards.Count : "Реликвии · 1", 237, 202, 29, gold, 650, true);
             Button(g, "Закрыть · Esc", 897, 195, 145, 39, () => SetInventory(""));
             if (isPause)
             {
@@ -122,17 +128,18 @@ namespace ShpilSvoih
                 TextAt(g, relic.Name, 487, 302, 25, text, 535, true);
                 TextAt(g, relic.Description, 487, 370, 18, text, 535);
             }
-            else if (currentHero.Deck.Count == 0)
+            else if (cards.Count == 0)
             {
-                TextAt(g, "Колода пока пуста", 283, 345, 33, text, 680, true);
+                TextAt(g, inventoryView == "discard" ? "В сбросе пока нет карт" : "Колода пока пуста", 283, 345, 33, text, 680, true);
             }
             else
             {
+                if (inventoryView == "draw") TextAt(g, "Порядок добора скрыт", 240, 245, 12, muted, 550);
                 deckPage = Math.Min(deckPage, MaxDeckPage);
-                int end = Math.Min(currentHero.Deck.Count, (deckPage + 1) * 8);
+                int end = Math.Min(cards.Count, (deckPage + 1) * 8);
                 for (int index = deckPage * 8; index < end; index++)
                 {
-                    var card = currentHero.Deck[index];
+                    var card = cards[index];
                     float y = 267 + (index % 8) * 48;
                     Rect(g, 235, y, 810, 43, Color.FromArgb(100, background));
                     TextAt(g, string.IsNullOrEmpty(card.Name) ? "Без названия" : card.Name, 250, y + 9, 16, text, 390, true);

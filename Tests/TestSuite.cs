@@ -73,6 +73,7 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Combat dock: fan, raised hits, piles and fixed controls", UiTests.TestCombatDock);
             Run("Software mixer: bit-exact background isolation", SoftwareMixerTests.Isolation);
             Run("Software mixer: resampling, one-shot and quiet peaks", SoftwareMixerTests.ResamplingAndHeadroom);
             Run("Software mixer: static song calibration and source ownership", SoftwareMixerTests.SongCalibration);
