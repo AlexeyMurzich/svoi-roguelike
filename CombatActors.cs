@@ -12,6 +12,7 @@ namespace ShpilSvoih
 
         RectangleF EnemyArea(int index)
         {
+            if (combat.Enemy == EnemyKind.Fomatreshka) return FomatreshkaArea(index);
             float center = EnemyCenter(index);
             if (combat.Enemies[index].Kind == EnemyKind.Babai) return BabaiBodyArea;
             if (combat.Enemies[index].Kind == EnemyKind.Toha) return new RectangleF(center - 260, CombatFloor - 350, 520, 350);
@@ -25,6 +26,8 @@ namespace ShpilSvoih
 
         RectangleF EnemyTargetArea(int index)
         {
+            if (combat.Enemy == EnemyKind.Fomatreshka)
+                return new RectangleF(EnemyCenter(index) - CanvasWidth * .055f, CombatFloor - 340, CanvasWidth * .11f, 380);
             float width = combat.Enemies.Count > 1 ? Math.Min(300, EnemyCenter(1) - EnemyCenter(0) - 12) : 300;
             float top = CombatFloor - 340, bottom = Math.Min(CombatFloor + 35, CanvasHeight - 265);
             return new RectangleF(EnemyCenter(index) - width / 2, top, width, bottom - top);
@@ -56,6 +59,7 @@ namespace ShpilSvoih
 
         void PaintCombatEnemy(Graphics graphics, int index)
         {
+            if (combat.Enemy == EnemyKind.Fomatreshka) { DrawFomatreshkaSprite(graphics, index, false); return; }
             var area = EnemyArea(index);
             if (actingEnemyIndex == index && (attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite))
                 area.Offset(BiteOffset(attackTimeline.Time), 0);

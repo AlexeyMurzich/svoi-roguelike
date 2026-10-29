@@ -21,7 +21,8 @@ namespace ShpilSvoih
         TohaRam,
         TohaDarkRam,
         TohaTransform,
-        BabaiLasso
+        BabaiLasso,
+        FomatreshkaSummon, FomatreshkaDrink, FomatreshkaShot, FanStrike
     }
 
     // Animation owns its clock and one impact callback, never the combat rules.
@@ -63,6 +64,9 @@ namespace ShpilSvoih
             if (kind == AttackAnimation.TohaDarkRam) { Duration = 1.5f; HitTime = .58f; }
             if (kind == AttackAnimation.TohaTransform) { Duration = 1.2f; HitTime = .6f; }
             if (kind == AttackAnimation.BabaiLasso) { Duration = BabaiMotion.Duration; HitTime = BabaiMotion.Hit; }
+            if (kind == AttackAnimation.FomatreshkaSummon) { Duration = 1.65f; HitTime = .5f; }
+            if (kind == AttackAnimation.FomatreshkaDrink) { Duration = 1.3f; HitTime = .7f; }
+            if (kind == AttackAnimation.FomatreshkaShot) { Duration = 1.05f; HitTime = .52f; }
             Time = 0;
             HitApplied = false;
             impact = onImpact;

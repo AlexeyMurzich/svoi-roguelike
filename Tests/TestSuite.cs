@@ -73,6 +73,8 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Fomatreshka: pattern, minions, vigor, flight and district", FomatreshkaTests.Rules);
+            Run("Fomatreshka: animated combat, targets, pause and six sizes", UiTests.TestFomatreshka);
             Run("Cashier: deterministic rare glitch clock", CashierTests.Clock);
             Run("Cashier: one-shot audio, pause and source", CashierTests.Sound);
             Run("Cashier: checkout animation, clicks and six sizes", UiTests.TestCashierCheckout);

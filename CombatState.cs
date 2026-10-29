@@ -27,6 +27,7 @@ namespace ShpilSvoih
         readonly List<CardData> draw = new List<CardData>(), discard = new List<CardData>(), hand = new List<CardData>();
         readonly Dictionary<CardData, decimal> handCosts = new Dictionary<CardData, decimal>();
         readonly Random random;
+        readonly List<CombatEnemy> enemies = new List<CombatEnemy>();
         public readonly HeroState Hero;
         public readonly EnemyKind Enemy;
         public readonly BabaiTrap Babai;
@@ -109,7 +110,7 @@ namespace ShpilSvoih
             if (enemy == EnemyKind.Babai) Babai = new BabaiTrap();
             this.random = random;
             Hand = hand.AsReadOnly();
-            var enemies = new List<CombatEnemy> { new CombatEnemy(0, enemy == EnemyKind.Hedgehogs ? EnemyKind.Hedgehog : enemy, 0) };
+            enemies.Add(new CombatEnemy(0, enemy == EnemyKind.Hedgehogs ? EnemyKind.Hedgehog : enemy, 0));
             if (enemy == EnemyKind.StrayDogs) enemies.Add(new CombatEnemy(1, enemy, 1));
             if (enemy == EnemyKind.Hedgehogs) enemies.Add(new CombatEnemy(1, EnemyKind.RabidHedgehog, 0));
             Enemies = enemies.AsReadOnly();
@@ -256,6 +257,8 @@ namespace ShpilSvoih
                 int damage = DamageFor(card);
                 var target = Enemies[SelectedTarget];
                 target.ReceiveDamage(damage);
+                if (target.Kind == EnemyKind.Fomatreshka && !target.IsAlive)
+                    foreach (var minion in enemies.Where(e => e.Kind == EnemyKind.Fan)) minion.Flee();
                 if (target.Thorns > 0) LastRetaliation = ReceiveHit(target.Thorns);
                 if (!Enemies[SelectedTarget].IsAlive)
                     SelectedTarget = NextLivingEnemy(0);
@@ -282,7 +285,8 @@ namespace ShpilSvoih
             if (WeakTurns > 0) WeakTurns--;
             CardPlayLimit = int.MaxValue;
             Phase = CombatPhase.Enemy;
-            ActingEnemy = NextLivingEnemy(0);
+            ActingEnemy = Enemy == EnemyKind.Fomatreshka && enemies.Count > 1 ? NextLivingEnemy(1) : NextLivingEnemy(0);
+            if (ActingEnemy < 0 && enemies[0].IsAlive) ActingEnemy = 0;
             return true;
         }
 
@@ -321,13 +325,19 @@ namespace ShpilSvoih
             if (!EnemyActionPrepared) PrepareNextEnemyAction();
             var actor = Enemies[ActingEnemy];
             int before = Hero.Health;
-            if (actor.WillHowl)
+            if (actor.WillSummon)
+            {
+                for (int i = 1; i <= 3; i++) enemies.Add(new CombatEnemy(i, EnemyKind.Fan, 0));
+            }
+            else if (actor.WillDrink) actor.DrinkGorilla();
+            else if (actor.WillHowl)
             {
                 if (Hero.Effects.AcceptDebuff()) WeakTurns = Math.Max(WeakTurns, 1);
             }
             else if (!(actor.Kind == EnemyKind.Mimicrator && actor.Form == MimicratorForm.Fairy))
             {
                 int lost = ReceiveHit(actor.AttackDamage);
+                if (actor.Kind == EnemyKind.Fomatreshka) actor.ConsumeVigor();
                 if (actor.Kind == EnemyKind.Babai && Hero.Health > 0) Babai.Pull(Hero);
                 if (actor.Kind == EnemyKind.RabidHedgehog && lost > 0 && Hero.Health > 0 && Hero.Effects.AcceptDebuff())
                     Rabies = true;
@@ -346,6 +356,8 @@ namespace ShpilSvoih
             if (EnemyImpactsResolved < actor.HitCount) return true;
             actor.CompleteAction();
             ActingEnemy = NextLivingEnemy(ActingEnemy + 1);
+            if (Enemy == EnemyKind.Fomatreshka)
+                ActingEnemy = actor.Kind == EnemyKind.Fomatreshka ? -1 : ActingEnemy < 0 && enemies[0].IsAlive ? 0 : ActingEnemy;
             EnemyActionPrepared = false;
             EnemyImpactsResolved = 0;
             if (ActingEnemy < 0)

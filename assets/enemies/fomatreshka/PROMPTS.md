@@ -1,0 +1,11 @@
+# Комплект поз v8
+
+Три позы 01/02/04 утверждены пользователем и скопированы из v7 без изменений. Исправлена только 03-gorilla.png. Новый вариант энергетика пока для проверки. Встроенный image_gen, identity-preserve, transparent_background=true.
+
+## Промпт правки Gorilla
+
+Use case: identity-preserve. Create a corrected DRINKING GORILLA pose for a game sprite set by editing image 1 (the APPROVED full-body summon sprite). Image 1's exact face is APPROVED: keep its entire head, face proportions, large round glasses, brown hair, gaze and nearly frontal head angle unchanged. Image 2 is only a secondary detailed identity reference. Image 3 is the rejected drinking pose and supplies ONLY the black/green GORILLA can design; do NOT copy its face, chin, lifted head or long stretched neck. Change ONLY the arms/hand gesture of image 1: replace the hand touching the hair with a naturally bent arm holding a normal-sized 500ml black-and-green GORILLA ENERGY can at his lips; the other hand relaxed in his bomber pocket. He takes a small sip with head upright and shoulders relaxed, only the CAN tilted toward the mouth, no head thrown back, no overlong exposed neck, no exaggerated pout. Keep the face nearly FRONT-FACING so the exact approved likeness remains obvious. The can touches lips from the viewer's left side and must not hide either eye or glasses; fingers anatomically plausible around its middle, can opening aligned to lips. Label GORILLA clearly readable with green gorilla head emblem, not Monster or invented branding. Keep approved image 1's soft jaw, actual full lips, eyelids, nose, glasses, hair, natural facial rendering, black bomber with silver zipper, charcoal jeans, black sneakers, full-body proportions and stance. Do not beautify or sharpen jaw. Exactly one complete full-body isolated sprite, all hands, can, hair and shoes within frame with margins. True transparent alpha background; remove surrounding fog/amber halo, no scenery, no vignette, no panels, no text except can label. The approved face of image 1 must remain recognizable without redesign.
+
+
+Утверждение: пользователь одобрил три позы v7, затем исправленный Gorilla v8 и поручил внедрение со свечением. В игре используются только девушки №1, №3, №4; каждая называется Фанатка. Исходные фотографии в репозиторий не включены.
+

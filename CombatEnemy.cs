@@ -15,7 +15,11 @@ namespace ShpilSvoih
         public int ActionsTaken { get; private set; }
         public bool IsDarkToha { get; private set; }
         public bool IsActing { get; private set; }
-        public bool IsAlive { get { return Health > 0; } }
+        public bool Fled { get; private set; }
+        public int Vigor { get; private set; }
+        public bool WillSummon { get { return Kind == EnemyKind.Fomatreshka && ActionsTaken == 0; } }
+        public bool WillDrink { get { return Kind == EnemyKind.Fomatreshka && ActionsTaken % 2 == 1; } }
+        public bool IsAlive { get { return Health > 0 && !Fled; } }
         public bool WillHowl { get { return Kind == EnemyKind.StrayDogs && CyclePosition == 2; } }
         public MimicratorForm Form { get { return (MimicratorForm)CyclePosition; } }
         public MimicratorForm NextForm { get { return ActionsTaken == 0 ? MimicratorForm.Fairy : (MimicratorForm)((CyclePosition + 1) % 4); } }
@@ -26,6 +30,8 @@ namespace ShpilSvoih
         {
             get
             {
+                if (Kind == EnemyKind.Fomatreshka) return WillSummon || WillDrink ? 0 : FomatreshkaRules.ShotDamage + Vigor;
+                if (Kind == EnemyKind.Fan) return FomatreshkaRules.FanDamage;
                 if (Kind == EnemyKind.Babai) return BabaiRules.Damage;
                 if (Kind == EnemyKind.Toha) return IsDarkToha ? TohaRules.DarkDamage : TohaRules.LightDamage;
                 if (Kind == EnemyKind.Mimicrator)
@@ -39,6 +45,8 @@ namespace ShpilSvoih
         {
             get
             {
+                if (Kind == EnemyKind.Fomatreshka) return WillSummon ? "Призыв · 3 фанатки" : WillDrink ? "Gorilla · Бодрость +" + FomatreshkaRules.Vigor : "Императрица · " + AttackDamage;
+                if (Kind == EnemyKind.Fan) return "Атака · " + AttackDamage;
                 if (Kind == EnemyKind.Babai) return "Лассо · " + BabaiRules.Damage + " / Притягивание · 1";
                 if (Kind == EnemyKind.Toha) return (IsDarkToha ? "Тёмный наезд · " : "Наезд · ") + AttackDamage;
                 if (Kind == EnemyKind.Mimicrator)
@@ -58,7 +66,7 @@ namespace ShpilSvoih
         {
             Id = id;
             Kind = kind;
-            Health = MaxHealth = kind == EnemyKind.Babai ? BabaiRules.MaxHealth : kind == EnemyKind.Toha ? TohaRules.MaxHealth : kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
+            Health = MaxHealth = kind == EnemyKind.Fomatreshka ? FomatreshkaRules.MaxHealth : kind == EnemyKind.Fan ? FomatreshkaRules.FanHealth : kind == EnemyKind.Babai ? BabaiRules.MaxHealth : kind == EnemyKind.Toha ? TohaRules.MaxHealth : kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
             CyclePosition = offset;
         }
 
@@ -79,6 +87,9 @@ namespace ShpilSvoih
             IsActing = true;
         }
         internal void Defend() { Block = 12; }
+        internal void DrinkGorilla() { Vigor = FomatreshkaRules.Vigor; }
+        internal void ConsumeVigor() { Vigor = 0; }
+        internal void Flee() { if (Health > 0) Fled = true; }
         internal void CompleteAction()
         {
             IsActing = false;

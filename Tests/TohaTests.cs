@@ -174,7 +174,7 @@ namespace ShpilSvoih
                     Call(game, "ReturnToMainMenu"); Write(game, "selected", 3);
                     Call(game, "OpenCheckout"); Call(game, "TakeBuff"); Call(game, "OpenActMap");
                     run = Read<MapRun>(game, "mapRun");
-                    elite = run.Map.Nodes.FirstOrDefault(n => n.Kind == RoomKind.Elite && EnemyCatalog.ForEliteNode(run.Map.Seed, n.Id) == EnemyKind.Toha);
+                    elite = run.Map.Nodes.FirstOrDefault(n => n.Kind == RoomKind.Elite && EnemyCatalog.ForEliteNode(run.Map.Seed, n.Id, n.District) == EnemyKind.Toha);
                 }
                 TestSuite.Check(elite != null, "procedural map contains a Toha elite encounter");
                 var parents = new Dictionary<int, int>(); var queue = new Queue<int>(); queue.Enqueue(0); parents[0] = -1;

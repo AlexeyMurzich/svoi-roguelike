@@ -9,6 +9,7 @@ namespace ShpilSvoih
         {
             get
             {
+                if (combat != null && combat.Enemy == EnemyKind.Fomatreshka) return ClientRectangle;
                 if (checkout && !mapScreen && !GameplayPaused && (long)ClientSize.Width * ClientSize.Height <= RenderPixelBudget)
                 {
                     var checkoutView = DrawingViewport;
