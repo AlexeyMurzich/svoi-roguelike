@@ -40,7 +40,7 @@ namespace ShpilSvoih
                 combat.ResolveNextEnemyImpact();
                 if (combat.Block < block) guardVisualTime = .3f;
                 combatNotice = combat.Babai.Caught ? "Бабай утащил под кровать" : combat.Phase == CombatPhase.Defeat ?
-                    "Поражение" : "До кровати: " + combat.Babai.Distance + " · лассо притянуло на 1";
+                    "Поражение" : "До кровати: " + combat.Babai.Distance + " · Бабай притянул на 1";
                 SyncDeaths();
             });
         }

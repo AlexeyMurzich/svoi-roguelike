@@ -94,6 +94,7 @@ namespace ShpilSvoih
 
         void DisposeCheckoutArt()
         {
+            ClearCheckoutBackdrop();
             checkoutBackground = null;
             relicImages.Clear();
         }
@@ -135,7 +136,7 @@ namespace ShpilSvoih
         {
             bool taken = currentHero.Effects.Chosen != null;
             if (checkoutBackground != null)
-                g.DrawImage(checkoutBackground, new RectangleF(0, 0, 1280, 840), Viewport.CoverSource(checkoutBackground.Size, new SizeF(1280, 840)), GraphicsUnit.Pixel);
+                DrawCheckoutBackdrop(g);
             else
                 Rect(g, 0, 0, 1280, 840, Color.FromArgb(21, 64, 43));
             using (var scrim = new LinearGradientBrush(new Rectangle(438, 12, 818, 175), Color.FromArgb(210, 9, 25, 19), Color.FromArgb(80, 9, 25, 19), 90f))

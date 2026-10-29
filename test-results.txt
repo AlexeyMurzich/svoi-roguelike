@@ -1,25 +1,17 @@
-﻿v0.31 verification
-Full initial run: 95 passed, 1 failed (bicubic edge alpha).
-The edge alpha defect was fixed by an opaque base fill.
-Post-fix verification: 10 suites passed, 0 failed, 41658 assertions.
-This combines the full initial run and targeted post-fix checks; no second full run is claimed.
-EXE SHA256 BC925F846257C1192B877E9BDF6CD72ECBC2444CE931AAA20EED72DFFE738665
-ZIP verified; packaged and tested EXE match.
-
-=== FULL RUN BEFORE EDGE FIX ===
-PASS Software mixer: bit-exact background isolation
+﻿PASS Software mixer: bit-exact background isolation
 PASS Software mixer: resampling, one-shot and quiet peaks
 PASS Software mixer: static song calibration and source ownership
 PASS Card audio: constant battle background level
 PASS Card audio: bounded voices, tails, cache, pause and failure
 PASS Card audio: eight complete embedded effects
-INFO Mixer positions: music 18432 -> 49152; effect 17640/17640; error=
+INFO Mixer positions: music 18432 -> 51200; effect 17640/17640; error=
 PASS Card audio: late music gain and simultaneous native playback
-FAIL Babai: grounded bed, separate planes and cache lifetime
-System.Exception: regional backdrop is opaque
-   в ShpilSvoih.TestSuite.Check(Boolean condition, String message)
-   в ShpilSvoih.UiTests.TestBabaiGrounding()
-   в ShpilSvoih.TestSuite.Run(String name, Action test)
+PASS Babai: complete silhouette, no giant arm and cached shade
+PASS Babai: low lasso, stable face scale and one contact
+PASS District: registered planes and source proportions
+PASS District: six sizes, all heroes and scene transitions
+PASS Babai: Estate scene routing and elite preservation
+PASS Babai: grounded bed, separate planes and cache lifetime
 PASS Babai: lasso, block, capture and victory
 PASS Babai: hard pool and legal route previews
 PASS Babai: pure motion and frame-rate independence
@@ -35,7 +27,6 @@ PASS Music: actual hero clicks and elite scene transitions
 PASS Debug console: infinite gold and exact triple multiplier
 PASS Debug console: input, pause and scene isolation
 PASS Battle backdrop: source, cache and six sizes
-PASS Battle backdrop: actual node, regional boundaries and ordinary enemies
 PASS Combat hints: statuses, intents and scaled hover
 PASS Toha: Illya test launcher preserves free auto plays and confusion
 PASS Toha: threshold, damage and elite generation
@@ -46,6 +37,8 @@ INFO fade GDI handles after warmup: 18 -> 18
 PASS Fade: native alpha, clipping and handle cleanup
 PASS Repaint: partial frames are pixel-identical
 PASS Repaint: mouse movement only redraws visual changes
+PASS Presentation: real HWND, GPU pixels, resize, focus and fallback
+PASS Presentation: stable silhouettes, checkout cache and partial map
 PASS Performance: bounded rasterization and native pointer input
 PASS Performance: alpha and graphics state after fast drawing
 PASS Performance: bounded image cache and LRU
@@ -53,7 +46,7 @@ PASS Performance: interface reuse and cleanup
 PASS Illya: free automatic cards and confusion costs
 PASS Illya: live costs and animated payment
 PASS Hero combat minimum: timing, pause and poses
-PASS Audit: neck attachment
+PASS Dogs: complete connected silhouettes and registration
 PASS Audit: sprite cache and cadence
 PASS Living: lifecycle and fixed paws
 PASS Living: visual gallery
@@ -71,7 +64,7 @@ PASS Exchange callback is atomic and cannot re-enter
 PASS Uniform viewport, click mapping and image crop
 PASS Image ownership, fallback and file unlocking
 PASS UI all heroes and relics at six window sizes
-INFO After 72 resizes: GDI handles 19 -> 19; decoded images 37; cached fonts 9.
+INFO After 72 resizes: GDI handles 53 -> 53; decoded images 36; cached fonts 9.
 PASS Resize/repaint determinism and GDI resources
 PASS Procedural act constraints, determinism and connectivity: 2000 seeds
 PASS Map traversal rejects skips and repeated actions
@@ -84,7 +77,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 22,7 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 23,8 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -93,8 +86,8 @@ PASS Debt atomicity, fractional charges, card contracts and configured draw
 PASS Hands of one to six cards preserve controls and aspect ratio
 PASS Reviewed input, capture, focus, overlay and debt-death interactions
 PASS Investigation reveals future enemy identity on map hover
-PASS Dog legs preserve color and opacity through bite and howl frames
-INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 37; font cache 12.
+PASS Dogs: whole-body opacity and planted paws through bite/howl
+INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 36; font cache 12.
 PASS Repeated battle/map/pause/resize transitions release resources
 PASS Death snapshots lifecycle and resource ownership
 PASS Separate dog deaths, all hero deaths, rat death and credit-card guard
@@ -106,35 +99,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 32,52 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 21,13 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 95 passed, 1 failed. Assertions: 1279553.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-=== POST-FIX: DISTRICT BACKGROUNDS ===
-PASS Battle backdrop: source, cache and six sizes
-PASS Battle backdrop: actual node, regional boundaries and ordinary enemies
-Suites: 2 passed, 0 failed. Assertions: 110.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-=== POST-FIX: REPAINT AND RESIZE ===
-PASS Repaint: partial frames are pixel-identical
-PASS Repaint: mouse movement only redraws visual changes
-INFO After 72 resizes: GDI handles 19 -> 19; decoded images 37; cached fonts 9.
-PASS Resize/repaint determinism and GDI resources
-Suites: 3 passed, 0 failed. Assertions: 131.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-=== POST-FIX: BABAI ===
-PASS Babai: grounded bed, separate planes and cache lifetime
-PASS Babai: lasso, block, capture and victory
-PASS Babai: hard pool and legal route previews
-PASS Babai: pure motion and frame-rate independence
-PASS Babai: animated battle, pause, capture and six sizes
-Suites: 5 passed, 0 failed. Assertions: 41417.
+Suites: 102 passed, 0 failed. Assertions: 1295800.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

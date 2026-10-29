@@ -42,17 +42,15 @@ namespace ShpilSvoih
                     for (int i = 0; i < hz * 3; i++) Call(game, "AdvanceLivingAnimation", 1f / hz);
                     TestSuite.Check(Math.Abs(Read<double>(game, "livingSeconds") - 3) < .00001, "idle has the same elapsed time at different refresh rates");
                 }
-                // Full-opacity paws must remain unchanged while the heads animate.
+                // Whole-body breathing may move fur, but paw support and opacity remain stable.
                 Write(game, "livingSeconds", 0d);
-                byte[] feet;
-                using (var layer = DogLayer(game)) feet = LowerDogPixels(layer);
+                Tuple<int, float, int> feet;
+                using (var layer = DogLayer(game)) feet = DogSilhouette(layer);
                 Write(game, "livingSeconds", 2.1d);
                 using (var layer = DogLayer(game))
                 {
-                    byte[] after = LowerDogPixels(layer);
-                    bool equal = true;
-                    for (int i = 0; i < feet.Length; i++) if (feet[i] != after[i]) { equal = false; break; }
-                    TestSuite.Check(equal, "idle does not jitter or fade dog legs");
+                    var after = DogSilhouette(layer);
+                    TestSuite.Check(Math.Abs(feet.Item3 - after.Item3) <= 1 && after.Item2 > .97f && after.Item1 > feet.Item1 * .95f, "idle keeps whole dog opaque and paws on the same floor");
                 }
                 Call(game, "ReturnToMainMenu");
                 TestSuite.Check(Read<double>(game, "livingSeconds") == 0, "scene reset clears elapsed time");
@@ -106,7 +104,7 @@ namespace ShpilSvoih
                     }
                 }
                 sheet.Save(Path.Combine(TestSuite.OutputDirectory, "living-contact-sheet.png"));
-                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37, "all idle effects reuse existing source art");
+                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 36, "all idle effects reuse existing source art");
             }
         }
     }

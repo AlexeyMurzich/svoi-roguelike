@@ -16,7 +16,7 @@ namespace ShpilSvoih
         void StopMapMotion()
         {
             mapScrollTarget = mapScroll; mapScrollVelocity = 0;
-            if (!CombatBusy && combatTimer != null) combatTimer.Stop();
+            if (!CombatBusy && !presentationPending && combatTimer != null) combatTimer.Stop();
         }
 
         void MoveMapTo(float value)
@@ -39,7 +39,7 @@ namespace ShpilSvoih
                 remaining -= step;
             }
             hoveredMapNode = -1;
-            Invalidate();
+            InvalidateMotionFrame();
         }
 
         void CancelMapDrag()

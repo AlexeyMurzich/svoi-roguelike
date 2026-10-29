@@ -16,6 +16,7 @@ namespace ShpilSvoih
             debugConsoleOpen = false;
             debugCommand = "";
             debugReply = "shut_god — Шутен: бесконечное золото, атаки и защита ×3.";
+            ClearCheckoutBackdrop();
             ClearMimicratorBackdrop();
             mimicratorPreview = false;
             mimicratorPaused = false;

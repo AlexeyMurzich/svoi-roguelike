@@ -38,8 +38,9 @@ namespace ShpilSvoih
             {
                 float pivotX = target.X + target.Width * .55f, pivotY = target.Bottom - target.Height * .08f;
                 graphics.TranslateTransform(pivotX, pivotY + bounce);
-                graphics.RotateTransform((dark ? .12f : .07f) * LivingMotion.Wave(livingSeconds, 2.1, .2) + rev * (dark ? -3f : -1.5f));
-                graphics.ScaleTransform(1 + morphPulse * .015f, 1 + .002f * LivingMotion.Wave(livingSeconds, 6.3, .8));
+                // Engine vibration is translation, not continuous resampling/tilting of the whole car.
+                if (rev > 0) graphics.RotateTransform(rev * (dark ? -3f : -1.5f));
+                if (morph) graphics.ScaleTransform(1 + morphPulse * .015f, 1 + morphPulse * .015f);
                 graphics.TranslateTransform(-pivotX, -pivotY);
                 actorArtCache.Draw(graphics, image, target, new RectangleF(0, 0, image.Width, image.Height), opacity, false);
                 if (IsTohaRamming) DrawTohaWheelMotion(graphics, target, dark, motion);

@@ -15,16 +15,16 @@ namespace ShpilSvoih
             public Image Source;
             public RectangleF Crop;
             public Size Size;
-            public bool Warm;
+            public bool Warm, Shaded;
 
             public bool Equals(Key other)
             {
-                return ReferenceEquals(Source, other.Source) && Crop == other.Crop && Size == other.Size && Warm == other.Warm;
+                return ReferenceEquals(Source, other.Source) && Crop == other.Crop && Size == other.Size && Warm == other.Warm && Shaded == other.Shaded;
             }
             public override bool Equals(object other) { return other is Key && Equals((Key)other); }
             public override int GetHashCode()
             {
-                return Source.GetHashCode() ^ Crop.GetHashCode() ^ Size.GetHashCode() ^ Warm.GetHashCode();
+                return Source.GetHashCode() ^ Crop.GetHashCode() ^ Size.GetHashCode() ^ Warm.GetHashCode() ^ Shaded.GetHashCode();
             }
         }
 
@@ -72,29 +72,39 @@ namespace ShpilSvoih
 
         public void Draw(Graphics graphics, Image source, RectangleF target, RectangleF crop, float opacity, bool warm)
         {
+            DrawCore(graphics, source, target, crop, opacity, warm, false);
+        }
+        public void DrawShaded(Graphics graphics, Image source, RectangleF target, RectangleF crop, float opacity)
+        {
+            DrawCore(graphics, source, target, crop, opacity, false, true);
+        }
+        void DrawCore(Graphics graphics, Image source, RectangleF target, RectangleF crop, float opacity, bool warm, bool shaded)
+        {
             if (!Motion.IsFinite(opacity) || opacity <= 0 || !Motion.IsFinite(target.Width) ||
                 !Motion.IsFinite(target.Height) || target.Width <= 0 || target.Height <= 0) return;
             if (target.Width * scale > 8192 || target.Height * scale > 8192)
             {
-                SpriteDrawing.Image(graphics, source, target, crop, opacity, warm);
+                if (shaded) SpriteDrawing.Shaded(graphics, source, target, crop, opacity);
+                else SpriteDrawing.Image(graphics, source, target, crop, opacity, warm);
                 return;
             }
             var size = new Size(PixelSize(target.Width), PixelSize(target.Height));
             long required = (long)size.Width * size.Height * 4;
             if (required > byteLimit)
             {
-                SpriteDrawing.Image(graphics, source, target, crop, opacity, warm);
+                if (shaded) SpriteDrawing.Shaded(graphics, source, target, crop, opacity);
+                else SpriteDrawing.Image(graphics, source, target, crop, opacity, warm);
                 return;
             }
 
-            var key = new Key { Source = source, Crop = crop, Size = size, Warm = warm };
+            var key = new Key { Source = source, Crop = crop, Size = size, Warm = warm, Shaded = shaded };
             Entry entry;
             if (images.TryGetValue(key, out entry)) Hits++;
             else
             {
                 Misses++;
                 MakeRoom(required);
-                entry = CreateEntry(source, crop, size, warm, required);
+                entry = CreateEntry(source, crop, size, warm, shaded, required);
                 images.Add(key, entry);
                 bytes += required;
             }
@@ -102,7 +112,7 @@ namespace ShpilSvoih
             DrawEntry(graphics, entry.Image, target, opacity);
         }
 
-        static Entry CreateEntry(Image source, RectangleF crop, Size size, bool warm, long required)
+        static Entry CreateEntry(Image source, RectangleF crop, Size size, bool warm, bool shaded, long required)
         {
             var bitmap = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb);
             try
@@ -110,7 +120,8 @@ namespace ShpilSvoih
                 using (var graphics = Graphics.FromImage(bitmap))
                 {
                     graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    SpriteDrawing.Image(graphics, source, new RectangleF(PointF.Empty, size), crop, 1, warm);
+                    if (shaded) SpriteDrawing.Shaded(graphics, source, new RectangleF(PointF.Empty, size), crop, 1);
+                    else SpriteDrawing.Image(graphics, source, new RectangleF(PointF.Empty, size), crop, 1, warm);
                 }
                 return new Entry { Image = bitmap, Bytes = required };
             }
@@ -123,16 +134,27 @@ namespace ShpilSvoih
 
         static void DrawEntry(Graphics graphics, Bitmap bitmap, RectangleF target, float opacity)
         {
-            var interpolation = graphics.InterpolationMode;
+            var state = graphics.Save();
             try
             {
-                // Copies are already resampled to device resolution with bicubic filtering.
-                // A second filtered affine draw is extremely slow in GDI+; point sampling
-                // preserves the prepared detail while retaining the exact destination transform.
+                // Prepared pixels stay on the device grid during translation. Tiny
+                // fractions must not make different rows select different texels.
+                using (var transform = graphics.Transform)
+                {
+                    var m = transform.Elements;
+                    if (Math.Abs(m[1]) < .00001f && Math.Abs(m[2]) < .00001f && m[0] > 0 && m[3] > 0)
+                    {
+                        target = new RectangleF((float)Math.Round(target.X * m[0] + m[4]),
+                            (float)Math.Round(target.Y * m[3] + m[5]),
+                            Math.Max(1, (float)Math.Round(target.Width * m[0])),
+                            Math.Max(1, (float)Math.Round(target.Height * m[3])));
+                        graphics.ResetTransform();
+                    }
+                }
                 graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
                 SpriteDrawing.Image(graphics, bitmap, target, new RectangleF(0, 0, bitmap.Width, bitmap.Height), opacity, false);
             }
-            finally { graphics.InterpolationMode = interpolation; }
+            finally { graphics.Restore(state); }
         }
 
         void MakeRoom(long required)

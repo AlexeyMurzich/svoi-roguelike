@@ -80,6 +80,11 @@ namespace ShpilSvoih
             Run("Card audio: bounded voices, tails, cache, pause and failure", CardAudioTests.Voices);
             Run("Card audio: eight complete embedded effects", CardAudioTests.Embedded);
             Run("Card audio: late music gain and simultaneous native playback", CardAudioTests.MusicGainAndNativeMix);
+            Run("Babai: complete silhouette, no giant arm and cached shade", UiTests.TestBabaiSilhouette);
+            Run("Babai: low lasso, stable face scale and one contact", UiTests.TestLowBabaiLasso);
+            Run("District: registered planes and source proportions", UiTests.TestDistrictPlanes);
+            Run("District: six sizes, all heroes and scene transitions", UiTests.TestDistrictBattles);
+            Run("Babai: Estate scene routing and elite preservation", UiTests.TestEstateSceneRouting);
             Run("Babai: grounded bed, separate planes and cache lifetime", UiTests.TestBabaiGrounding);
             Run("Babai: lasso, block, capture and victory", BabaiTests.Rules);
             Run("Babai: hard pool and legal route previews", BabaiTests.Pools);
@@ -96,7 +101,6 @@ namespace ShpilSvoih
             Run("Debug console: infinite gold and exact triple multiplier", DebugModeTests.Rules);
             Run("Debug console: input, pause and scene isolation", UiTests.TestDebugConsole);
             Run("Battle backdrop: source, cache and six sizes", UiTests.TestBattleBackground);
-            Run("Battle backdrop: actual node, regional boundaries and ordinary enemies", UiTests.TestDistrictBackgrounds);
             Run("Combat hints: statuses, intents and scaled hover", UiTests.TestCombatHints);
             Run("Toha: Illya test launcher preserves free auto plays and confusion", UiTests.TestIllyaToha);
             Run("Toha: threshold, damage and elite generation", TohaTests.Rules);
@@ -106,6 +110,8 @@ namespace ShpilSvoih
             Run("Fade: native alpha, clipping and handle cleanup", UiTests.TestOpaqueFade);
             Run("Repaint: partial frames are pixel-identical", UiTests.TestPartialRepaint);
             Run("Repaint: mouse movement only redraws visual changes", UiTests.TestHoverInvalidation);
+            Run("Presentation: real HWND, GPU pixels, resize, focus and fallback", UiTests.TestNativePresentation);
+            Run("Presentation: stable silhouettes, checkout cache and partial map", UiTests.TestStableSampling);
             Run("Performance: bounded rasterization and native pointer input", UiTests.TestRenderBudget);
             Run("Performance: alpha and graphics state after fast drawing", UiTests.TestFastCompositing);
             Run("Performance: bounded image cache and LRU", UiTests.TestScaledCacheLimits);
@@ -113,7 +119,7 @@ namespace ShpilSvoih
             Run("Illya: free automatic cards and confusion costs", IllyaTests.Rules);
             Run("Illya: live costs and animated payment", UiTests.TestIllyaCosts);
             Run("Hero combat minimum: timing, pause and poses", UiTests.TestHeroCombatMinimum);
-            Run("Audit: neck attachment", UiTests.TestNeckAttachment);
+            Run("Dogs: complete connected silhouettes and registration", UiTests.TestNeckAttachment);
             Run("Audit: sprite cache and cadence", UiTests.TestAnimationCachePolicy);
             Run("Living: lifecycle and fixed paws", UiTests.TestLivingScenes);
             Run("Living: visual gallery", UiTests.TestLivingGallery);
@@ -306,7 +312,7 @@ namespace ShpilSvoih
             Run("Hands of one to six cards preserve controls and aspect ratio", ReviewTests.HandLayout);
             Run("Reviewed input, capture, focus, overlay and debt-death interactions", UiTests.TestReviewedInteractions);
             Run("Investigation reveals future enemy identity on map hover", UiTests.TestInvestigationPreview);
-            Run("Dog legs preserve color and opacity through bite and howl frames", UiTests.TestDogLegStability);
+            Run("Dogs: whole-body opacity and planted paws through bite/howl", UiTests.TestDogLegStability);
             Run("Repeated battle/map/pause/resize transitions release resources", UiTests.TestSceneResourceStress);
             Run("Death snapshots lifecycle and resource ownership", DeathTests.Lifecycle);
             Run("Separate dog deaths, all hero deaths, rat death and credit-card guard", UiTests.TestDeathsAndGuard);

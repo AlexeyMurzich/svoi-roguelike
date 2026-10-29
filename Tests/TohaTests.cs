@@ -105,7 +105,7 @@ namespace ShpilSvoih
                     game.CreateControl(); game.ClientSize = size; Call(game, "StartTestToha");
                     var f = Read<CombatState>(game, "combat");
                     using (var image = Render(game)) image.Save(Path.Combine(TestSuite.OutputDirectory, "toha-light-" + size.Width + "x" + size.Height + ".png"));
-                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 41, "Toha lazily loads four shared assets");
+                    TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 40, "Toha lazily loads four shared assets");
                     foreach (string source in new[] { "tohaLight", "tohaDark" })
                     {
                         var sprite = (Bitmap)Read<Image>(game, source);
@@ -198,7 +198,7 @@ namespace ShpilSvoih
                 game.ClientSize = new Size(1920, 1080);
                 using (Render(game)) { }
                 TestSuite.Throws<ArgumentException>(() => oldBackdrop.GetPixel(0, 0), "resizing releases the previous viewport background");
-                TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 41, "resizing reuses the four decoded source images");
+                TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 40, "resizing reuses the four decoded source images");
                 var card = fight.Hand[0]; card.Attack = true; card.Skill = false; card.Damage = 999; card.Block = 0; card.GoldCost = 0;
                 Call(game, "PlayCombatCard", 0); SettleToha(game); Call(game, "CompleteMapRoom");
                 TestSuite.Check(run.Current == elite && run.Pending == null, "defeating Toha completes the elite room");

@@ -22,6 +22,7 @@ namespace ShpilSvoih
         {
             if (currentHero == null || currentHero.Effects.Chosen == null)
                 return;
+            ClearCheckoutBackdrop();
             mapScreen = true;
             if (mapRun == null)
             {
@@ -315,7 +316,7 @@ namespace ShpilSvoih
             var saved = g.Save();
             try
             {
-                g.SetClip(MapView);
+                g.SetClip(MapView, CombineMode.Intersect);
                 for (int district = 0; district < 3; district++)
                 {
                     float worldY = 1900 - (district * 5 + 3) * 110;

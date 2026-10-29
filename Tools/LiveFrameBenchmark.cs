@@ -17,7 +17,10 @@ internal static class LiveFrameBenchmark
     static readonly Stopwatch clock = new Stopwatch();
     static Process process;
     static int phase = -1;
-    static double phaseStart, cpuStart, sampleSeconds = 7;
+    static double phaseStart, cpuStart, sampleSeconds = 7, rasterStart, presentStart;
+    static string clip;
+    static double nativeStart, deferredStart;
+    static double Counter(string name) { return gameType.GetField(name, Private) == null ? 0 : Convert.ToDouble(Read(name)); }
     static long lastPaint, lastTick;
     static bool mapUp;
     static object timeline, guard;
@@ -32,7 +35,9 @@ internal static class LiveFrameBenchmark
     static void BeginPhase(int next)
     {
         phase = next; frames.Clear(); ticks.Clear(); lastPaint = lastTick = 0;
-        phaseStart = clock.Elapsed.TotalSeconds; cpuStart = process.TotalProcessorTime.TotalMilliseconds;
+        phaseStart = clock.Elapsed.TotalSeconds; process.Refresh(); cpuStart = process.TotalProcessorTime.TotalMilliseconds;
+        rasterStart = Counter("rasterTicks"); presentStart = Counter("presentTicks"); clip = "";
+        nativeStart = Counter("presentedFrames"); deferredStart = Counter("deferredFrames");
     }
     static void KeepGuardLoop()
     {
@@ -42,8 +47,15 @@ internal static class LiveFrameBenchmark
     static void Report()
     {
         double seconds = clock.Elapsed.TotalSeconds - phaseStart;
+        process.Refresh();
         Console.WriteLine((phase == 0 ? "idle" : phase == 1 ? "animation-loop" : "map-scroll") + "; kind=" + guard + "; focused=" + game.ContainsFocus +
             "; client=" + game.ClientSize.Width + "x" + game.ClientSize.Height +
+            "; native-frames=" + (gameType.GetField("presentedFrames", Private) == null ? "n/a" : Read("presentedFrames").ToString()) +
+            "; accepted-per-sec=" + Number((Counter("presentedFrames")-nativeStart)/seconds) +
+            "; deferred-per-sec=" + Number((Counter("deferredFrames")-deferredStart)/seconds) +
+            "; fallback=" + (gameType.GetField("presentationFailure", Private) == null ? "n/a" : Read("presentationFailure").ToString()) +
+            "; clip=" + clip + "; raster-ms=" + Number((Counter("rasterTicks")-rasterStart)*1000/Stopwatch.Frequency/Math.Max(1,frames.Count)) +
+            "; present-ms=" + Number((Counter("presentTicks")-presentStart)*1000/Stopwatch.Frequency/Math.Max(1,frames.Count)) +
             "; paints-per-sec=" + Number(frames.Count / seconds) +
             "; frame-p50-ms=" + Number(Percentile(frames, .5)) + "; frame-p95-ms=" + Number(Percentile(frames, .95)) +
             "; tick-p50-ms=" + Number(Percentile(ticks, .5)) +
@@ -65,6 +77,7 @@ internal static class LiveFrameBenchmark
             guard = Enum.Parse(timelineType.GetProperty("Kind").PropertyType, args.Length > 2 ? args[2] : "HeroGuard");
             game.Paint += (sender, e) =>
             {
+                clip = e.ClipRectangle.ToString();
                 long now = Stopwatch.GetTimestamp();
                 if (phase >= 0 && lastPaint != 0) frames.Add((now - lastPaint) * 1000d / Stopwatch.Frequency);
                 lastPaint = now;
