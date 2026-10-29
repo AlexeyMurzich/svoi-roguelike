@@ -38,6 +38,8 @@ namespace ShpilSvoih
                 int index = dark ? 1 : 0;
                 if (clips[index] == null) clips[index] = load(dark);
                 voice = create(clips[index]);
+                var volume = voice as IAudioVolumeVoice;
+                if (volume != null) volume.SetVolume(AudioLevels.Enemy);
                 paused = true;
                 SetPaused(pause);
                 LastError = "";

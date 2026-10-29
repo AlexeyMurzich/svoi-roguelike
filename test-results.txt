@@ -1,17 +1,17 @@
-Final production EXE SHA256: 442DFE28DE4EE8C5D8BBA658312FFF9A4AE21D5AB92E0CE739F8E41F71ABC950
-Full run: 94 passed, one random renderer-fixture failure. The fixture was corrected and explicitly exercised without optional fights; targeted recheck: 1 passed / 0 failed / 115 assertions. Production EXE unchanged. All 95 suites checked; no unresolved failures. This is a composite verification, not one 95/0 full run.
-
-FULL RUN
-
-﻿PASS Babai: complete silhouette, no giant arm and cached shade
+﻿PASS Software mixer: bit-exact background isolation
+PASS Software mixer: resampling, one-shot and quiet peaks
+PASS Software mixer: static song calibration and source ownership
+PASS Card audio: constant battle background level
+PASS Card audio: bounded voices, tails, cache, pause and failure
+PASS Card audio: eight complete embedded effects
+INFO Mixer positions: music 65536 -> 102400; effect 17640/17640; error=
+PASS Card audio: late music gain and simultaneous native playback
+INFO Menu output: 3,013s audio / 3,013s wall; underruns=0
+PASS Music continuity: real menu, redraw, resize and GC
+PASS Babai: complete silhouette, no giant arm and cached shade
 PASS Babai: low lasso, stable face scale and one contact
 PASS District: registered planes and source proportions
-FAIL District: six sizes, all heroes and scene transitions
-System.InvalidOperationException: Последовательность не содержит соответствующий элемент
-   в System.Linq.Enumerable.First[TSource](IEnumerable`1 source, Func`2 predicate)
-   в ShpilSvoih.UiTests.SetSceneDistrict(Game game, Int32 district)
-   в ShpilSvoih.UiTests.TestDistrictBattles()
-   в ShpilSvoih.TestSuite.Run(String name, Action test)
+PASS District: six sizes, all heroes and scene transitions
 PASS Babai: Estate scene routing and elite preservation
 PASS Babai: grounded bed, separate planes and cache lifetime
 PASS Babai: lasso, block, capture and victory
@@ -23,7 +23,7 @@ PASS Toha sound: approved embedded previews
 PASS Toha sound: native one-shot and pause
 PASS Toha sound: focus, menus, console and exit
 PASS Music: asynchronous switching, pause, cancellation and disposal
-PASS Music: five embedded tracks preserve all samples
+PASS Music: six embedded tracks match prepared samples
 PASS Music: native loop, pause and resume
 PASS Music: actual hero clicks and elite scene transitions
 PASS Debug console: infinite gold and exact triple multiplier
@@ -35,7 +35,7 @@ PASS Toha: threshold, damage and elite generation
 PASS Toha: frame-rate independent ram and transformation
 PASS Toha: battle, backgrounds, pause, death and six sizes
 PASS Toha: real elite room, investigation and revisit
-INFO fade GDI handles after warmup: 18 -> 18
+INFO fade GDI handles after warmup: 52 -> 52
 PASS Fade: native alpha, clipping and handle cleanup
 PASS Repaint: partial frames are pixel-identical
 PASS Repaint: mouse movement only redraws visual changes
@@ -79,7 +79,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 18,9 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 27,2 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -101,19 +101,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 15,30 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 19,30 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 94 passed, 1 failed. Assertions: 1195475.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-
-CORRECTED FIXTURE RECHECK
-
-﻿PASS District: six sizes, all heroes and scene transitions
-Suites: 1 passed, 0 failed. Assertions: 115.
+Suites: 103 passed, 0 failed. Assertions: 1295821.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

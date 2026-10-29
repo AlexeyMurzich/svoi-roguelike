@@ -1,0 +1,96 @@
+﻿v0.32.1 audio continuity investigation
+Private counters were added to baseline v0.32 without changing its buffer policy.
+max-service-ms is a cumulative maximum since output creation.
+
+=== BASELINE: v0.32 three 512-frame buffers ===
+idle-menu: underruns=1; max-service-ms=265,74; wall-seconds=6,029; played-seconds=4,035; paused-ticks=0; consumed-bytes=710656; gain=0,07; output-error=
+redraw-menu: underruns=0; max-service-ms=265,74; wall-seconds=6,041; played-seconds=4,278; paused-ticks=0; consumed-bytes=757760; gain=0,07; output-error=
+resize-and-GC: underruns=7; max-service-ms=265,74; wall-seconds=6,097; played-seconds=5,686; paused-ticks=0; consumed-bytes=1001472; gain=0,07; output-error=
+50ms-service-stalls: underruns=29; max-service-ms=265,74; wall-seconds=6,024; played-seconds=4,465; paused-ticks=0; consumed-bytes=788480; gain=0,07; output-error=
+
+=== BASELINE REGRESSION: 25ms bounded service delay ===
+INFO Menu output: 2,527s audio / 3,147s wall; underruns=8
+FAIL Music continuity: real menu, redraw, resize and GC
+System.Exception: menu music keeps real-time speed under redraw, resize and collection
+   в ShpilSvoih.TestSuite.Check(Boolean condition, String message)
+   в ShpilSvoih.UiTests.TestMenuAudioContinuity()
+   в ShpilSvoih.TestSuite.Run(String name, Action test)
+Suites: 0 passed, 1 failed. Assertions: 4.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+=== INTERMEDIATE: 93ms reserve for all scenes; artificial delay exceeded it ===
+hero=0; idle-menu: underruns=0; max-service-ms=40,92; wall-seconds=6,015; played-seconds=6,006; paused-ticks=0; consumed-bytes=1056768; gain=0,07; output-error=
+hero=0; redraw-menu: underruns=0; max-service-ms=40,92; wall-seconds=6,024; played-seconds=6,024; paused-ticks=0; consumed-bytes=1064960; gain=0,07; output-error=
+hero=0; resize-and-GC: underruns=0; max-service-ms=40,92; wall-seconds=6,142; played-seconds=6,142; paused-ticks=0; consumed-bytes=1081344; gain=0,07; output-error=
+hero=0; 50ms-service-stalls: underruns=5; max-service-ms=221,06; wall-seconds=6,087; played-seconds=5,666; paused-ticks=0; consumed-bytes=1003520; gain=0,07; output-error=
+
+=== FINAL MENU: pupsolet ===
+hero=0; idle-menu: underruns=0; max-service-ms=49,82; wall-seconds=6,029; played-seconds=6,016; paused-ticks=0; consumed-bytes=1056768; gain=0,07; output-error=
+hero=0; redraw-menu: underruns=0; max-service-ms=49,82; wall-seconds=6,094; played-seconds=6,094; paused-ticks=0; consumed-bytes=1077248; gain=0,07; output-error=
+hero=0; resize-and-GC: underruns=0; max-service-ms=49,82; wall-seconds=6,194; played-seconds=6,193; paused-ticks=0; consumed-bytes=1093632; gain=0,07; output-error=
+hero=0; 50ms-service-stalls: underruns=0; max-service-ms=87,38; wall-seconds=6,056; played-seconds=6,056; paused-ticks=0; consumed-bytes=1069056; gain=0,07; output-error=
+
+=== FINAL MENU: illya ===
+hero=1; idle-menu: underruns=0; max-service-ms=44,92; wall-seconds=6,016; played-seconds=6,006; paused-ticks=0; consumed-bytes=1056768; gain=0,07; output-error=
+hero=1; redraw-menu: underruns=0; max-service-ms=44,92; wall-seconds=6,007; played-seconds=6,007; paused-ticks=0; consumed-bytes=1060864; gain=0,07; output-error=
+hero=1; resize-and-GC: underruns=0; max-service-ms=44,92; wall-seconds=6,037; played-seconds=6,037; paused-ticks=0; consumed-bytes=1064960; gain=0,07; output-error=
+hero=1; 50ms-service-stalls: underruns=0; max-service-ms=81,21; wall-seconds=6,025; played-seconds=6,025; paused-ticks=0; consumed-bytes=1060864; gain=0,07; output-error=
+
+=== FINAL MENU: runtso ===
+hero=2; idle-menu: underruns=0; max-service-ms=45,30; wall-seconds=6,019; played-seconds=6,004; paused-ticks=0; consumed-bytes=1056768; gain=0,07; output-error=
+hero=2; redraw-menu: underruns=0; max-service-ms=45,30; wall-seconds=6,008; played-seconds=6,008; paused-ticks=0; consumed-bytes=1060864; gain=0,07; output-error=
+hero=2; resize-and-GC: underruns=0; max-service-ms=45,30; wall-seconds=6,037; played-seconds=6,037; paused-ticks=0; consumed-bytes=1064960; gain=0,07; output-error=
+hero=2; 50ms-service-stalls: underruns=0; max-service-ms=89,92; wall-seconds=6,034; played-seconds=6,034; paused-ticks=0; consumed-bytes=1064960; gain=0,07; output-error=
+
+=== FINAL MENU: shuten ===
+hero=3; idle-menu: underruns=0; max-service-ms=45,38; wall-seconds=6,013; played-seconds=5,998; paused-ticks=0; consumed-bytes=1052672; gain=0,07; output-error=
+hero=3; redraw-menu: underruns=0; max-service-ms=45,38; wall-seconds=6,040; played-seconds=6,040; paused-ticks=0; consumed-bytes=1064960; gain=0,07; output-error=
+hero=3; resize-and-GC: underruns=0; max-service-ms=45,38; wall-seconds=6,126; played-seconds=6,126; paused-ticks=0; consumed-bytes=1081344; gain=0,07; output-error=
+hero=3; 50ms-service-stalls: underruns=0; max-service-ms=82,56; wall-seconds=6,018; played-seconds=6,018; paused-ticks=0; consumed-bytes=1060864; gain=0,07; output-error=
+
+=== SCHEDULER ===
+MMCSS Audio registered=True
+Output error=
+
+=== STANDALONE EXE AUDIO ===
+PASS hero selection owns the menu song
+PASS battle music starts at fixed quiet level
+PASS accepted attack starts one native effect
+PASS music and card use exactly one Windows output
+PASS card preparation does not change music level
+PASS card uses reduced software level
+PASS pause holds both channels at exact positions
+PASS pause also holds the physical Windows output position
+PASS resume keeps both existing native voices
+PASS card animation completes after resumed impact
+PASS second card bounds overlap
+PASS finished effects release voices without a music swell
+PASS scene change clears old effects
+PASS standalone elite loads separate music
+PASS Toha battle does not borrow Illya menu theme
+PASS automatic opening cards produce a single bounded accent
+PASS closing game releases the shared output and worker
+
+=== REAL HWND GALLERY ===
+main; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=1
+checkout; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=2
+map; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=3
+Battle; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=4
+Battle-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=5
+Dogs; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=6
+Dogs-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=7
+Hedgehogs; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=8
+Hedgehogs-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=9
+IllyaToha; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=10
+IllyaToha-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=11
+Mimicrator; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=12
+Mimicrator-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=13
+Babai; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=14
+Babai-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=15
+Toha-dark; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=16
+Dogs-4k; client={Width=3840, Height=2160}; raster={Width=1920, Height=1080}; presented=17
+main-return; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=18
+device-loss; fallback=True; native-released=True; redraw=ok
+
+EXE SHA256 253D33C10B3770A33A548845293E18CD0BE149633AF1C1A3037D7DD0F75AA9A6
+ZIP verified, exactly one EXE, packaged/tested bytes identical.

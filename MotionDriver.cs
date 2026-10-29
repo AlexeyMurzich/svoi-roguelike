@@ -14,7 +14,7 @@ namespace ShpilSvoih
 
         bool NeedsMotion
         {
-            get { return presentationPending || CombatBusy || CombatAmbientMoving || LivingScene || MapMoving ||
+            get { return presentationPending || AudioNeedsMotion || CombatBusy || CombatAmbientMoving || LivingScene || MapMoving ||
                 (mimicratorPreview && !mimicratorPaused); }
         }
 
@@ -53,7 +53,8 @@ namespace ShpilSvoih
             if (GameplayPaused || !ContainsFocus)
             {
                 tohaSound.SetPaused(true);
-                howlSound.Stop();
+                cardSounds.SetPaused(true);
+                howlSound.SetPaused(true);
                 if (!ContainsFocus || !presentationPending) combatTimer.Stop();
                 return;
             }
@@ -61,6 +62,7 @@ namespace ShpilSvoih
             // Preserve real elapsed time on slower frames; focus/overlay transitions
             // reset the clock separately, rather than slowing every animation down.
             elapsed = Motion.FrameDelta(elapsed);
+            AdvanceAudio(elapsed);
             AdvanceLivingAnimation(elapsed);
             if (mimicratorPreview)
                 AdvanceMimicrator(elapsed);
@@ -87,7 +89,7 @@ namespace ShpilSvoih
             SyncMusic();
             if (view != "")
             {
-                howlSound.Stop();
+                howlSound.SetPaused(true);
                 if (combatTimer != null)
                     combatTimer.Stop();
             }

@@ -52,7 +52,8 @@ namespace ShpilSvoih
         {
             music.SetTrack(music.Track, true);
             tohaSound.SetPaused(true);
-            howlSound.Stop();
+            cardSounds.SetPaused(true);
+            howlSound.SetPaused(true);
             CancelMapDrag();
             if (combatTimer != null) combatTimer.Stop();
             ResetMotionClock();

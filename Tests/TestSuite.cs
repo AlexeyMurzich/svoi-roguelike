@@ -73,6 +73,14 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Software mixer: bit-exact background isolation", SoftwareMixerTests.Isolation);
+            Run("Software mixer: resampling, one-shot and quiet peaks", SoftwareMixerTests.ResamplingAndHeadroom);
+            Run("Software mixer: static song calibration and source ownership", SoftwareMixerTests.SongCalibration);
+            Run("Card audio: constant battle background level", UiTests.TestConstantBattleMusic);
+            Run("Card audio: bounded voices, tails, cache, pause and failure", CardAudioTests.Voices);
+            Run("Card audio: eight complete embedded effects", CardAudioTests.Embedded);
+            Run("Card audio: late music gain and simultaneous native playback", CardAudioTests.MusicGainAndNativeMix);
+            Run("Music continuity: real menu, redraw, resize and GC", UiTests.TestMenuAudioContinuity);
             Run("Babai: complete silhouette, no giant arm and cached shade", UiTests.TestBabaiSilhouette);
             Run("Babai: low lasso, stable face scale and one contact", UiTests.TestLowBabaiLasso);
             Run("District: registered planes and source proportions", UiTests.TestDistrictPlanes);
@@ -88,7 +96,7 @@ namespace ShpilSvoih
             Run("Toha sound: native one-shot and pause", TohaSoundTests.NativeOneShot);
             Run("Toha sound: focus, menus, console and exit", UiTests.TestTohaSoundScenes);
             Run("Music: asynchronous switching, pause, cancellation and disposal", MusicTests.StateAndCancellation);
-            Run("Music: five embedded tracks preserve all samples", MusicTests.EmbeddedSongs);
+            Run("Music: six embedded tracks match prepared samples", MusicTests.EmbeddedSongs);
             Run("Music: native loop, pause and resume", MusicTests.NativeLoop);
             Run("Music: actual hero clicks and elite scene transitions", UiTests.TestMusicScenes);
             Run("Debug console: infinite gold and exact triple multiplier", DebugModeTests.Rules);

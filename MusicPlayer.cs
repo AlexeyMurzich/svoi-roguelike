@@ -17,7 +17,7 @@ namespace ShpilSvoih
         }
         public static bool IsValid(string track)
         {
-            return track == "" || track == "mimicrator" || Array.IndexOf(heroes, track) >= 0;
+            return track == "" || track == "mimicrator" || track == "babai" || Array.IndexOf(heroes, track) >= 0;
         }
     }
 
@@ -65,6 +65,10 @@ namespace ShpilSvoih
     {
         void SetPaused(bool value);
     }
+    public interface IAudioVolumeVoice
+    {
+        void SetVolume(double gain);
+    }
 
     // Decode on a worker, one active voice. Stale loads always remain silent.
     public sealed class MusicPlayer : IDisposable
@@ -76,6 +80,7 @@ namespace ShpilSvoih
         IMusicVoice voice;
         string track = "", error = "";
         bool paused = true, disposed, loading;
+        double gain = AudioLevels.Music;
         long generation;
         public MusicPlayer() : this(LoadEmbedded, pcm => new LoopingMusicVoice(pcm)) { }
         public MusicPlayer(Func<string, CancellationToken, MusicPcm> loader, Func<MusicPcm, IMusicVoice> factory)
@@ -87,6 +92,24 @@ namespace ShpilSvoih
         public string LastError { get { lock (gate) return error; } }
         public bool IsLoading { get { lock (gate) return loading; } }
         public bool IsPaused { get { lock (gate) return paused; } }
+        public double Gain { get { lock (gate) return gain; } }
+        public void SetVolume(double value)
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value) || value < 0 || value > 1)
+                throw new ArgumentOutOfRangeException("value");
+            lock (gate)
+            {
+                if (disposed || Math.Abs(gain - value) < .0005) return;
+                gain = value;
+                try { ApplyVolume(voice); }
+                catch (InvalidOperationException failure) { error = failure.Message; if (voice != null) voice.Dispose(); voice = null; }
+            }
+        }
+        void ApplyVolume(IMusicVoice target)
+        {
+            var volume = target as IAudioVolumeVoice;
+            if (volume != null) volume.SetVolume(gain);
+        }
         public static MusicPcm LoadEmbedded(string id, CancellationToken cancel)
         {
             if (!MusicTracks.IsValid(id) || id == "") throw new ArgumentOutOfRangeException("id");
@@ -130,11 +153,13 @@ namespace ShpilSvoih
             try
             {
                 var pcm = load(id, source.Token);
+                pcm = AudioLevels.PrepareMusic(pcm, source.Token);
                 source.Token.ThrowIfCancellationRequested();
                 candidate = createVoice(pcm); // Newly created voices are paused.
                 lock (gate)
                 {
                     if (disposed || generation != version) return;
+                    ApplyVolume(candidate);
                     candidate.SetPaused(paused);
                     voice = candidate; candidate = null; loading = false;
                 }

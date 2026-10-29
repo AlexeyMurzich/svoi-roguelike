@@ -60,6 +60,9 @@ namespace ShpilSvoih
                 }
                 ((Bitmap)NativeRead(presenter, "frame")).Save(Path.Combine(TestSuite.OutputDirectory, "native-dogs.png"));
                 NativeGpuPixels(presenter, new Size(1280, 840));
+                var cards = Read<CardSoundPlayer>(game, "cardSounds");
+                cards.Play(3, true, false);
+                TestSuite.Check(cards.ActiveVoices == 1, "card voice starts alongside the native presenter");
                 Call(game, "SetInventory", "pause");
                 var presentMethod = presenter.GetType().GetField("present", NativePrivate);
                 var originalPresent = presentMethod.GetValue(presenter);
@@ -72,8 +75,12 @@ namespace ShpilSvoih
                 for (int retry = 0; retry < 10 && Read<bool>(game, "presentationPending"); retry++)
                 { System.Threading.Thread.Sleep(20); Call(game, "OnMotionTick", game, EventArgs.Empty); game.Update(); }
                 TestSuite.Check(!Read<bool>(game, "presentationPending"), "deferred paused frame eventually presents");
+                TestSuite.Check(cards.IsPaused && cards.ActiveVoices == 1, "GPU retries preserve the paused card tail");
+                TestSuite.Check(Read<MusicPlayer>(game, "music").Gain == AudioLevels.Music, "presentation retry never changes the music level");
                 TestSuite.Check(Read<CombatState>(game, "combat").Hero.Health == hp && Read<CombatState>(game, "combat").Turn == turn, "presentation retries never advance paused gameplay");
                 Call(game, "SetInventory", ""); Read<Timer>(game, "combatTimer").Stop();
+                TestSuite.Check(!cards.IsPaused, "card audio resumes after the pending pause frame");
+                cards.Stop();
                 var oldFrame = (Bitmap)NativeRead(presenter, "frame");
                 game.ClientSize = new Size(2560, 1080); game.Invalidate(); game.Update();
                 TestSuite.Throws<ArgumentException>(() => oldFrame.GetPixel(0, 0), "resize releases prior native CPU surface");

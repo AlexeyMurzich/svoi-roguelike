@@ -30,6 +30,8 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     originals = args.output / "source"
     originals.mkdir(exist_ok=True)
+    manifest_path = args.output / "manifest.json"
+    existing = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else []
     manifest = []
     for key, filename in TRACKS.items():
         source = args.source / filename
@@ -58,7 +60,8 @@ def main():
             "asset_sha256": hashlib.sha256(destination.read_bytes()).hexdigest(),
         })
         print(key, frames, rate, channels, destination.stat().st_size, flush=True)
-    (args.output / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    manifest.extend(item for item in existing if item["id"] not in TRACKS)
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

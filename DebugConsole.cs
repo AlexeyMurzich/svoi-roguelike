@@ -21,7 +21,7 @@ namespace ShpilSvoih
             ResetMotionClock();
             if (open)
             {
-                howlSound.Stop();
+                howlSound.SetPaused(true);
                 if (combatTimer != null) combatTimer.Stop();
             }
             else if (CombatBusy || CombatAmbientMoving || LivingScene || MapMoving || mimicratorPreview)

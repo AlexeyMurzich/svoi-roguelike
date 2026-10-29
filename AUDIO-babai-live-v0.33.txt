@@ -1,0 +1,24 @@
+PASS hero selection owns the menu song
+PASS battle music starts at fixed quiet level
+PASS accepted attack starts one native effect
+PASS music and card use exactly one Windows output
+PASS card preparation does not change music level
+PASS card uses reduced software level
+PASS pause holds both channels at exact positions
+PASS pause also holds the physical Windows output position
+PASS resume keeps both existing native voices
+PASS card animation completes after resumed impact
+PASS second card bounds overlap
+PASS finished effects release voices without a music swell
+PASS scene change clears old effects
+PASS standalone elite loads separate music
+PASS Toha battle does not borrow Illya menu theme
+PASS automatic opening cards produce a single bounded accent
+PASS Babai theme plays through native mixer
+PASS Babai PCM advances on the native device
+PASS Babai uses fixed background gain and one device
+PASS Babai theme pauses with game
+PASS Babai pause preserves actual sample position
+PASS Babai theme resumes with game
+PASS Babai theme stops on leaving battle
+PASS closing game releases the shared output and worker

@@ -1,25 +1,20 @@
 ﻿using System;
 using System.IO;
-using System.Media;
 using System.Text;
 
 namespace ShpilSvoih
 {
-    // Shared immutable PCM data; each window owns its player and read-only stream.
+    // Original procedural dog howl; native one-shot shares the music/effect transport.
     sealed class HowlSound : IDisposable
     {
         const int SampleRate = 22050;
         const int SampleCount = 18742;
         static readonly byte[] wave = CreateWave();
-        readonly MemoryStream stream;
-        readonly SoundPlayer player;
-        bool disposed;
+        IMusicVoice voice;
+        bool disposed, paused = true;
 
         public HowlSound()
         {
-            stream = new MemoryStream(wave, false);
-            player = new SoundPlayer(stream);
-            player.Load();
         }
 
         static byte[] CreateWave()
@@ -64,25 +59,36 @@ namespace ShpilSvoih
                 return;
             try
             {
-                player.Play();
+                Stop();
+                var bytes = new byte[SampleCount * 2];
+                Buffer.BlockCopy(wave, 44, bytes, 0, bytes.Length);
+                voice = new LoopingMusicVoice(new MusicPcm(SampleRate, 1, bytes), false);
+                ((IAudioVolumeVoice)voice).SetVolume(AudioLevels.Howl);
+                paused = true;
+                SetPaused(false);
             }
-            catch (InvalidOperationException) { }
-            catch (System.ComponentModel.Win32Exception) { }
+            catch (InvalidOperationException) { Stop(); }
+            catch (System.Runtime.InteropServices.ExternalException) { Stop(); }
         }
 
         public void Stop()
         {
-            if (!disposed)
-                player.Stop();
+            if (voice != null) voice.Dispose();
+            voice = null; paused = true;
+        }
+
+        public void SetPaused(bool value)
+        {
+            if (disposed || voice == null || paused == value) return;
+            try { voice.SetPaused(value); paused = value; }
+            catch (InvalidOperationException) { Stop(); }
         }
 
         public void Dispose()
         {
             if (disposed)
                 return;
-            player.Stop();
-            player.Dispose();
-            stream.Dispose();
+            Stop();
             disposed = true;
         }
     }

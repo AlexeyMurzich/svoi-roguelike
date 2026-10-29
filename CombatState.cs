@@ -36,6 +36,9 @@ namespace ShpilSvoih
         public bool EnemyActionPrepared { get; private set; }
         public int EnemyImpactsResolved { get; private set; }
         public int CardsPlayedThisTurn { get; private set; }
+        // Presentation telemetry only; automatic rules and their order are unchanged.
+        public int AutomaticAttacksThisTurn { get; private set; }
+        public int AutomaticBlocksThisTurn { get; private set; }
         public int CardPlayLimit { get; private set; }
         public bool IsStunned { get { return CardPlayLimit == 1; } }
         public bool Rabies { get; private set; }
@@ -126,6 +129,7 @@ namespace ShpilSvoih
         void BeginPlayerTurn()
         {
             Turn++;
+            AutomaticAttacksThisTurn = AutomaticBlocksThisTurn = 0;
             CardPlayLimit = pendingStun ? 1 : int.MaxValue;
             CardsPlayedThisTurn = 0;
             pendingStun = false;
@@ -250,6 +254,11 @@ namespace ShpilSvoih
             }
 
             Block = (int)Math.Min(int.MaxValue, (long)Block + BlockFor(card));
+            if (automatic)
+            {
+                if (card.Attack) AutomaticAttacksThisTurn++;
+                if (card.Block > 0) AutomaticBlocksThisTurn++;
+            }
             if (Hero.Health <= 0) Phase = CombatPhase.Defeat;
             else if (NextLivingEnemy(0) < 0) Phase = CombatPhase.Victory;
             return true;

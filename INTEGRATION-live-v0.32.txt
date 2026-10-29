@@ -1,0 +1,42 @@
+﻿Standalone audio (release EXE, no loose assets)
+PASS hero selection owns the menu song
+PASS battle music starts at fixed quiet level
+PASS accepted attack starts one native effect
+PASS music and card use exactly one Windows output
+PASS card preparation does not change music level
+PASS card uses reduced software level
+PASS pause holds both channels at exact positions
+PASS pause also holds the physical Windows output position
+PASS resume keeps both existing native voices
+PASS card animation completes after resumed impact
+PASS second card bounds overlap
+PASS finished effects release voices without a music swell
+PASS scene change clears old effects
+PASS standalone elite loads separate music
+PASS Toha battle does not borrow Illya menu theme
+PASS automatic opening cards produce a single bounded accent
+PASS closing game releases the shared output and worker
+
+Real HWND / Direct3D9Ex gallery
+main; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=1
+checkout; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=2
+map; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=3
+Battle; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=4
+Battle-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=5
+Dogs; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=6
+Dogs-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=7
+Hedgehogs; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=8
+Hedgehogs-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=9
+IllyaToha; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=10
+IllyaToha-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=11
+Mimicrator; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=12
+Mimicrator-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=13
+Babai; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=14
+Babai-moving; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=15
+Toha-dark; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=16
+Dogs-4k; client={Width=3840, Height=2160}; raster={Width=1920, Height=1080}; presented=17
+main-return; client={Width=1280, Height=840}; raster={Width=1280, Height=840}; presented=18
+device-loss; fallback=True; native-released=True; redraw=ok
+
+EXE SHA256 996FE5AA9777DC198BFE1C9862598D41892A1951941D13F93DA197A193735894
+ZIP integrity and packaged/tested EXE equality verified.

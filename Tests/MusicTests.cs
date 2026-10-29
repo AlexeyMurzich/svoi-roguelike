@@ -68,13 +68,13 @@ namespace ShpilSvoih
         }
         public static void EmbeddedSongs()
         {
-            string[] ids = { "pupsolet", "illya", "runtso", "shuten", "mimicrator" };
-            int[] frames = { 1955835, 1644930, 7673400, 8061480, 8004863 };
+            string[] ids = { "pupsolet", "illya", "runtso", "shuten", "mimicrator", "babai" };
+            int[] frames = { 1955835, 1644930, 7673400, 8061480, 8004863, 8022767 };
             for (int i = 0; i < ids.Length; i++)
             {
                 var pcm = MusicPlayer.LoadEmbedded(ids[i], CancellationToken.None);
-                TestSuite.Check(pcm.SampleRate == 44100 && pcm.Channels == 2, "original sample rate and channels: " + ids[i]);
-                TestSuite.Check(pcm.Data.Length == frames[i] * 4, "no cuts or added silence: " + ids[i]);
+                TestSuite.Check(pcm.SampleRate == (ids[i] == "babai" ? 48000 : 44100) && pcm.Channels == 2, "original sample rate and channels: " + ids[i]);
+                TestSuite.Check(pcm.Data.Length == frames[i] * 4, "expected prepared sample count: " + ids[i]);
                 TestSuite.Check(Array.Exists(pcm.Data, value => value != 0), "embedded song is not silence: " + ids[i]);
                 if (i < 4) TestSuite.Check(MusicTracks.Hero(i) == ids[i], "hero theme mapping");
             }
@@ -111,7 +111,7 @@ namespace ShpilSvoih
             using (var game = new Game())
             {
                 game.CreateControl();
-                TestSuite.Check(MusicChoice(game) == "", "startup waits for hero selection");
+                TestSuite.Check(MusicChoice(game) == "", "startup waits for explicit hero selection");
                 using (Render(game)) { }
                 for (int i = 0; i < 4; i++)
                 {
@@ -127,11 +127,55 @@ namespace ShpilSvoih
                 Call(game, "EndCombatTurn"); Call(game, "AdvanceCombatAnimation", 5f);
                 TestSuite.Check(MusicChoice(game) == "mimicrator" && fight.Turn == 2, "form and turn changes do not change theme");
                 Call(game, "ReturnToMainMenu");
-                TestSuite.Check(MusicChoice(game) == "", "return to menu stops elite theme");
+                TestSuite.Check(MusicChoice(game) == "", "return to menu waits for hero selection");
+                Call(game, "StartTestBabai");
+                TestSuite.Check(MusicChoice(game) == "babai", "Babai owns his separate battle theme");
+                Call(game, "EndCombatTurn"); Call(game, "AdvanceCombatAnimation", 5f);
+                TestSuite.Check(MusicChoice(game) == "babai", "Babai theme persists across turns");
                 Call(game, "StartTestDogs");
-                TestSuite.Check(MusicChoice(game) == "", "ordinary battle has no assigned elite theme");
+                TestSuite.Check(MusicChoice(game) == "", "ordinary battles do not borrow hero songs");
+                foreach (string launch in new[] { "StartTestIllyaToha", "StartTestHedgehogs" })
+                {
+                    Call(game, launch);
+                    TestSuite.Check(MusicChoice(game) == "", "hero themes excluded from " + launch);
+                }
                 Call(game, "ReturnToMainMenu");
                 TestSuite.Check(Read<MusicPlayer>(game, "music").Track == "", "offscreen windows never open audio device");
+            }
+        }
+        public static void TestConstantBattleMusic()
+        {
+            using (var game = new Game())
+            {
+                game.CreateControl();
+                Func<double> gain = () => (double)typeof(Game).GetProperty("DesiredMusicGain", PrivateInstance).GetValue(game, null);
+                Call(game, "ChooseMenuHero", 3);
+                TestSuite.Check(MusicChoice(game) == "shuten" && gain() == AudioLevels.Music, "selected hero song belongs to menu");
+                Call(game, "StartTestMimicrator");
+                TestSuite.Check(MusicChoice(game) == "mimicrator" && gain() == AudioLevels.Music, "battle starts already quiet");
+                var fight = Read<CombatState>(game, "combat");
+                var hand = (System.Collections.Generic.List<CardData>)typeof(CombatState).GetField("hand", PrivateInstance).GetValue(fight);
+                foreach (bool attack in new[] { true, false })
+                {
+                    hand.Clear(); hand.Add(new CardData { Name = "Audio", Attack = attack, Skill = !attack,
+                        Damage = attack ? 6 : 0, Block = attack ? 0 : 5, GoldCost = 10 });
+                    Call(game, "PlayCombatCard", 0);
+                    foreach (float elapsed in new[] { .02f, .13f, .30f, .80f })
+                    {
+                        Call(game, "AdvanceAudio", elapsed); Call(game, "AdvanceCombatAnimation", elapsed);
+                        Call(game, "SyncMusic");
+                        TestSuite.Check(gain() == AudioLevels.Music && Read<MusicPlayer>(game, "music").Gain == AudioLevels.Music,
+                            "preparation, impact and tail never modulate music");
+                    }
+                }
+                Call(game, "SetInventory", "pause"); Call(game, "SetInventory", "");
+                TestSuite.Check(gain() == AudioLevels.Music, "pause keeps fixed battle level");
+                Call(game, "EndCombatTurn"); Call(game, "AdvanceCombatAnimation", 5f); Call(game, "SyncMusic");
+                TestSuite.Check(gain() == AudioLevels.Music, "enemy turn never modulates music");
+                Call(game, "StartTestBabai"); Call(game, "SyncMusic");
+                TestSuite.Check(MusicChoice(game) == "babai" && gain() == AudioLevels.Music, "Babai uses the same fixed background level");
+                Call(game, "ReturnToMainMenu"); Call(game, "ChooseMenuHero", 3);
+                TestSuite.Check(MusicChoice(game) == "shuten" && gain() == AudioLevels.Music, "menu restores its own fixed level");
             }
         }
     }
