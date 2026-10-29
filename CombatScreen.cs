@@ -22,7 +22,7 @@ namespace ShpilSvoih
         readonly Dictionary<int, EnemyKind> encounteredEnemies = new Dictionary<int, EnemyKind>();
         EnemyKind EnemyAtNode(int id)
         {
-            if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id);
+            if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id, mapRun.Map.Nodes[id].District);
             EnemyKind enemy;
             return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : OrdinaryEncounters.Select(mapRun.Map.Seed, id, OrdinaryEncounters.Completed(mapRun), mapRun.Map.Nodes[id].District);
         }
@@ -40,7 +40,7 @@ namespace ShpilSvoih
         {
             get
             {
-                return attackTimeline.IsRunning || deathVisuals.IsRunning;
+                return attackTimeline.IsRunning || deathVisuals.IsRunning || FomatreshkaFleeing;
             }
         }
 
@@ -57,11 +57,14 @@ namespace ShpilSvoih
             ordinaryCombatBackground = assetStore.Get("combat-social-stage.png", "combat-social-stage.png");
             routeButtonArt = assetStore.Get("route-button.png", "route-button.png");
             combatIcons = assetStore.Get("combat-icons.png", "combat-icons.png");
+            combatDockIcons = assetStore.Get("combat-dock-icons.png", "combat-dock-icons.png");
             InitializeMotionTimer();
         }
 
         void ResetCombat()
         {
+            fomatreshkaFlee = -1;
+            fomatreshkaEntrance = FomatreshkaRules.EntranceDuration;
             cardSounds.Stop();
             audioPlayerTurn = -1;
             tohaSound.Stop();
@@ -79,6 +82,7 @@ namespace ShpilSvoih
                 combatTimer.Stop();
             combatHintAreas.Clear();
             combatPointer = null;
+            hoveredCombatCard = -1;
             routePressed = false;
             combat = null;
             combatNode = -1;
@@ -146,6 +150,7 @@ namespace ShpilSvoih
             mapIntel[combatNode].Identity = EnemyCatalog.Name(enemy);
             combat = new CombatState(currentHero, new Random(mapRun.Map.Seed ^ combatNode ^ 0xA71), enemy);
             cardSounds.Prepare(selected);
+            if (enemy == EnemyKind.Fomatreshka) LoadFomatreshkaArt();
             if (enemy == EnemyKind.Mimicrator)
             {
                 LoadMimicratorBattleArt();
@@ -186,6 +191,7 @@ namespace ShpilSvoih
             {
                 float step = attackTimeline.IsRunning ? Math.Min(remaining, attackTimeline.SecondsToBoundary) : remaining;
                 deathVisuals.Advance(step);
+                if (fomatreshkaFlee >= 0) fomatreshkaFlee = Math.Min(FomatreshkaRules.FleeDuration, fomatreshkaFlee + step);
                 guardVisualTime = Math.Max(0, guardVisualTime - step);
                 attackTimeline.Advance(step);
                 remaining = Math.Max(0, remaining - step);
@@ -208,6 +214,7 @@ namespace ShpilSvoih
         {
             if (CombatBusy || combat == null || !combat.CanPlay(index))
                 return;
+            hoveredCombatCard = -1;
             var card = combat.Hand[index];
             guardAtActionStart = combat.Block > 0 ? 1 : Motion.Ease(guardVisualTime / .3f);
             if (card.Attack)
@@ -241,6 +248,7 @@ namespace ShpilSvoih
         {
             if (CombatBusy || combat == null || !combat.EndPlayerTurn())
                 return;
+            hoveredCombatCard = -1;
             StartNextEnemyAnimation();
         }
 
@@ -249,6 +257,7 @@ namespace ShpilSvoih
             if (combat.Phase != CombatPhase.Enemy || combat.ActingEnemy < 0) return;
             actingEnemyIndex = combat.ActingEnemy;
             var actor = combat.Enemies[actingEnemyIndex];
+            if (actor.Kind == EnemyKind.Fomatreshka || actor.Kind == EnemyKind.Fan) { StartFomatreshkaAction(actor); return; }
             if (actor.Kind == EnemyKind.Babai) { StartBabaiLasso(); return; }
             if (actor.Kind == EnemyKind.Toha)
             {
@@ -286,6 +295,11 @@ namespace ShpilSvoih
             {
                 int index = i;
                 var enemy = combat.Enemies[index];
+                if (enemy.Fled)
+                {
+                    if (fomatreshkaFlee < 0) fomatreshkaFlee = 0;
+                    continue;
+                }
                 if (!enemy.IsAlive && deathVisuals.Start(enemy.Id))
                     deathVisuals.Capture(enemy.Id, EnemyArea(index), canvas => PaintCombatEnemy(canvas, index));
             }

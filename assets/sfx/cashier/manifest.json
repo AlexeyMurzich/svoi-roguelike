@@ -1,0 +1,15 @@
+{
+  "source": "source/elevenlabs-connection-lost.mp3",
+  "source_sha256": "5f928688233ef6d91ff3adcb4d9f8e9007621e8eb7b490e184304c01da6263f1",
+  "duration_seconds": 2,
+  "sample_rate": 44100,
+  "channels": 2,
+  "frames": 88200,
+  "edge_fade_seconds": 0.005,
+  "static_gain": 0.5317785472473562,
+  "rms": 0.17999999999999997,
+  "peak": 0.43912205907965285,
+  "runtime": "glitch.pcm.gz",
+  "pcm_sha256": "6fd4f8ebc39b9b818c892ec7f8e4007f9d035e0301ab620d99f6572989c927fb",
+  "runtime_sha256": "76bbe8c8f6e4d5ae11c05337c8e837d7311f7da7cba0a5148822e4db976ba2c8"
+}

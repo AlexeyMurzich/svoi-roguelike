@@ -202,11 +202,12 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "map-finished.png"));
                     Key(game, Keys.Enter);
                     TestSuite.Check(run.Finished && run.Pending == null, "completed map cannot restart on enter");
-                    int expectedArt = 36 + HeroArtCount(game);
+                    int expectedArt = 38 + HeroArtCount(game);
                     if (Read<object>(game, "mimicratorBody") != null) expectedArt += 2;
                     if (Read<object>(game, "mimicratorShellPoses") != null) expectedArt++;
                     if (Read<object>(game, "tohaLight") != null) expectedArt += 4;
                     if (Read<object>(game, "babaiBodies") != null) expectedArt += 2;
+                    expectedArt += Read<Image[]>(game, "fomatreshkaArt").Count(image => image != null);
                     expectedArt += Read<Image[]>(game, "districtArt").Skip(1).Count(image => image != null);
                     TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == expectedArt, "only encountered art sets are decoded once and shared");
                     Call(game, "OpenCheckout");

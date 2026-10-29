@@ -92,8 +92,8 @@ namespace ShpilSvoih
                     for (int index = 0; index < count; index++)
                     {
                         var card = CombatLayout.CardSlot(width, 840, count, index);
-                        TestSuite.Check(card.Left >= 250 && card.Right <= width - 250 && card.Bottom <= 824.01f, "hand leaves space for draw pile and end-turn button");
-                        TestSuite.Check(index == 0 || previous.Right < card.Left, "cards do not overlap");
+                        TestSuite.Check(card.Left >= 250 && card.Right <= width - 250 && card.Top < 840 && card.Top >= 600, "hand leaves space for draw pile and end-turn button");
+                        TestSuite.Check(index == 0 || previous.Left < card.Left && card.Left - previous.Left >= 100, "fan keeps every card reachable");
                         TestSuite.Check(Math.Abs(card.Width / card.Height - 180f / 244) < .001, "card aspect ratio preserved");
                         previous = card;
                     }

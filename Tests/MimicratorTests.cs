@@ -49,9 +49,9 @@ namespace ShpilSvoih
             using (var game = new Game())
             {
                 game.CreateControl();
-                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 36, "preview art is lazy");
+                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 38, "preview art is lazy");
                 game.StartMimicratorPreview();
-                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 38, "two shared new images");
+                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 40, "two shared new images");
                 var crops = Read<RectangleF[]>(game, "mimicratorSources");
                 var props = Read<Bitmap>(game, "mimicratorProps");
                 var body = Read<Bitmap>(game, "mimicratorBody");
@@ -128,7 +128,7 @@ namespace ShpilSvoih
                     using (var image = Render(game)) { }
                     Call(game, "CloseMimicratorPreview");
                 }
-                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 38, "reopening never duplicates art");
+                TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 40, "reopening never duplicates art");
                 game.Dispose();
                 TestSuite.Check(Read<ImageAssets>(game, "assetStore").Count == 0, "all source layers released");
             }

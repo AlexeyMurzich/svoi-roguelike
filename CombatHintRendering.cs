@@ -15,8 +15,10 @@ namespace ShpilSvoih
             bool show = inside && !debugConsoleOpen && HasLiveFight && combat != null && inventoryView == "" && !hoveredRelic;
             PointF? next = show ? (PointF?)point : null;
             int previous = CombatHoverIdentity(combatPointer);
+            int oldCard = hoveredCombatCard;
+            hoveredCombatCard = next.HasValue ? CombatCardAt(next.Value, true) : -1;
             combatPointer = next;
-            if (previous != CombatHoverIdentity(next)) Invalidate();
+            if (oldCard != hoveredCombatCard || previous != CombatHoverIdentity(next)) Invalidate();
         }
 
         int CombatHoverIdentity(PointF? pointer)
@@ -24,12 +26,16 @@ namespace ShpilSvoih
             if (!pointer.HasValue) return -1;
             for (int i = 0; i < combatHintAreas.Count; i++)
                 if (combatHintAreas[i].Item1.Contains(pointer.Value)) return i;
+            if (CombatLayout.DrawPile(CanvasWidth, CanvasHeight).Contains(pointer.Value)) return 10001;
+            if (CombatLayout.DiscardPile(CanvasWidth, CanvasHeight).Contains(pointer.Value)) return 10002;
+            if (CombatLayout.EndTurn(CanvasWidth, CanvasHeight).Contains(pointer.Value)) return 10003;
             return RouteButtonVisible && RouteButtonArea.Contains(pointer.Value) ? int.MaxValue : -1;
         }
 
         void DrawCombatHintIcon(Graphics g, int icon, RectangleF area)
         {
-            if (icon == 20) { LoadBabaiArt(); FitImage(g, babaiBed, area); }
+            if (icon == 21) VigorIcon.Draw(g, area);
+            else if (icon == 20) { LoadBabaiArt(); FitImage(g, babaiBed, area); }
             else if (icon == 19)
             {
                 LoadTohaArt();

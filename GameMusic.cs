@@ -5,7 +5,7 @@
         readonly MusicPlayer music = new MusicPlayer();
         readonly CardSoundPlayer cardSounds = new CardSoundPlayer();
         int audioPlayerTurn = -1;
-        bool AudioNeedsMotion { get { return cardSounds.ActiveVoices > 0; } }
+        bool AudioNeedsMotion { get { return cardSounds.ActiveVoices > 0 || cashierSound.Active; } }
         double DesiredMusicGain { get { return AudioLevels.Music; } }
         int menuMusicHero = -1;
         string DesiredMusicTrack
@@ -32,6 +32,8 @@
             // Long menu songs can reserve more audio; battle effects retain a shorter queue.
             LoopingMusicVoice.SetMenuBuffering(!checkout && !mapScreen && !mimicratorPreview && menuMusicHero >= 0);
             bool pause = GameplayPaused || !ContainsFocus || !Visible || (mimicratorPreview && mimicratorPaused);
+            if (!checkout || mapScreen || mimicratorPreview) ResetCashier();
+            cashierSound.SetPaused(pause);
             tohaSound.SetPaused(pause);
             cardSounds.SetPaused(pause);
             howlSound.SetPaused(pause);
@@ -52,6 +54,7 @@
         void AdvanceAudio(float seconds)
         {
             cardSounds.Advance(seconds);
+            cashierSound.Advance(seconds);
         }
         void StartCardSound(bool attack)
         {

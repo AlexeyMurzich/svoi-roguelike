@@ -7,7 +7,7 @@ namespace ShpilSvoih
     {
         Image routeButtonArt;
         bool routePressed;
-        RectangleF RouteButtonArea { get { return new RectangleF(CanvasWidth - 272, CanvasHeight - 91, 247, 68); } }
+        RectangleF RouteButtonArea { get { return new RectangleF(CanvasWidth - 272, CanvasHeight - 209, 247, 68); } }
         bool RouteButtonVisible
         {
             get { return HasLiveFight && combat != null && combat.Phase == CombatPhase.Victory && !CombatBusy && inventoryView == ""; }

@@ -50,7 +50,13 @@ namespace ShpilSvoih
         {
             var result = new List<CombatHint>();
             if (!enemy.IsAlive) return result;
-            if (enemy.Kind == EnemyKind.Babai)
+            if (enemy.Kind == EnemyKind.Fomatreshka)
+                result.Add(enemy.WillSummon ? new CombatHint(14, "3", "Призыв фанаток", "Смахнёт волосы и призовёт трёх фанаток. В этот ход они не атакуют. После смерти старшего выжившие фанатки сбегают.") :
+                    enemy.WillDrink ? new CombatHint(21, "+6", "Gorilla · Бодрость", "Получит 6 бодрости: каждое попадание следующей очереди нанесёт на 6 урона больше. Бодрость исчезнет после всей очереди. Фанатки атакуют перед ним.") :
+                    new CombatHint(8, enemy.AttackDamage + " × " + enemy.HitCount, "Императрица · очередь", "Три отдельных выстрела по " + enemy.AttackDamage + " урона. Блок расходуется поочерёдно, HP снимаются на каждом попадании. Бодрость усиливает все три попадания и расходуется после всей очереди, включая полный блок."));
+            else if (enemy.Kind == EnemyKind.Fan)
+                result.Add(new CombatHint(8, enemy.AttackDamage.ToString(), "Атака фанатки", "Нанесёт " + enemy.AttackDamage + " урона. Фанатка сбежит, если погибнет Фоматрешка."));
+            else if (enemy.Kind == EnemyKind.Babai)
                 result.Add(new CombatHint(20, BabaiRules.Damage.ToString(), "Лассо · притягивание", "Нанесёт 10 урона и притянет на 1 независимо от блока. Под кроватью герой мгновенно погибает."));
             else if (enemy.Kind == EnemyKind.Toha)
             {

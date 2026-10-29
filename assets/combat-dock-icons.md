@@ -1,0 +1,15 @@
+# Иконки нижней панели боя — v0.34.1
+
+Файл: combat-dock-icons.png, 1254×1254 RGBA, подлинная прозрачность, четыре области одного атласа. Исходник результата генерации скопирован без редактирования альфа-канала.
+
+Верхний ряд: колода (изумрудная рубашка), сброс (бордовые карты и светлая лицевая карта). Нижний: синий медальон энергии, кожаный кошелёк с монетами. Числа и подписи рисуются игрой, их нет в PNG.
+
+Стиль основан на существующих assets/menu-icons.png и assets/coin-icon.png, переданных как стилевые референсы. Использован встроенный image_gen, transparent_background=true; это один согласованный atlas-asset. CLI/API fallback не использовался.
+
+Области с запасом для мягкого края (x, y, w, h): (54,73,524,527), (643,78,567,522), (48,640,554,569), (641,634,573,557). Их использует DockIconSources в CombatDock.cs. Владелец единственного bitmap — ImageAssets.
+
+## Точный промпт
+
+Generate ONE production game UI sprite atlas, a square transparent PNG with a strictly regular 2 by 2 grid, four isolated icons, each icon centered in its quadrant with equal 12% transparent padding and no contact with neighboring quadrants. This is a cohesive single atlas asset for an ornate illustrated deckbuilding game. The supplied images are STYLE REFERENCES ONLY: match their hand-painted warm antique gold, dark green enamel, crisp chunky bevels and tactile materials. Keep detail readable at 80 to 110 pixels. No typography, letters, digits, arrows, interface labels, checkerboard, background panel, guides, or watermarks. Upper-left quadrant: compact stack of three face-down playing cards, deep emerald backs with a simple raised gold diamond emblem, cream paper edges and thick beautiful gold corners, upright near-frontal slight perspective. Upper-right: visually distinct loose fan of three discarded cards, burgundy backs, one cream face card with a modest golden diagonal flourish, same gold trim and consistent scale, slight opposite tilt. Lower-left: elegant small circular blue energy medallion, rich lapis enamel, antique gold rim and one small blue crystalline lightning ornament at its top rim; its entire central 60% diameter must be EMPTY dark navy space reserved for a dynamic number drawn by the game. Lower-right: ornate but compact open dark brown leather coin purse framed by a warm gold clasp with two small embossed gold coins tucked at its upper edge; the broad central dark leather area must be EMPTY, clean and uncluttered, reserved for a large dynamic number. The two lower icons should each occupy a roughly square footprint with broad readable central spaces. Strong clean silhouettes and genuinely transparent exterior, soft minimal contact shadows within each silhouette only. Painterly polished fantasy game inventory artwork, substantial outlines and restrained ornament, consistent light from upper-left, matching the existing references rather than generic flat vector symbols. Do not reproduce gear icon from the references.
+
+SHA256 PNG: 94c4f9d0f4da11c6ac7e63762194a5ef7982b47fce21ec1d043c8eaef4885709

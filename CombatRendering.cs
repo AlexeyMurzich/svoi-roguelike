@@ -55,13 +55,8 @@ namespace ShpilSvoih
             if (card.Attack && card.Block > 0)
                 rules += ", " + combat.BlockFor(card) + " блока";
             TextAt(g, rules, area.X + 19, rulesY + 5, 16, text, area.Width - 32, true);
-            TextAt(g, (index + 1).ToString(), area.Right - 17, area.Bottom - 22, 12, gold, 20, true);
-            if (usable)
-            {
-                int choice = index;
-                actions.Add(Tuple.Create(slot, (Action)(() => PlayCombatCard(choice))));
-            }
-            else
+            TextAt(g, (index + 1).ToString(), area.Right - 21, area.Y + 33, 12, gold, 20, true);
+            if (!usable)
                 Rect(g, area.X, area.Y, area.Width, area.Height, Color.FromArgb(85, 0, 0, 0));
         }
 
@@ -86,25 +81,8 @@ namespace ShpilSvoih
             float floor = CombatFloor;
             DrawCombatActors(g, heroX, floor);
             TextAt(g, combatNotice, CanvasWidth / 2 - 150, floor + 34, 16, gold, 360, true);
-            float cardsY = CanvasHeight - 260;
-            if (combat.Phase == CombatPhase.Player || CombatBusy)
-            {
-                for (int i = 0; i < combat.Hand.Count; i++)
-                    DrawCombatCard(g, combat.Hand[i], i, CombatLayout.CardSlot(CanvasWidth, CanvasHeight, combat.Hand.Count, i));
-            }
-
-            TextAt(g, "Колода · " + combat.DrawCount + "\nСброс · " + combat.DiscardCount, 25, cardsY + 90, 16, text, 190, true);
-            if (selected != 3)
-                TextAt(g, "Энергия · " + combat.Energy, 25, cardsY + 35, 18, gold, 210, true);
-            if (!CombatBusy)
-            {
-                if (combat.Phase == CombatPhase.Victory)
-                    DrawRouteButton(g);
-                else if (combat.Phase == CombatPhase.Defeat)
-                    Button(g, "Поражение · В меню", CanvasWidth - 235, CanvasHeight - 80, 210, 54, ReturnToMainMenu);
-                else
-                    Button(g, "Завершить ход", CanvasWidth - 235, CanvasHeight - 80, 210, 54, EndCombatTurn, true);
-            }
+            DrawCombatDock(g);
+            DrawCombatHand(g);
 
             DrawRunBar(g);
             DrawMapRelics(g);

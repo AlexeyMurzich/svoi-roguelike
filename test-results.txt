@@ -1,12 +1,20 @@
-﻿PASS Software mixer: bit-exact background isolation
+﻿PASS Fomatreshka: burst impacts, block, vigor and death
+PASS Fomatreshka: separate HP ticks, icon and mid-burst pause
+PASS Fomatreshka: pattern, minions, vigor, flight and district
+PASS Fomatreshka: animated combat, targets, pause and six sizes
+PASS Cashier: deterministic rare glitch clock
+PASS Cashier: one-shot audio, pause and source
+PASS Cashier: checkout animation, clicks and six sizes
+PASS Combat dock: fan, raised hits, piles and fixed controls
+PASS Software mixer: bit-exact background isolation
 PASS Software mixer: resampling, one-shot and quiet peaks
 PASS Software mixer: static song calibration and source ownership
 PASS Card audio: constant battle background level
 PASS Card audio: bounded voices, tails, cache, pause and failure
 PASS Card audio: eight complete embedded effects
-INFO Mixer positions: music 65536 -> 102400; effect 17640/17640; error=
+INFO Mixer positions: music 69632 -> 102400; effect 17640/17640; error=
 PASS Card audio: late music gain and simultaneous native playback
-INFO Menu output: 3,013s audio / 3,013s wall; underruns=0
+INFO Menu output: 3,025s audio / 3,025s wall; underruns=0
 PASS Music continuity: real menu, redraw, resize and GC
 PASS Babai: complete silhouette, no giant arm and cached shade
 PASS Babai: low lasso, stable face scale and one contact
@@ -35,7 +43,7 @@ PASS Toha: threshold, damage and elite generation
 PASS Toha: frame-rate independent ram and transformation
 PASS Toha: battle, backgrounds, pause, death and six sizes
 PASS Toha: real elite room, investigation and revisit
-INFO fade GDI handles after warmup: 52 -> 52
+INFO fade GDI handles after warmup: 21 -> 21
 PASS Fade: native alpha, clipping and handle cleanup
 PASS Repaint: partial frames are pixel-identical
 PASS Repaint: mouse movement only redraws visual changes
@@ -66,7 +74,7 @@ PASS Exchange callback is atomic and cannot re-enter
 PASS Uniform viewport, click mapping and image crop
 PASS Image ownership, fallback and file unlocking
 PASS UI all heroes and relics at six window sizes
-INFO After 72 resizes: GDI handles 53 -> 53; decoded images 36; cached fonts 9.
+INFO After 72 resizes: GDI handles 23 -> 23; decoded images 38; cached fonts 9.
 PASS Resize/repaint determinism and GDI resources
 PASS Procedural act constraints, determinism and connectivity: 2000 seeds
 PASS Map traversal rejects skips and repeated actions
@@ -79,7 +87,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 27,2 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 19,8 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -89,7 +97,7 @@ PASS Hands of one to six cards preserve controls and aspect ratio
 PASS Reviewed input, capture, focus, overlay and debt-death interactions
 PASS Investigation reveals future enemy identity on map hover
 PASS Dogs: whole-body opacity and planted paws through bite/howl
-INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 36; font cache 12.
+INFO 18 battle/map/pause/resize cycles: GDI handles 23 -> 23; source images 38; font cache 13.
 PASS Repeated battle/map/pause/resize transitions release resources
 PASS Death snapshots lifecycle and resource ownership
 PASS Separate dog deaths, all hero deaths, rat death and credit-card guard
@@ -101,12 +109,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 19,30 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 16,44 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 103 passed, 0 failed. Assertions: 1295821.
+Suites: 111 passed, 0 failed. Assertions: 1296361.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

@@ -13,7 +13,7 @@ namespace ShpilSvoih
         SizeF districtBackdropLogical;
         float districtBackdropFloor;
         int districtBackdropIndex = -1;
-        int BattleDistrict { get { return combat.Enemy == EnemyKind.Babai ? 2 : mapRun.Pending.District; } }
+        int BattleDistrict { get { return (combat.Enemy == EnemyKind.Babai || combat.Enemy == EnemyKind.Fomatreshka) ? 2 : mapRun.Pending.District; } }
         bool districtBackdropHasBed;
         // Elite encounters retain their own approved scenes. Test Babai also uses the Estate.
         bool UsesDistrictBackdrop

@@ -9,6 +9,14 @@ namespace ShpilSvoih
         {
             get
             {
+                if (combat != null && combat.Enemy == EnemyKind.Fomatreshka) return ClientRectangle;
+                if (checkout && !mapScreen && !GameplayPaused && (long)ClientSize.Width * ClientSize.Height <= RenderPixelBudget)
+                {
+                    var checkoutView = DrawingViewport;
+                    var corner = checkoutView.ToClient(new PointF(0, 224));
+                    var far = checkoutView.ToClient(new PointF(331, 694));
+                    return Rectangle.Intersect(ClientRectangle, Rectangle.FromLTRB(corner.X - 2, corner.Y - 2, far.X + 2, far.Y + 2));
+                }
                 if (mapScreen && mapRun != null && mapRun.Pending == null && !GameplayPaused &&
                     (long)ClientSize.Width * ClientSize.Height <= RenderPixelBudget)
                     return MapFrameDamage;

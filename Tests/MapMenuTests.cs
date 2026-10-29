@@ -164,7 +164,7 @@ namespace ShpilSvoih
                     Key(game, Keys.Space);
                     SettleMap(game);
                     TestSuite.Check(Read<float>(game, "mapScroll") == ExpectedFocus(game, run.Current), "focus shortcut restores current position");
-                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 36, "menus and scrolling reuse thirty-seven assets");
+                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 38, "menus and scrolling reuse thirty-eight assets");
                 }
         }
     }

@@ -70,6 +70,8 @@ namespace ShpilSvoih
         {
             if (!LivingScene || GameplayPaused || !Motion.IsFinite(elapsed) || elapsed <= 0) return;
             livingSeconds += elapsed;
+            fomatreshkaEntrance = Math.Min(FomatreshkaRules.EntranceDuration, fomatreshkaEntrance + elapsed);
+            AdvanceCashier(elapsed);
             if (!CombatBusy) guardVisualTime = Math.Max(0, guardVisualTime - elapsed);
             InvalidateMotionFrame();
         }

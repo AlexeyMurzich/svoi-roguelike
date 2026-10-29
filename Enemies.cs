@@ -2,7 +2,7 @@
 
 namespace ShpilSvoih
 {
-    public enum EnemyKind { Rat, StrayDogs, Hedgehog, RabidHedgehog, Hedgehogs, Mimicrator, Toha, Babai }
+    public enum EnemyKind { Rat, StrayDogs, Hedgehog, RabidHedgehog, Hedgehogs, Mimicrator, Toha, Babai, Fomatreshka, Fan }
 
     public static class EnemyCatalog
     {
@@ -10,6 +10,8 @@ namespace ShpilSvoih
         {
             switch (kind)
             {
+                case EnemyKind.Fomatreshka: return "Фоматрешка";
+                case EnemyKind.Fan: return "Фанатка";
                 case EnemyKind.Babai: return "Бабай";
                 case EnemyKind.Toha: return "Тоха";
                 case EnemyKind.Mimicrator: return "Мимикратор";
@@ -19,6 +21,20 @@ namespace ShpilSvoih
                 case EnemyKind.RabidHedgehog: return "Безумный ёж";
                 default: return "Большая крыса";
             }
+        }
+
+        public static EnemyKind ForEliteNode(int seed, int node, int district)
+        {
+            if (district == 2)
+            {
+                unchecked
+                {
+                    uint hash = (uint)seed * 0x27D4EB2Du ^ (uint)node * 0x85EBCA6Bu;
+                    hash ^= hash >> 15;
+                    if (hash % 3 == 0) return EnemyKind.Fomatreshka;
+                }
+            }
+            return ForEliteNode(seed, node);
         }
 
         public static EnemyKind ForEliteNode(int seed, int node)

@@ -52,6 +52,7 @@ namespace ShpilSvoih
             if (presentationPending && ContainsFocus) InvalidateMotionFrame();
             if (GameplayPaused || !ContainsFocus)
             {
+                cashierSound.SetPaused(true);
                 tohaSound.SetPaused(true);
                 cardSounds.SetPaused(true);
                 howlSound.SetPaused(true);
@@ -81,10 +82,11 @@ namespace ShpilSvoih
 
         void SetInventory(string view)
         {
-            if (view != "" && view != "pause" && view != "deck" && view != "relics")
+            if (view != "" && view != "pause" && view != "deck" && view != "relics" && view != "draw" && view != "discard")
                 throw new ArgumentOutOfRangeException("view");
             CancelMapDrag();
             inventoryView = view;
+            hoveredCombatCard = -1;
             ResetMotionClock();
             SyncMusic();
             if (view != "")
