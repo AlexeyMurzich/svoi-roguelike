@@ -1,0 +1,23 @@
+PASS native frame presented: cashier-native
+PASS GPU presenter active: cashier-native
+PASS natural idle advances without immediate glitch audio
+PASS visual glitch and supplied one-shot start together
+PASS glitch uses the existing single output mixer
+PASS native frame presented: cashier-glitch-native
+PASS GPU presenter active: cashier-glitch-native
+PASS pause freezes cashier clock and keeps its voice
+PASS pause holds physical audio output position
+PASS resume preserves and advances the same glitch
+PASS deactivation freezes animation and stops its timer
+PASS deactivation holds physical glitch audio position
+PASS activation wakes the cashier timer
+PASS finished one-shot releases audio output in quiet checkout
+PASS relic payment and starter deck remain one-time
+PASS native frame presented: cashier-relic-native
+PASS GPU presenter active: cashier-relic-native
+PASS leaving checkout clears sound and animation schedule
+PASS native frame presented: cashier-4k-native
+PASS GPU presenter active: cashier-4k-native
+PASS re-entry can start a fresh glitch
+PASS menu exit stops an active glitch immediately
+PASS native close releases audio

@@ -30,6 +30,7 @@ namespace ShpilSvoih
             mapRun = null;
             mapIntel.Clear();
             checkout = true;
+            ResetCashier();
             preview = false;
             buffCursor = 0;
             currentHero = new HeroState(selected, 50, 0, new Balance());
@@ -73,6 +74,7 @@ namespace ShpilSvoih
         void LoadCheckoutArt()
         {
             checkoutBackground = assetStore.Get("checkout.png", "checkout.png");
+            cashierArt = assetStore.Get("npc/cashier.png", "npc.cashier.png");
             foreach (string id in new[]
             {
                 "ring",
@@ -96,6 +98,7 @@ namespace ShpilSvoih
         {
             ClearCheckoutBackdrop();
             checkoutBackground = null;
+            cashierArt = null;
             relicImages.Clear();
         }
 
@@ -141,15 +144,15 @@ namespace ShpilSvoih
                 Rect(g, 0, 0, 1280, 840, Color.FromArgb(21, 64, 43));
             using (var scrim = new LinearGradientBrush(new Rectangle(438, 12, 818, 175), Color.FromArgb(210, 9, 25, 19), Color.FromArgb(80, 9, 25, 19), 90f))
                 g.FillRectangle(scrim, 438, 12, 818, 175);
-            ShadowText(g, "СМОЛЕВИЧИ / СОЦИАЛ / ЛИЧНАЯ РЕЛИКВИЯ", 470, 30, 12, Color.FromArgb(188, 218, 175), 750, true);
+            ShadowText(g, "СМОЛЕВИЧИ / СОЦИАЛ / " + names[selected].ToUpperInvariant(), 470, 30, 12, Color.FromArgb(188, 218, 175), 750, true);
             ShadowText(g, taken ? "Покупка за счёт заведения." : "Бонус по карте своих.", 466, 61, 36, text, 760, true);
             ShadowText(g, taken ? "Всё пробито. Этот предмет теперь с вами." : "Выберите один предмет перед выходом в город.", 470, 119, 17, Color.FromArgb(219, 226, 207), 750);
             using (var heroShadow = new LinearGradientBrush(new Rectangle(13, 246, 304, 469), Color.FromArgb(125, 8, 24, 18), Color.FromArgb(40, 8, 24, 18), 0f))
                 g.FillRectangle(heroShadow, 13, 246, 304, 469);
-            ShadowText(g, names[selected], 32, 260, 27, colors[selected], 275, true);
-            Portrait(g, selected, 11, 308, 306, 363);
+            ShadowText(g, "КАССИР", 32, 246, 20, gold, 275, true);
+            DrawCashier(g);
             ShadowText(g, "КАССА № 1", 34, 685, 12, Color.FromArgb(190, 236, 175), 250, true);
-            ShadowText(g, taken ? "Чек закрыт · приятного пути" : "Один предмет. За счёт заведения.", 34, 711, 13, text, 270);
+            ShadowText(g, taken ? "Чек закрыт · приятного пути" : "Один предмет. Выбор за тобой.", 34, 711, 13, text, 270);
             var items = StartingBuff.For(selected);
             for (int i = 0; i < 3; i++)
             {

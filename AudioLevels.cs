@@ -6,7 +6,7 @@ namespace ShpilSvoih
     // Complete level policy: software gains only, never Windows session volume.
     public static class AudioLevels
     {
-        public const double Music = .07, Card = .18, Enemy = .18, Howl = .16;
+        public const double Music = .07, Card = .18, Enemy = .18, Howl = .16, Cashier = .12;
         public const double MusicReferenceRms = .18, MusicSourcePeak = .65;
         // One fixed calibration per song; no live compressor or ducking.
         public static MusicPcm PrepareMusic(MusicPcm pcm, CancellationToken cancel)

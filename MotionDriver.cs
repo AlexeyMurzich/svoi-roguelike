@@ -52,6 +52,7 @@ namespace ShpilSvoih
             if (presentationPending && ContainsFocus) InvalidateMotionFrame();
             if (GameplayPaused || !ContainsFocus)
             {
+                cashierSound.SetPaused(true);
                 tohaSound.SetPaused(true);
                 cardSounds.SetPaused(true);
                 howlSound.SetPaused(true);

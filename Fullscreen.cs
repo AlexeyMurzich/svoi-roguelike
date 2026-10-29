@@ -51,6 +51,7 @@ namespace ShpilSvoih
         protected override void OnDeactivate(EventArgs e)
         {
             music.SetTrack(music.Track, true);
+            cashierSound.SetPaused(true);
             tohaSound.SetPaused(true);
             cardSounds.SetPaused(true);
             howlSound.SetPaused(true);

@@ -202,7 +202,7 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "map-finished.png"));
                     Key(game, Keys.Enter);
                     TestSuite.Check(run.Finished && run.Pending == null, "completed map cannot restart on enter");
-                    int expectedArt = 37 + HeroArtCount(game);
+                    int expectedArt = 38 + HeroArtCount(game);
                     if (Read<object>(game, "mimicratorBody") != null) expectedArt += 2;
                     if (Read<object>(game, "mimicratorShellPoses") != null) expectedArt++;
                     if (Read<object>(game, "tohaLight") != null) expectedArt += 4;

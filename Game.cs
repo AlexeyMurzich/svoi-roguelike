@@ -127,6 +127,7 @@ namespace ShpilSvoih
             {
                 music.Dispose();
                 cardSounds.Dispose();
+                cashierSound.Dispose();
                 tohaSound.Dispose();
                 actorArtCache.Dispose();
                 interfaceArtCache.Dispose();
@@ -440,6 +441,7 @@ namespace ShpilSvoih
                 ClearRenderSurface();
                 music.Dispose();
                 cardSounds.Dispose();
+                cashierSound.Dispose();
                 tohaSound.Dispose();
                 ResetCombat();
                 ClearMimicratorBackdrop();
