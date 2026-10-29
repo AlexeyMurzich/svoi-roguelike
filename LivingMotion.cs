@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace ShpilSvoih
 {
@@ -20,15 +19,14 @@ namespace ShpilSvoih
 
         public static void Body(Graphics g, RectangleF area, double seconds, int character, bool flying)
         {
-            float breath = Wave(seconds, 1.65 + character * .07, character * 1.7);
             float sway = Wave(seconds, .85, character * 2.1);
             float tremor = (character == 7 ? .0022f : .00035f) *
                 Wave(seconds, 17 + character * .3, .7) * Wave(seconds, 2.3, character);
             // Feet and the bike base remain on their baseline; no chopped sprite seams.
             float lift = flying ? 3.5f * Wave(seconds, 1.25, .4) : 0;
-            g.TranslateTransform(area.X + area.Width / 2, area.Bottom + lift);
-            using (var shear = new Matrix(1, 0, .003f * sway + tremor, 1 + .006f * breath, 0, 0))
-                g.MultiplyTransform(shear);
+            // Keep the sprite axis-aligned. Tiny per-row shear with point sampling
+            // made contours ripple; filtered affine draws were also very costly.
+            g.TranslateTransform(area.X + area.Width / 2 + sway * 1.25f + tremor * area.Width, area.Bottom + lift);
             g.TranslateTransform(-area.X - area.Width / 2, -area.Bottom);
         }
 

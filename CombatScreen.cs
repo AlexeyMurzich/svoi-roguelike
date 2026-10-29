@@ -14,7 +14,7 @@ namespace ShpilSvoih
         readonly AttackTimeline attackTimeline = new AttackTimeline();
         PoseAtlas ratPoses, shutenPoses;
         HedgehogAtlas hedgehogPoses, rabidHedgehogPoses;
-        Image dogBody, dogHeads;
+        DogAtlas dogPoses;
         readonly DeathVisuals deathVisuals = new DeathVisuals();
         int actingEnemyIndex = -1, attackTarget;
         float guardVisualTime, guardAtActionStart;
@@ -24,7 +24,7 @@ namespace ShpilSvoih
         {
             if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id);
             EnemyKind enemy;
-            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : OrdinaryEncounters.Select(mapRun.Map.Seed, id, OrdinaryEncounters.Completed(mapRun));
+            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : OrdinaryEncounters.Select(mapRun.Map.Seed, id, OrdinaryEncounters.Completed(mapRun), mapRun.Map.Nodes[id].District);
         }
         readonly HowlSound howlSound = new HowlSound();
         string combatNotice = "";
@@ -48,14 +48,13 @@ namespace ShpilSvoih
         {
             for (int i = 0; i < 4; i++)
                 cardSheets[i] = assetStore.Get("cards/" + filenames[i], "cards." + filenames[i]);
-            dogBody = assetStore.Get("enemies/dog-body.png", "enemies.dog-body.png");
-            dogHeads = assetStore.Get("enemies/stray-dogs.png", "enemies.stray-dogs.png");
+            dogPoses = new DogAtlas(assetStore.Get("enemies/dogs-complete.png", "enemies.dogs-complete.png"), actorArtCache);
             ratPoses = new PoseAtlas(assetStore.Get("enemies/rat-bite.png", "enemies.rat-bite.png"), 3, 1, actorArtCache);
             shutenPoses = new PoseAtlas(assetStore.Get("shuten-combat.png", "shuten-combat.png"), 2, 2, actorArtCache);
             hedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-curl.png", "enemies.hedgehog-curl.png"), false, actorArtCache);
             rabidHedgehogPoses = new HedgehogAtlas(assetStore.Get("enemies/hedgehog-bite.png", "enemies.hedgehog-bite.png"), true, actorArtCache);
             eliteCombatBackground = assetStore.Get("combat-mimicrator.png", "combat-mimicrator.png");
-            ordinaryCombatBackground = assetStore.Get("combat-social.png", "combat-social.png");
+            ordinaryCombatBackground = assetStore.Get("combat-social-stage.png", "combat-social-stage.png");
             routeButtonArt = assetStore.Get("route-button.png", "route-button.png");
             combatIcons = assetStore.Get("combat-icons.png", "combat-icons.png");
             InitializeMotionTimer();
@@ -64,7 +63,7 @@ namespace ShpilSvoih
         void ResetCombat()
         {
             tohaSound.Stop();
-            ClearBabaiBackdrop();
+            ClearDistrictBackdrop();
             ClearTohaBackdrop();
             tohaVisualDark = false;
             ClearMimicratorBackdrop();

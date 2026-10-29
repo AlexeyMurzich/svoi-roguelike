@@ -73,6 +73,11 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Babai: complete silhouette, no giant arm and cached shade", UiTests.TestBabaiSilhouette);
+            Run("Babai: low lasso, stable face scale and one contact", UiTests.TestLowBabaiLasso);
+            Run("District: registered planes and source proportions", UiTests.TestDistrictPlanes);
+            Run("District: six sizes, all heroes and scene transitions", UiTests.TestDistrictBattles);
+            Run("Babai: Estate scene routing and elite preservation", UiTests.TestEstateSceneRouting);
             Run("Babai: grounded bed, separate planes and cache lifetime", UiTests.TestBabaiGrounding);
             Run("Babai: lasso, block, capture and victory", BabaiTests.Rules);
             Run("Babai: hard pool and legal route previews", BabaiTests.Pools);
@@ -98,6 +103,8 @@ namespace ShpilSvoih
             Run("Fade: native alpha, clipping and handle cleanup", UiTests.TestOpaqueFade);
             Run("Repaint: partial frames are pixel-identical", UiTests.TestPartialRepaint);
             Run("Repaint: mouse movement only redraws visual changes", UiTests.TestHoverInvalidation);
+            Run("Presentation: real HWND, GPU pixels, resize, focus and fallback", UiTests.TestNativePresentation);
+            Run("Presentation: stable silhouettes, checkout cache and partial map", UiTests.TestStableSampling);
             Run("Performance: bounded rasterization and native pointer input", UiTests.TestRenderBudget);
             Run("Performance: alpha and graphics state after fast drawing", UiTests.TestFastCompositing);
             Run("Performance: bounded image cache and LRU", UiTests.TestScaledCacheLimits);
@@ -105,7 +112,7 @@ namespace ShpilSvoih
             Run("Illya: free automatic cards and confusion costs", IllyaTests.Rules);
             Run("Illya: live costs and animated payment", UiTests.TestIllyaCosts);
             Run("Hero combat minimum: timing, pause and poses", UiTests.TestHeroCombatMinimum);
-            Run("Audit: neck attachment", UiTests.TestNeckAttachment);
+            Run("Dogs: complete connected silhouettes and registration", UiTests.TestNeckAttachment);
             Run("Audit: sprite cache and cadence", UiTests.TestAnimationCachePolicy);
             Run("Living: lifecycle and fixed paws", UiTests.TestLivingScenes);
             Run("Living: visual gallery", UiTests.TestLivingGallery);
@@ -298,7 +305,7 @@ namespace ShpilSvoih
             Run("Hands of one to six cards preserve controls and aspect ratio", ReviewTests.HandLayout);
             Run("Reviewed input, capture, focus, overlay and debt-death interactions", UiTests.TestReviewedInteractions);
             Run("Investigation reveals future enemy identity on map hover", UiTests.TestInvestigationPreview);
-            Run("Dog legs preserve color and opacity through bite and howl frames", UiTests.TestDogLegStability);
+            Run("Dogs: whole-body opacity and planted paws through bite/howl", UiTests.TestDogLegStability);
             Run("Repeated battle/map/pause/resize transitions release resources", UiTests.TestSceneResourceStress);
             Run("Death snapshots lifecycle and resource ownership", DeathTests.Lifecycle);
             Run("Separate dog deaths, all hero deaths, rat death and credit-card guard", UiTests.TestDeathsAndGuard);

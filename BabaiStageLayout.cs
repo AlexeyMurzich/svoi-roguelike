@@ -7,7 +7,6 @@ namespace ShpilSvoih
 {
     public static class BabaiStageLayout
     {
-        public static float WallBase(float floor) { return floor - 180; }
         // Registration is measured once from the original alpha, not the PNG canvas.
         public static RectangleF FootCrop(Bitmap image)
         {

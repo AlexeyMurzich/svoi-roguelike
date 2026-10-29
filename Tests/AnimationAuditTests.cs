@@ -14,40 +14,50 @@ namespace ShpilSvoih
             using (var game = new Game())
             {
                 game.CreateControl(); Call(game, "StartTestDogs");
+                TestSuite.Check(typeof(Game).GetMethod("DrawDogHead", PrivateInstance) == null, "no separate dog-head drawing path remains");
+                var names = typeof(Game).Assembly.GetManifestResourceNames();
+                TestSuite.Check(Array.IndexOf(names, "enemies.dog-body.png") < 0 && Array.IndexOf(names, "enemies.stray-dogs.png") < 0, "legacy separated body/head atlases are not shipped");
+                var atlas = Read<object>(game, "dogPoses");
+                TestSuite.Check((int)atlas.GetType().GetProperty("FrameCount").GetValue(atlas, null) == 6, "two dogs each have three full-body poses");
                 foreach (float scale in new[] { .6f, 1f, 1.8f })
-                {
-                    var area = new RectangleF(0, 0, 270 * scale, 245 * scale);
-                    var body = (RectangleF)typeof(Game).GetMethod("DogBodyArea", PrivateInstance).Invoke(game, new object[] { area });
-                    using (var baseImage = new Bitmap((int)area.Width + 1, (int)area.Height + 1))
-                    using (var headImage = new Bitmap(baseImage.Width, baseImage.Height))
-                    using (var bg = Graphics.FromImage(baseImage))
-                    using (var hg = Graphics.FromImage(headImage))
+                    for (int dog = 0; dog < 2; dog++)
                     {
-                        bg.DrawImage(Read<Image>(game, "dogBody"), body);
-                        foreach (bool warm in new[] { false, true })
-                            for (int frame = 0; frame < 3; frame++)
-                                for (int phase = 0; phase < 6; phase++)
-                                {
-                                    Write(game, "livingSeconds", phase * .55d);
-                                    hg.Clear(Color.Transparent);
-                                    Call(game, "DrawDogHead", hg, body, frame, 1f, warm);
-                                    int overlap = 0;
-                                    for (int y = 0; y < headImage.Height; y += 2)
-                                        for (int x = 0; x < headImage.Width; x += 2)
-                                            if (baseImage.GetPixel(x, y).A > 220 && headImage.GetPixel(x, y).A > 220) overlap++;
-                                    if (overlap <= 20 * scale * scale)
-                                    {
-                                        using (var diagnostic = new Bitmap(baseImage))
-                                        using (var dg = Graphics.FromImage(diagnostic))
-                                        { dg.DrawImageUnscaled(headImage, 0, 0); diagnostic.Save(Path.Combine(TestSuite.OutputDirectory, "neck-gap.png")); }
-                                    }
-                                    TestSuite.Check(overlap > 20 * scale * scale, "opaque neck overlap at pose " + frame + ", scale " + scale + ", phase " + phase + ": " + overlap);
-                                }
-                        hg.Clear(Color.Transparent);
-                        Call(game, "DrawDogHeadBlend", hg, body, 0, 2, .5f, false);
-                        string transition = Digest(headImage);
-                        hg.Clear(Color.Transparent); Call(game, "DrawDogHead", hg, body, 2, 1f, false);
-                        TestSuite.Check(Digest(headImage) == transition, "transition has one opaque face, never two fading heads");
+                        float reference = 0;
+                        for (int pose = 0; pose < 3; pose++)
+                        {
+                            var slot = new RectangleF(30 * scale, 0, 270 * scale, 245 * scale);
+                            var source = (RectangleF)atlas.GetType().GetMethod("Source").Invoke(atlas, new object[] { dog, pose });
+                            var target = (RectangleF)atlas.GetType().GetMethod("Target").Invoke(atlas, new object[] { dog, pose, slot });
+                            float ratio = target.Width / source.Width;
+                            if (pose == 0) reference = ratio;
+                            TestSuite.Check(Math.Abs(ratio - reference) < .00001f && Math.Abs(target.Height / source.Height - ratio) < .00001f, "all complete poses keep one anatomical scale");
+                            TestSuite.Check(Math.Abs(target.Bottom - slot.Bottom) < .001f, "all full-body frames are grounded");
+                            using (var layer = new Bitmap((int)(340 * scale), (int)(250 * scale), PixelFormat.Format32bppPArgb))
+                            using (var graphics = Graphics.FromImage(layer))
+                            {
+                                atlas.GetType().GetMethod("Draw").Invoke(atlas, new object[] { graphics, dog, pose, slot });
+                                var support = DogSilhouette(layer);
+                                TestSuite.Check(support.Item1 > 1500 * scale * scale && support.Item2 > .97f, "head, neck, torso and legs belong to one connected opaque creature");
+                                TestSuite.Check(Math.Abs(support.Item3 - slot.Bottom) <= 3, "actual paw alpha sits on the floor");
+                            }
+                        }
+                    }
+                var timeline = Read<AttackTimeline>(game, "attackTimeline");
+                for (int dog = 0; dog < 2; dog++) for (int pose = 0; pose < 3; pose++)
+                {
+                    timeline.Cancel(); Write(game, "actingEnemyIndex", dog);
+                    if (pose > 0)
+                    {
+                        timeline.Start(pose == 1 ? AttackAnimation.DogBite : AttackAnimation.DogHowl, () => { });
+                        timeline.Advance(.3f / AttackTimeline.Speed);
+                    }
+                    var area = (RectangleF)typeof(Game).GetMethod("EnemyArea", PrivateInstance).Invoke(game, new object[] { dog });
+                    var aim = (PointF)typeof(Game).GetMethod("DogTargetPoint", PrivateInstance).Invoke(game, new object[] { dog });
+                    using (var layer = new Bitmap(1280, 840, PixelFormat.Format32bppPArgb))
+                    using (var graphics = Graphics.FromImage(layer))
+                    {
+                        Call(game, "DrawDogPoseFor", graphics, area, dog);
+                        TestSuite.Check(layer.GetPixel((int)aim.X, (int)aim.Y).A > 128, "projectile aim is on the actual dog, not above it");
                     }
                 }
             }

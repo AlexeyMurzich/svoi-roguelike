@@ -25,6 +25,18 @@ namespace ShpilSvoih
                 graphics.DrawImage(image, new[] { new PointF(target.Left, target.Top), new PointF(target.Right, target.Top), new PointF(target.Left, target.Bottom) }, source, GraphicsUnit.Pixel, attributes);
             }
         }
+        // Applied only while preparing the small cached sprite; alpha/identity stay intact.
+        public static void Shaded(Graphics graphics, Image image, RectangleF target, RectangleF source, float opacity)
+        {
+            using (var attributes = new ImageAttributes())
+            {
+                var color = new ColorMatrix();
+                color.Matrix00 = .78f; color.Matrix11 = .75f; color.Matrix22 = .71f;
+                color.Matrix33 = opacity;
+                attributes.SetColorMatrix(color); attributes.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
+                graphics.DrawImage(image, new[] { new PointF(target.Left, target.Top), new PointF(target.Right, target.Top), new PointF(target.Left, target.Bottom) }, source, GraphicsUnit.Pixel, attributes);
+            }
+        }
         public static void FitBottom(Graphics graphics, Image image, RectangleF area, float opacity)
         {
             float scale = System.Math.Min(area.Width / image.Width, area.Height / image.Height);

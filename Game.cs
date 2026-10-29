@@ -369,7 +369,8 @@ namespace ShpilSvoih
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            PaintFrame(e.Graphics);
+            if (nativePaint) PaintScene(e.Graphics);
+            else PaintFrame(e.Graphics);
         }
 
         void PaintScene(Graphics g)
@@ -429,6 +430,7 @@ namespace ShpilSvoih
             if (disposing && !resourcesDisposed)
             {
                 resourcesDisposed = true;
+                ReleasePresenter();
                 ClearRenderSurface();
                 music.Dispose();
                 tohaSound.Dispose();

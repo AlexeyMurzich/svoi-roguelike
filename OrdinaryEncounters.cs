@@ -7,10 +7,10 @@ namespace ShpilSvoih
     // Room type stays Fight. Pool progression counts completed ordinary fights, never floors/elites.
     public static class OrdinaryEncounters
     {
-        public static EnemyKind Select(int seed, int node, int completedFights)
+        public static EnemyKind Select(int seed, int node, int completedFights, int district)
         {
             if (completedFights < 0) throw new ArgumentOutOfRangeException("completedFights");
-            if (completedFights >= 3)
+            if (district == 2 && completedFights >= 3)
             {
                 unchecked
                 {
@@ -45,7 +45,7 @@ namespace ShpilSvoih
             }
             HashSet<int> options;
             if (!counts.TryGetValue(nodeId, out options) || options.Count == 0) return "Путь недоступен";
-            var names = options.Select(count => EnemyCatalog.Name(Select(run.Map.Seed, nodeId, Math.Max(0, completed + count - 1)))).Distinct().OrderBy(s => s).ToArray();
+            var names = options.Select(count => EnemyCatalog.Name(Select(run.Map.Seed, nodeId, Math.Max(0, completed + count - 1), run.Map.Nodes[nodeId].District))).Distinct().OrderBy(s => s).ToArray();
             return string.Join(" / ", names);
         }
     }

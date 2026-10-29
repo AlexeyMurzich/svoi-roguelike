@@ -49,10 +49,9 @@ namespace ShpilSvoih
         {
             float time = attackTimeline.Time;
             TextAt(graphics, "ХОД " + combat.Turn, CanvasWidth / 2 - 42, 100, 14, gold, 140, true);
-            DrawBabaiHeroContact(graphics);
+            DrawDistrictHeroContact(graphics);
             if (!deathVisuals.Draw(graphics, -1, HeroDeathArea, null)) PaintCombatHero(graphics);
             DrawStunBirds(graphics);
-            DrawBabaiBed(graphics);
             DrawCombatHealth(graphics, heroX - 125, floor + 8, 250, currentHero.Health, currentHero.MaxHealth);
             DrawBlockBadge(graphics, heroX + 129, floor + 8, combat.Block);
             DrawHeroStatuses(graphics);
@@ -62,11 +61,14 @@ namespace ShpilSvoih
                 var enemy = combat.Enemies[index];
                 float center = EnemyCenter(index);
                 if (!deathVisuals.Draw(graphics, enemy.Id, EnemyArea(index), null)) PaintCombatEnemy(graphics, index);
+                if (enemy.Kind == EnemyKind.Babai) DrawBabaiBed(graphics);
                 if (!enemy.IsAlive) continue;
                 int width = combat.Enemies.Count == 1 ? 250 : 180;
                 bool selectedTarget = combat.SelectedTarget == index;
-                TextAt(graphics, enemy.Name, center - width / 2, floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 414 : 315), combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
-                DrawEnemyIntent(graphics, enemy, center, floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
+                float nameY = floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 414 : 315);
+                if (enemy.Kind == EnemyKind.StrayDogs) nameY = Math.Max(150, dogPoses.Target(index == 1 ? 1 : 0, 2, EnemyArea(index)).Top - 90);
+                TextAt(graphics, enemy.Name, center - width / 2, nameY, combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
+                DrawEnemyIntent(graphics, enemy, center, enemy.Kind == EnemyKind.StrayDogs ? nameY + 34 : floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
                 DrawBlockBadge(graphics, center + width / 2 + 4, floor + 8, enemy.Block);
                 if (enemy.Thorns > 0) DrawCombatHint(graphics, new CombatHint(6, enemy.Thorns.ToString(), "Шипы", "За каждую атакующую карту по этому врагу: " + enemy.Thorns + " ответного урона, включая добивающий удар. Блок поглощает этот урон."), new RectangleF(center - 14, floor + 30, 28, 28), true);
@@ -74,7 +76,7 @@ namespace ShpilSvoih
                 {
                     Stroke(graphics, center - width / 2 - 3, floor + 5, width + 6, 27, gold);
                     using (var targetBrush = new SolidBrush(gold))
-                        graphics.FillPolygon(targetBrush, new[] { new PointF(center - 8, floor - 336), new PointF(center + 8, floor - 336), new PointF(center, floor - 326) });
+                        graphics.FillPolygon(targetBrush, new[] { new PointF(center - 8, nameY - 21), new PointF(center + 8, nameY - 21), new PointF(center, nameY - 11) });
                 }
                 if (!CombatBusy && combat.Phase == CombatPhase.Player)
                     actions.Add(Tuple.Create(EnemyTargetArea(index), (Action)(() => SelectCombatTarget(index))));

@@ -47,10 +47,12 @@ namespace ShpilSvoih
                 for (int node = 1; node < 40; node++)
                 {
                     for (int fights = 0; fights < 3; fights++)
-                        TestSuite.Check(OrdinaryEncounters.Select(seed, node, fights) != EnemyKind.Babai, "first three fights exclude hard-only enemy");
-                    var kind = OrdinaryEncounters.Select(seed, node, 3);
+                        TestSuite.Check(OrdinaryEncounters.Select(seed, node, fights, 2) != EnemyKind.Babai, "first three fights exclude hard-only enemy");
+                    var kind = OrdinaryEncounters.Select(seed, node, 3, 2);
                     found |= kind == EnemyKind.Babai;
-                    TestSuite.Check(kind == OrdinaryEncounters.Select(seed, node, 3), "hard pool is deterministic");
+                    for (int district = 0; district < 2; district++)
+                        TestSuite.Check(OrdinaryEncounters.Select(seed, node, 100, district) != EnemyKind.Babai, "Babai never appears outside the Estate even late in a run");
+                    TestSuite.Check(kind == OrdinaryEncounters.Select(seed, node, 3, 2), "hard pool is deterministic");
                     TestSuite.Check(EnemyCatalog.ForEliteNode(seed, node) != EnemyKind.Babai, "Babai never replaces an elite");
                 }
             TestSuite.Check(found, "Babai appears in hard pool");
@@ -67,7 +69,7 @@ namespace ShpilSvoih
                     TestSuite.Check(OrdinaryEncounters.Completed(run) == completed, "elite/event floors do not count as ordinary fights");
                     if (node.Kind == RoomKind.Fight)
                     {
-                        var actual = OrdinaryEncounters.Select(seed, next, completed);
+                        var actual = OrdinaryEncounters.Select(seed, next, completed, node.District);
                         TestSuite.Check(preview.Split(new[] { " / " }, StringSplitOptions.None).Contains(EnemyCatalog.Name(actual)), "route reveal contains actual next encounter");
                         completed++;
                     }
@@ -83,6 +85,13 @@ namespace ShpilSvoih
                 int frames = 0;
                 while (timeline.IsRunning) { timeline.Advance(1f / hz); frames++; TestSuite.Check(impacts <= 1, "one callback regardless of frame rate"); }
                 TestSuite.Check(impacts == 1 && Math.Abs(frames / (float)hz - BabaiMotion.Duration / AttackTimeline.Speed) < 1.01f / hz, "consistent lasso duration");
+            }
+            TestSuite.Check(BabaiMotion.RopeExtension(0) == 0 && BabaiMotion.RopeExtension(BabaiMotion.Hit) == 1 && BabaiMotion.RopeExtension(BabaiMotion.Duration) == 0, "lasso reaches at impact and retracts completely");
+            float extension = 0;
+            for (int sample = 0; sample <= 100; sample++)
+            {
+                float next = BabaiMotion.RopeExtension(BabaiMotion.Hit * sample / 100);
+                TestSuite.Check(next >= extension && next <= 1, "rope extension is continuous and monotonic before impact"); extension = next;
             }
             float previous = 1;
             for (int frame = 0; frame <= 100; frame++)

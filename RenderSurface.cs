@@ -12,7 +12,7 @@ namespace ShpilSvoih
         Bitmap renderSurface;
         float renderDensity = 1;
         Viewport RenderViewport { get { return DrawingViewport.AtDensity(renderDensity); } }
-        Size RenderPixels { get { return renderSurface != null && renderDensity < 1 ? renderSurface.Size : ClientSize; } }
+        Size RenderPixels { get { return !framePixels.IsEmpty ? framePixels : renderSurface != null && renderDensity < 1 ? renderSurface.Size : ClientSize; } }
 
         void ClearRenderSurface()
         {

@@ -1,4 +1,19 @@
-﻿PASS Babai: grounded bed, separate planes and cache lifetime
+Final production EXE SHA256: 442DFE28DE4EE8C5D8BBA658312FFF9A4AE21D5AB92E0CE739F8E41F71ABC950
+Full run: 94 passed, one random renderer-fixture failure. The fixture was corrected and explicitly exercised without optional fights; targeted recheck: 1 passed / 0 failed / 115 assertions. Production EXE unchanged. All 95 suites checked; no unresolved failures. This is a composite verification, not one 95/0 full run.
+
+FULL RUN
+
+﻿PASS Babai: complete silhouette, no giant arm and cached shade
+PASS Babai: low lasso, stable face scale and one contact
+PASS District: registered planes and source proportions
+FAIL District: six sizes, all heroes and scene transitions
+System.InvalidOperationException: Последовательность не содержит соответствующий элемент
+   в System.Linq.Enumerable.First[TSource](IEnumerable`1 source, Func`2 predicate)
+   в ShpilSvoih.UiTests.SetSceneDistrict(Game game, Int32 district)
+   в ShpilSvoih.UiTests.TestDistrictBattles()
+   в ShpilSvoih.TestSuite.Run(String name, Action test)
+PASS Babai: Estate scene routing and elite preservation
+PASS Babai: grounded bed, separate planes and cache lifetime
 PASS Babai: lasso, block, capture and victory
 PASS Babai: hard pool and legal route previews
 PASS Babai: pure motion and frame-rate independence
@@ -24,6 +39,8 @@ INFO fade GDI handles after warmup: 18 -> 18
 PASS Fade: native alpha, clipping and handle cleanup
 PASS Repaint: partial frames are pixel-identical
 PASS Repaint: mouse movement only redraws visual changes
+PASS Presentation: real HWND, GPU pixels, resize, focus and fallback
+PASS Presentation: stable silhouettes, checkout cache and partial map
 PASS Performance: bounded rasterization and native pointer input
 PASS Performance: alpha and graphics state after fast drawing
 PASS Performance: bounded image cache and LRU
@@ -31,7 +48,7 @@ PASS Performance: interface reuse and cleanup
 PASS Illya: free automatic cards and confusion costs
 PASS Illya: live costs and animated payment
 PASS Hero combat minimum: timing, pause and poses
-PASS Audit: neck attachment
+PASS Dogs: complete connected silhouettes and registration
 PASS Audit: sprite cache and cadence
 PASS Living: lifecycle and fixed paws
 PASS Living: visual gallery
@@ -49,7 +66,7 @@ PASS Exchange callback is atomic and cannot re-enter
 PASS Uniform viewport, click mapping and image crop
 PASS Image ownership, fallback and file unlocking
 PASS UI all heroes and relics at six window sizes
-INFO After 72 resizes: GDI handles 19 -> 19; decoded images 37; cached fonts 9.
+INFO After 72 resizes: GDI handles 53 -> 53; decoded images 36; cached fonts 9.
 PASS Resize/repaint determinism and GDI resources
 PASS Procedural act constraints, determinism and connectivity: 2000 seeds
 PASS Map traversal rejects skips and repeated actions
@@ -62,7 +79,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 21,2 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 18,9 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -71,8 +88,8 @@ PASS Debt atomicity, fractional charges, card contracts and configured draw
 PASS Hands of one to six cards preserve controls and aspect ratio
 PASS Reviewed input, capture, focus, overlay and debt-death interactions
 PASS Investigation reveals future enemy identity on map hover
-PASS Dog legs preserve color and opacity through bite and howl frames
-INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 37; font cache 12.
+PASS Dogs: whole-body opacity and planted paws through bite/howl
+INFO 18 battle/map/pause/resize cycles: GDI handles 53 -> 53; source images 36; font cache 12.
 PASS Repeated battle/map/pause/resize transitions release resources
 PASS Death snapshots lifecycle and resource ownership
 PASS Separate dog deaths, all hero deaths, rat death and credit-card guard
@@ -84,12 +101,19 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 18,54 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 15,30 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 88 passed, 0 failed. Assertions: 1179216.
+Suites: 94 passed, 1 failed. Assertions: 1195475.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+
+CORRECTED FIXTURE RECHECK
+
+﻿PASS District: six sizes, all heroes and scene transitions
+Suites: 1 passed, 0 failed. Assertions: 115.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

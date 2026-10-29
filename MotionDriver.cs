@@ -14,13 +14,13 @@ namespace ShpilSvoih
 
         bool NeedsMotion
         {
-            get { return CombatBusy || CombatAmbientMoving || LivingScene || MapMoving ||
+            get { return presentationPending || CombatBusy || CombatAmbientMoving || LivingScene || MapMoving ||
                 (mimicratorPreview && !mimicratorPaused); }
         }
 
         int MotionInterval
         {
-            get { return CombatBusy || MapMoving ? ActiveFrameInterval : IdleFrameInterval; }
+            get { return presentationPending || CombatBusy || MapMoving ? ActiveFrameInterval : IdleFrameInterval; }
         }
 
         void InitializeMotionTimer()
@@ -36,7 +36,7 @@ namespace ShpilSvoih
 
         void WakeMotion()
         {
-            if (combatTimer == null || GameplayPaused)
+            if (combatTimer == null || (GameplayPaused && !presentationPending))
                 return;
             if (!combatTimer.Enabled)
                 ResetMotionClock();
@@ -49,11 +49,12 @@ namespace ShpilSvoih
             long now = Stopwatch.GetTimestamp();
             float elapsed = (float)((now - lastMotionTick) / (double)Stopwatch.Frequency);
             lastMotionTick = now;
+            if (presentationPending && ContainsFocus) InvalidateMotionFrame();
             if (GameplayPaused || !ContainsFocus)
             {
                 tohaSound.SetPaused(true);
                 howlSound.Stop();
-                combatTimer.Stop();
+                if (!ContainsFocus || !presentationPending) combatTimer.Stop();
                 return;
             }
 

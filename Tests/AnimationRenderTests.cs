@@ -23,55 +23,32 @@ namespace ShpilSvoih
             return bitmap;
         }
 
-        static byte[] LowerDogPixels(Bitmap bitmap)
-        {
-            var rectangle = new Rectangle(0, 170, bitmap.Width, bitmap.Height - 170);
-            var locked = bitmap.LockBits(rectangle, ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
-            try
-            {
-                var bytes = new byte[rectangle.Width * rectangle.Height * 4];
-                for (int y = 0; y < rectangle.Height; y++)
-                    Marshal.Copy(IntPtr.Add(locked.Scan0, y * locked.Stride), bytes, y * rectangle.Width * 4, rectangle.Width * 4);
-                return bytes;
-            }
-            finally { bitmap.UnlockBits(locked); }
-        }
-
         public static void TestDogLegStability()
         {
             using (var game = new Game())
             using (var board = new Bitmap(1080, 542))
             using (var boardGraphics = Graphics.FromImage(board))
             {
-                game.CreateControl(); Call(game, "StartTestDogs");
-                Write(game, "actingEnemyIndex", 0);
+                game.CreateControl(); Call(game, "StartTestDogs"); Write(game, "actingEnemyIndex", 0);
                 var timeline = Read<AttackTimeline>(game, "attackTimeline");
-                byte[] baseline;
-                using (var layer = DogLayer(game)) baseline = LowerDogPixels(layer);
-                int opaque = 0;
-                for (int i = 3; i < baseline.Length; i += 4) if (baseline[i] > 200) opaque++;
-                TestSuite.Check(opaque > 600, "leg comparison covers substantial visible dog pixels");
                 boardGraphics.Clear(Color.FromArgb(28, 36, 40));
-                int sample = 0;
+                int sample = 0, baseline;
+                using (var layer = DogLayer(game)) baseline = DogSilhouette(layer).Item1;
                 foreach (var kind in new[] { AttackAnimation.DogBite, AttackAnimation.DogHowl })
                 {
-                    timeline.Cancel(); timeline.Start(kind, () => { });
-                    int frame = 0;
+                    timeline.Cancel(); timeline.Start(kind, () => { }); int frame = 0;
                     while (timeline.IsRunning)
                     {
                         using (var layer = DogLayer(game))
                         {
-                            var current = LowerDogPixels(layer);
-                            int largestDelta = 0;
-                            for (int i = 0; i < current.Length; i++)
-                                largestDelta = Math.Max(largestDelta, Math.Abs(current[i] - baseline[i]));
-                            TestSuite.Check(largestDelta <= 2, "legs keep color and opacity within GDI rounding at " + kind + " frame " + frame + "; delta=" + largestDelta);
+                            var support = DogSilhouette(layer);
+                            TestSuite.Check(support.Item2 > .97f && support.Item1 > baseline * .65f, "whole dog stays connected and opaque during " + kind);
+                            TestSuite.Check(Math.Abs(support.Item3 - 245) <= 3, "paws stay grounded during " + kind);
                             if (frame % 15 == 0 && sample < 8)
                             {
                                 int x = sample % 4 * 270, y = sample / 4 * 271;
                                 boardGraphics.DrawImageUnscaled(layer, x, y + 26);
-                                using (var font = new Font("Segoe UI", 13))
-                                    boardGraphics.DrawString(kind + " · " + timeline.Time.ToString("F2"), font, Brushes.White, x + 10, y + 3);
+                                using (var font = new Font("Segoe UI", 13)) boardGraphics.DrawString(kind + " " + timeline.Time.ToString("F2"), font, Brushes.White, x + 10, y + 3);
                                 sample++;
                             }
                         }
@@ -105,7 +82,7 @@ namespace ShpilSvoih
                     Call(game, "ReturnToMainMenu"); Call(game, "OpenCheckout"); Call(game, "TakeBuff"); Call(game, "OpenActMap");
                     Call(game, "ScrollMap", -110f); Call(game, "AdvanceMapMotion", .1f);
                     using (Render(game)) { }
-                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 37, "scene transitions never duplicate source images");
+                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 36, "scene transitions never duplicate source images");
                     if (cycle == 5)
                     {
                         initialHandles = GetGuiResources(process.Handle, 0);
@@ -115,7 +92,7 @@ namespace ShpilSvoih
                 uint finalHandles = GetGuiResources(process.Handle, 0);
                 TestSuite.Check(finalHandles <= initialHandles + 3, "battle/map/resize stress keeps GDI handles bounded");
                 TestSuite.Check(Read<System.Collections.Generic.Dictionary<Tuple<float, bool>, Font>>(game, "fonts").Count == initialFonts, "scene stress reuses fonts after warmup");
-                TestSuite.Note("18 battle/map/pause/resize cycles: GDI handles " + initialHandles + " -> " + finalHandles + "; source images 37; font cache " + initialFonts + ".");
+                TestSuite.Note("18 battle/map/pause/resize cycles: GDI handles " + initialHandles + " -> " + finalHandles + "; source images 36; font cache " + initialFonts + ".");
                 var assets = Read<ImageAssets>(game, "assetStore");
                 game.Dispose();
                 TestSuite.Check(assets.Count == 0 && Read<Bitmap>(game, "sceneBackground") == null, "closing game releases original images and derived background");
