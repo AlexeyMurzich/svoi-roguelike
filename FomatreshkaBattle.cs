@@ -34,7 +34,8 @@ namespace ShpilSvoih
             combat.PrepareNextEnemyAction();
             var kind = actor.Kind == EnemyKind.Fan ? AttackAnimation.FanStrike : actor.WillSummon ?
                 AttackAnimation.FomatreshkaSummon : actor.WillDrink ? AttackAnimation.FomatreshkaDrink : AttackAnimation.FomatreshkaShot;
-            combatNotice = actor.Kind == EnemyKind.Fan ? "Фанатка атакует" : actor.Intent;
+            int shot = combat.EnemyImpactsResolved + 1;
+            combatNotice = kind == AttackAnimation.FomatreshkaShot ? "Императрица · выстрел " + shot + " / " + FomatreshkaRules.ShotCount : actor.Kind == EnemyKind.Fan ? "Фанатка атакует" : actor.Intent;
             StartCombatAnimation(kind, () =>
             {
                 int block = combat.Block;
@@ -44,7 +45,8 @@ namespace ShpilSvoih
                 SyncDeaths();
                 combatNotice = combat.Phase == CombatPhase.Defeat ? "Поражение" : kind == AttackAnimation.FomatreshkaSummon ?
                     "На помощь прибежали три фанатки" : kind == AttackAnimation.FomatreshkaDrink ?
-                    "Бодрость +6 · следующий выстрел усилен" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
+                    "Бодрость +6 · следующая очередь усилена" : kind == AttackAnimation.FomatreshkaShot ?
+                    "Императрица · " + shot + " / " + FomatreshkaRules.ShotCount + " · " + combat.LastDamage + " урона" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
             });
         }
 

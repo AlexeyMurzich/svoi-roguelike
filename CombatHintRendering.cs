@@ -34,7 +34,8 @@ namespace ShpilSvoih
 
         void DrawCombatHintIcon(Graphics g, int icon, RectangleF area)
         {
-            if (icon == 20) { LoadBabaiArt(); FitImage(g, babaiBed, area); }
+            if (icon == 21) VigorIcon.Draw(g, area);
+            else if (icon == 20) { LoadBabaiArt(); FitImage(g, babaiBed, area); }
             else if (icon == 19)
             {
                 LoadTohaArt();

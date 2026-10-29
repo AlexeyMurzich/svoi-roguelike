@@ -23,7 +23,7 @@ namespace ShpilSvoih
         public bool WillHowl { get { return Kind == EnemyKind.StrayDogs && CyclePosition == 2; } }
         public MimicratorForm Form { get { return (MimicratorForm)CyclePosition; } }
         public MimicratorForm NextForm { get { return ActionsTaken == 0 ? MimicratorForm.Fairy : (MimicratorForm)((CyclePosition + 1) % 4); } }
-        public int HitCount { get { return Kind == EnemyKind.Mimicrator && Form == MimicratorForm.Mussel ? 2 : 1; } }
+        public int HitCount { get { return Kind == EnemyKind.Fomatreshka && !WillSummon && !WillDrink ? FomatreshkaRules.ShotCount : Kind == EnemyKind.Mimicrator && Form == MimicratorForm.Mussel ? 2 : 1; } }
         public bool WillStun { get { return Kind == EnemyKind.Mimicrator && Form == MimicratorForm.Beacon; } }
         public bool WillDefend { get { return Kind == EnemyKind.Mimicrator && Form == MimicratorForm.Mussel; } }
         public int AttackDamage
@@ -45,7 +45,7 @@ namespace ShpilSvoih
         {
             get
             {
-                if (Kind == EnemyKind.Fomatreshka) return WillSummon ? "Призыв · 3 фанатки" : WillDrink ? "Gorilla · Бодрость +" + FomatreshkaRules.Vigor : "Императрица · " + AttackDamage;
+                if (Kind == EnemyKind.Fomatreshka) return WillSummon ? "Призыв · 3 фанатки" : WillDrink ? "Gorilla · Бодрость +" + FomatreshkaRules.Vigor : "Императрица · " + AttackDamage + " × " + HitCount;
                 if (Kind == EnemyKind.Fan) return "Атака · " + AttackDamage;
                 if (Kind == EnemyKind.Babai) return "Лассо · " + BabaiRules.Damage + " / Притягивание · 1";
                 if (Kind == EnemyKind.Toha) return (IsDarkToha ? "Тёмный наезд · " : "Наезд · ") + AttackDamage;

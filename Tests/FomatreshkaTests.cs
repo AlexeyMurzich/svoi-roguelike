@@ -35,7 +35,7 @@ namespace ShpilSvoih
                 bool drink = turn % 2 == 0;
                 TestSuite.Check(leader.WillDrink == drink && leader.Vigor == (drink ? 0 : 6), "alternating drink/shot intent and stored vigor");
                 fight.ResolveNextEnemyAction();
-                TestSuite.Check(fight.Phase == CombatPhase.Player && fight.Turn == turn + 1 && fight.Hero.Health == before - 9 - (drink ? 0 : 14), "one full phase deals exact damage");
+                TestSuite.Check(fight.Phase == CombatPhase.Player && fight.Turn == turn + 1 && fight.Hero.Health == before - 9 - (drink ? 0 : 24), "one full phase deals exact damage");
                 TestSuite.Check(leader.Vigor == (drink ? 6 : 0), "vigor is gained by drink and consumed once by shot");
             }
             fight = Fight(); fight.TryPlay(0);

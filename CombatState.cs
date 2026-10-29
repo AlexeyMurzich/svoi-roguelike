@@ -337,12 +337,13 @@ namespace ShpilSvoih
             else if (!(actor.Kind == EnemyKind.Mimicrator && actor.Form == MimicratorForm.Fairy))
             {
                 int lost = ReceiveHit(actor.AttackDamage);
-                if (actor.Kind == EnemyKind.Fomatreshka) actor.ConsumeVigor();
                 if (actor.Kind == EnemyKind.Babai && Hero.Health > 0) Babai.Pull(Hero);
                 if (actor.Kind == EnemyKind.RabidHedgehog && lost > 0 && Hero.Health > 0 && Hero.Effects.AcceptDebuff())
                     Rabies = true;
             }
             EnemyImpactsResolved++;
+            if (actor.Kind == EnemyKind.Fomatreshka && !actor.WillSummon && !actor.WillDrink &&
+                (EnemyImpactsResolved >= actor.HitCount || Hero.Health <= 0)) actor.ConsumeVigor();
             LastDamage = before - Hero.Health;
             if (Hero.Health <= 0)
             {

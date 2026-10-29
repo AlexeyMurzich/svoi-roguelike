@@ -66,7 +66,7 @@ namespace ShpilSvoih
             if (kind == AttackAnimation.BabaiLasso) { Duration = BabaiMotion.Duration; HitTime = BabaiMotion.Hit; }
             if (kind == AttackAnimation.FomatreshkaSummon) { Duration = 1.65f; HitTime = .5f; }
             if (kind == AttackAnimation.FomatreshkaDrink) { Duration = 1.3f; HitTime = .7f; }
-            if (kind == AttackAnimation.FomatreshkaShot) { Duration = 1.05f; HitTime = .52f; }
+            if (kind == AttackAnimation.FomatreshkaShot) { Duration = .34f; HitTime = .12f; }
             Time = 0;
             HitApplied = false;
             impact = onImpact;

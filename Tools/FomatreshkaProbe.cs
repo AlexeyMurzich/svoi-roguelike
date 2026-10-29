@@ -11,7 +11,7 @@ internal static class FomatreshkaProbe
     const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
     static Game game; static Timer timer; static string output, log = "";
     static readonly Stopwatch clock = new Stopwatch();
-    static int stage; static double since, frozen;
+    static int stage, burstHits, burstHP; static double since, frozen;
     static T Read<T>(string name) { return (T)typeof(Game).GetField(name, Private).GetValue(game); }
     static void Call(string name, params object[] args) { typeof(Game).GetMethod(name, Private).Invoke(game, args); }
     static void Check(bool condition, string message) { if (!condition) throw new Exception(message); log += "PASS " + message + "\r\n"; }
@@ -45,6 +45,8 @@ internal static class FomatreshkaProbe
             {
                 Check(fight.Enemies[0].Vigor == 6 && fight.Hero.Health == 41, "three minions attack before drink");
                 Capture("fomatreshka-vigor");
+                var hints = Read<System.Collections.Generic.List<Tuple<RectangleF, CombatHint>>>("combatHintAreas");
+                Check(hints.Exists(h => h.Item2.Icon == 21 && h.Item2.Title == "Бодрость"), "vigor has its own status icon and tooltip");
                 game.ClientSize = new Size(3840, 2160); Capture("fomatreshka-4k"); game.ClientSize = new Size(1280, 840);
                 Call("SetInventory", "pause"); frozen = Read<double>("livingSeconds"); Next();
             }
@@ -56,13 +58,18 @@ internal static class FomatreshkaProbe
             else if (stage == 6 && elapsed > .3)
             {
                 Check(Read<double>("livingSeconds") == frozen && !Read<Timer>("combatTimer").Enabled, "focus loss freezes all motion");
-                Call("OnActivated", EventArgs.Empty); Call("EndCombatTurn"); Next();
+                Call("OnActivated", EventArgs.Empty); burstHP = fight.Hero.Health - 9; Call("EndCombatTurn"); Next();
             }
-            else if (stage == 7 && timeline.Kind == AttackAnimation.FomatreshkaShot && timeline.Time > .25f)
-            { Capture("fomatreshka-empress"); Next(); }
+            else if (stage == 7 && timeline.Kind == AttackAnimation.FomatreshkaShot && fight.Hero.Health < burstHP)
+            {
+                Check(burstHP - fight.Hero.Health == 8, "one visible bullet HP tick: " + (burstHits + 1));
+                burstHP = fight.Hero.Health; burstHits++;
+                Capture("fomatreshka-shot-" + burstHits);
+                if (burstHits == 3) Next();
+            }
             else if (stage == 8 && !Busy && fight.Turn == 4)
             {
-                Check(fight.Enemies[0].Vigor == 0 && fight.Hero.Health == 18, "shot and three minions deal 23, consume vigor");
+                Check(burstHits == 3 && fight.Enemies[0].Vigor == 0 && fight.Hero.Health == 8, "three bullets and three minions deal 33 in sequential hits, consume vigor");
                 fight.Hand[0].Attack = true; fight.Hand[0].Damage = 100; fight.SelectTarget(0); Call("PlayCombatCard", 0); Next();
             }
             else if (stage == 9 && fight.Phase == CombatPhase.Victory && Read<float>("fomatreshkaFlee") > .1f)

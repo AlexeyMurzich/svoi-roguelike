@@ -74,7 +74,7 @@ namespace ShpilSvoih
                 DrawEnemyIntent(graphics, enemy, center, (enemy.Kind == EnemyKind.StrayDogs || combat.Enemy == EnemyKind.Fomatreshka) ? nameY + 34 : floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
                 DrawBlockBadge(graphics, center + width / 2 + 4, floor + 8, enemy.Block);
-                if (enemy.Vigor > 0) TextAt(graphics, "Бодрость +" + enemy.Vigor, center - width / 2, floor + 35, 13, Color.FromArgb(171, 255, 109), width + 10, true);
+                if (enemy.Vigor > 0) DrawCombatHint(graphics, new CombatHint(21, enemy.Vigor.ToString(), "Бодрость", "+" + enemy.Vigor + " урона к каждому попаданию ближайшей атаки. Усиливает всю очередь из трёх выстрелов и исчезает после неё, даже если весь урон поглотил блок."), new RectangleF(center - 18, floor + 32, 28, 28), false);
                 if (enemy.Thorns > 0) DrawCombatHint(graphics, new CombatHint(6, enemy.Thorns.ToString(), "Шипы", "За каждую атакующую карту по этому врагу: " + enemy.Thorns + " ответного урона, включая добивающий удар. Блок поглощает этот урон."), new RectangleF(center - 14, floor + 30, 28, 28), true);
                 if (selectedTarget && combat.Enemies.Count > 1)
                 {

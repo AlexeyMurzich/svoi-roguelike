@@ -1,0 +1,34 @@
+﻿PASS native presentation: fomatreshka-idle
+PASS GPU active: fomatreshka-idle
+PASS native presentation: fomatreshka-summon
+PASS GPU active: fomatreshka-summon
+PASS native presentation: fomatreshka-fans
+PASS GPU active: fomatreshka-fans
+PASS first turn summons three without damage
+PASS native presentation: fomatreshka-gorilla
+PASS GPU active: fomatreshka-gorilla
+PASS three minions attack before drink
+PASS native presentation: fomatreshka-vigor
+PASS GPU active: fomatreshka-vigor
+PASS vigor has its own status icon and tooltip
+PASS native presentation: fomatreshka-4k
+PASS GPU active: fomatreshka-4k
+PASS pause freezes glow
+PASS focus loss freezes all motion
+PASS one visible bullet HP tick: 1
+PASS native presentation: fomatreshka-shot-1
+PASS GPU active: fomatreshka-shot-1
+PASS one visible bullet HP tick: 2
+PASS native presentation: fomatreshka-shot-2
+PASS GPU active: fomatreshka-shot-2
+PASS one visible bullet HP tick: 3
+PASS native presentation: fomatreshka-shot-3
+PASS GPU active: fomatreshka-shot-3
+PASS three bullets and three minions deal 33 in sequential hits, consume vigor
+PASS native presentation: fomatreshka-flee
+PASS GPU active: fomatreshka-flee
+PASS all surviving fans flee immediately
+PASS native presentation: fomatreshka-victory
+PASS GPU active: fomatreshka-victory
+PASS exit clears combat clocks and state
+PASS native close releases audio
