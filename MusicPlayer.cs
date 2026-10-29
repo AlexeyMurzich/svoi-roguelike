@@ -17,7 +17,7 @@ namespace ShpilSvoih
         }
         public static bool IsValid(string track)
         {
-            return track == "" || track == "mimicrator" || Array.IndexOf(heroes, track) >= 0;
+            return track == "" || track == "mimicrator" || track == "babai" || Array.IndexOf(heroes, track) >= 0;
         }
     }
 

@@ -15,6 +15,8 @@
                 if (mimicratorPreview || checkout) return "";
                 if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Mimicrator)
                     return "mimicrator";
+                if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Babai)
+                    return "babai";
                 return !mapScreen && menuMusicHero >= 0 ? MusicTracks.Hero(menuMusicHero) : "";
             }
         }

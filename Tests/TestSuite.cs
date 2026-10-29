@@ -96,7 +96,7 @@ namespace ShpilSvoih
             Run("Toha sound: native one-shot and pause", TohaSoundTests.NativeOneShot);
             Run("Toha sound: focus, menus, console and exit", UiTests.TestTohaSoundScenes);
             Run("Music: asynchronous switching, pause, cancellation and disposal", MusicTests.StateAndCancellation);
-            Run("Music: five embedded tracks preserve all samples", MusicTests.EmbeddedSongs);
+            Run("Music: six embedded tracks match prepared samples", MusicTests.EmbeddedSongs);
             Run("Music: native loop, pause and resume", MusicTests.NativeLoop);
             Run("Music: actual hero clicks and elite scene transitions", UiTests.TestMusicScenes);
             Run("Debug console: infinite gold and exact triple multiplier", DebugModeTests.Rules);

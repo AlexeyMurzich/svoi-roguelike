@@ -88,6 +88,22 @@ internal static class AudioSmoke
             {
                 Check(music.Track == "" && music.LastError == "", "Toha battle does not borrow Illya menu theme");
                 Check(cards.ActiveVoices <= 1 && cards.LastError == "", "automatic opening cards produce a single bounded accent");
+                Call("StartTestBabai"); Next();
+            }
+            else if (stage == 7 && !music.IsLoading) { Next(); }
+            else if (stage == 8 && clock.Elapsed.TotalSeconds - since > .6)
+            {
+                Check(music.Track == "babai" && music.LastError == "" && !music.IsPaused, "Babai theme plays through native mixer");
+                var babaiVoice = (LoopingMusicVoice)typeof(MusicPlayer).GetField("voice", Private).GetValue(music);
+                Check(babaiVoice != null && babaiVoice.PlayedBytes > 44100, "Babai PCM advances on the native device");
+                using (var bitmap = new Bitmap(game.ClientSize.Width, game.ClientSize.Height))
+                { game.DrawToBitmap(bitmap, new Rectangle(Point.Empty, bitmap.Size)); bitmap.Save(Path.Combine(output, "babai-music.png")); }
+                Check(music.Gain == AudioLevels.Music && LoopingMusicVoice.OpenDeviceCount == 1, "Babai uses fixed background gain and one device");
+                Call("SetInventory", "pause"); Check(music.IsPaused, "Babai theme pauses with game");
+                uint babaiAt = babaiVoice.PlayedBytes; System.Threading.Thread.Sleep(120);
+                Check(babaiVoice.PlayedBytes == babaiAt, "Babai pause preserves actual sample position");
+                Call("SetInventory", ""); Check(!music.IsPaused, "Babai theme resumes with game");
+                Call("ReturnToMainMenu"); Check(music.Track == "", "Babai theme stops on leaving battle");
                 timer.Stop(); game.Close();
             }
         }

@@ -8,3 +8,5 @@
 *.ogg binary
 *.wav binary
 *.gz binary
+
+*.mp3 binary
