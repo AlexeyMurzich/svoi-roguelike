@@ -73,6 +73,9 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Encounter progression: history, forks and unchanged rooms", EncounterProgressionTests.Routes);
+            Run("Encounter progression: cached contents and previews", EncounterProgressionTests.CachedPreviews);
+            Run("Encounter progression: real combat, intel, pause and revisit", UiTests.TestEncounterProgression);
             Run("Fomatreshka: burst impacts, block, vigor and death", FomatreshkaBurstTests.Rules);
             Run("Fomatreshka: separate HP ticks, icon and mid-burst pause", UiTests.TestFomatreshkaBurst);
             Run("Fomatreshka: pattern, minions, vigor, flight and district", FomatreshkaTests.Rules);

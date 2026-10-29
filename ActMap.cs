@@ -230,6 +230,11 @@ namespace ShpilSvoih
         public bool PendingIsRevisit { get; private set; }
 
         private readonly HashSet<int> visited = new HashSet<int>();
+        private readonly Dictionary<int, EnemyKind> ordinaryEnemies = new Dictionary<int, EnemyKind>();
+        private readonly List<EnemyKind> ordinaryHistory = new List<EnemyKind>();
+        private readonly bool[] reachable;
+        public int CompletedOrdinaryFights { get { return ordinaryHistory.Count; } }
+
         public MapRun(ActMap map)
         {
             if (map == null)
@@ -237,6 +242,35 @@ namespace ShpilSvoih
             Map = map;
             Current = map.Nodes[0];
             visited.Add(Current.Id);
+            reachable = new bool[map.Nodes.Count];
+            RefreshOrdinaryEnemies();
+        }
+
+        public EnemyKind OrdinaryEnemyAt(int id)
+        {
+            if (id < 0 || id >= Map.Nodes.Count || Map.Nodes[id].Kind != RoomKind.Fight)
+                throw new ArgumentOutOfRangeException("id");
+            return ordinaryEnemies[id];
+        }
+
+        public bool Reachable(int id)
+        {
+            return id >= 0 && id < reachable.Length && reachable[id];
+        }
+
+        // Only called on initial creation and successful room completion. Drawing,
+        // hovering, entering, pausing and revisiting read the same cached contents.
+        private void RefreshOrdinaryEnemies()
+        {
+            Array.Clear(reachable, 0, reachable.Length);
+            reachable[Current.Id] = true;
+            foreach (var node in Map.Nodes)
+            {
+                if (!reachable[node.Id]) continue;
+                if (node.Kind == RoomKind.Fight && !visited.Contains(node.Id))
+                    ordinaryEnemies[node.Id] = OrdinaryEncounters.Select(Map.Seed, node.Id, ordinaryHistory);
+                foreach (int next in node.Exits) reachable[next] = true;
+            }
         }
 
         public bool Visited(int id)
@@ -268,10 +302,13 @@ namespace ShpilSvoih
 
             if (Pending == null || Finished)
                 return false;
+            if (Pending.Kind == RoomKind.Fight)
+                ordinaryHistory.Add(ordinaryEnemies[Pending.Id]);
             Current = Pending;
             Pending = null;
             visited.Add(Current.Id);
             Finished = Current.Kind == RoomKind.Boss;
+            RefreshOrdinaryEnemies();
             return true;
         }
 

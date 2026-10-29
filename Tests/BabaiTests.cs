@@ -42,39 +42,22 @@ namespace ShpilSvoih
         }
         public static void Pools()
         {
-            bool found = false;
             for (int seed = 0; seed < 200; seed++)
-                for (int node = 1; node < 40; node++)
-                {
-                    for (int fights = 0; fights < 3; fights++)
-                        TestSuite.Check(OrdinaryEncounters.Select(seed, node, fights, 2) != EnemyKind.Babai, "first three fights exclude hard-only enemy");
-                    var kind = OrdinaryEncounters.Select(seed, node, 3, 2);
-                    found |= kind == EnemyKind.Babai;
-                    for (int district = 0; district < 2; district++)
-                        TestSuite.Check(OrdinaryEncounters.Select(seed, node, 100, district) != EnemyKind.Babai, "Babai never appears outside the Estate even late in a run");
-                    TestSuite.Check(kind == OrdinaryEncounters.Select(seed, node, 3, 2), "hard pool is deterministic");
-                    TestSuite.Check(EnemyCatalog.ForEliteNode(seed, node) != EnemyKind.Babai, "Babai never replaces an elite");
-                }
-            TestSuite.Check(found, "Babai appears in hard pool");
-            // Real legal routes: each revealed set contains the encounter actually reached.
-            for (int seed = 0; seed < 80; seed++)
             {
-                var run = new MapRun(ActMap.Generate(seed)); var random = new Random(seed);
-                int completed = 0;
-                while (!run.Finished)
+                var history = new List<EnemyKind>();
+                for (int count = 0; count < 3; count++)
                 {
-                    int next = run.Current.Exits[random.Next(run.Current.Exits.Count)];
-                    var node = run.Map.Nodes[next];
-                    string preview = node.Kind == RoomKind.Fight ? OrdinaryEncounters.Preview(run, next) : "";
-                    TestSuite.Check(OrdinaryEncounters.Completed(run) == completed, "elite/event floors do not count as ordinary fights");
-                    if (node.Kind == RoomKind.Fight)
-                    {
-                        var actual = OrdinaryEncounters.Select(seed, next, completed, node.District);
-                        TestSuite.Check(preview.Split(new[] { " / " }, StringSplitOptions.None).Contains(EnemyCatalog.Name(actual)), "route reveal contains actual next encounter");
-                        completed++;
-                    }
-                    run.Enter(next); run.CompleteRoom();
+                    var easy = OrdinaryEncounters.Select(seed, count + 1, history);
+                    TestSuite.Check(easy != EnemyKind.Babai && !history.Contains(easy), "first three fights exclude hard-only enemy and prior easy enemies");
+                    history.Add(easy);
                 }
+                for (int count = 3; count < 20; count++)
+                {
+                    var hard = OrdinaryEncounters.Select(seed, count + 1, history);
+                    TestSuite.Check(hard == EnemyKind.Babai, "temporary hard pool repeats only Babai after the easy pool");
+                    history.Add(hard);
+                }
+                TestSuite.Check(EnemyCatalog.ForEliteNode(seed, 1) != EnemyKind.Babai, "Babai never replaces an elite");
             }
         }
         public static void Motion()

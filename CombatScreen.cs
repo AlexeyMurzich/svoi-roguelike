@@ -24,7 +24,7 @@ namespace ShpilSvoih
         {
             if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id, mapRun.Map.Nodes[id].District);
             EnemyKind enemy;
-            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : OrdinaryEncounters.Select(mapRun.Map.Seed, id, OrdinaryEncounters.Completed(mapRun), mapRun.Map.Nodes[id].District);
+            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : mapRun.OrdinaryEnemyAt(id);
         }
         readonly HowlSound howlSound = new HowlSound();
         string combatNotice = "";
