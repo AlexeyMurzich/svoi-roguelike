@@ -80,6 +80,7 @@ namespace ShpilSvoih
             Run("Card audio: bounded voices, tails, cache, pause and failure", CardAudioTests.Voices);
             Run("Card audio: eight complete embedded effects", CardAudioTests.Embedded);
             Run("Card audio: late music gain and simultaneous native playback", CardAudioTests.MusicGainAndNativeMix);
+            Run("Music continuity: real menu, redraw, resize and GC", UiTests.TestMenuAudioContinuity);
             Run("Babai: complete silhouette, no giant arm and cached shade", UiTests.TestBabaiSilhouette);
             Run("Babai: low lasso, stable face scale and one contact", UiTests.TestLowBabaiLasso);
             Run("District: registered planes and source proportions", UiTests.TestDistrictPlanes);

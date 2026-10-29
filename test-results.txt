@@ -4,8 +4,10 @@ PASS Software mixer: static song calibration and source ownership
 PASS Card audio: constant battle background level
 PASS Card audio: bounded voices, tails, cache, pause and failure
 PASS Card audio: eight complete embedded effects
-INFO Mixer positions: music 18432 -> 51200; effect 17640/17640; error=
+INFO Mixer positions: music 69632 -> 106496; effect 17640/17640; error=
 PASS Card audio: late music gain and simultaneous native playback
+INFO Menu output: 3,030s audio / 3,030s wall; underruns=0
+PASS Music continuity: real menu, redraw, resize and GC
 PASS Babai: complete silhouette, no giant arm and cached shade
 PASS Babai: low lasso, stable face scale and one contact
 PASS District: registered planes and source proportions
@@ -33,7 +35,7 @@ PASS Toha: threshold, damage and elite generation
 PASS Toha: frame-rate independent ram and transformation
 PASS Toha: battle, backgrounds, pause, death and six sizes
 PASS Toha: real elite room, investigation and revisit
-INFO fade GDI handles after warmup: 18 -> 18
+INFO fade GDI handles after warmup: 52 -> 52
 PASS Fade: native alpha, clipping and handle cleanup
 PASS Repaint: partial frames are pixel-identical
 PASS Repaint: mouse movement only redraws visual changes
@@ -77,7 +79,7 @@ PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
 PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 23,8 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 28,7 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -99,12 +101,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-INFO Mimicrator offscreen 1280x840 mean repaint: 21,13 ms (not an FPS guarantee).
+INFO Mimicrator offscreen 1280x840 mean repaint: 20,66 ms (not an FPS guarantee).
 PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 102 passed, 0 failed. Assertions: 1295800.
+Suites: 103 passed, 0 failed. Assertions: 1295808.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.

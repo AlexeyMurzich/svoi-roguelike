@@ -27,6 +27,8 @@
         void SyncMusic()
         {
             if (resourcesDisposed) return;
+            // Long menu songs can reserve more audio; battle effects retain a shorter queue.
+            LoopingMusicVoice.SetMenuBuffering(!checkout && !mapScreen && !mimicratorPreview && menuMusicHero >= 0);
             bool pause = GameplayPaused || !ContainsFocus || !Visible || (mimicratorPreview && mimicratorPaused);
             tohaSound.SetPaused(pause);
             cardSounds.SetPaused(pause);

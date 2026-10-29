@@ -9,6 +9,8 @@ namespace ShpilSvoih
         static SoftwareAudioMixer mixer;
         static WaveOutMixerOutput output;
         static int leases;
+        static bool menuBuffering;
+        internal static void SetMenuBuffering(bool value) { lock (gate) menuBuffering = value; }
         SoftwareAudioMixer.Channel channel;
         public static int OpenDeviceCount { get { lock (gate) return output == null ? 0 : 1; } }
         public static string OutputError { get { lock (gate) return output == null ? "" : output.LastError; } }
@@ -22,7 +24,7 @@ namespace ShpilSvoih
                 if (output == null)
                 {
                     var next = new SoftwareAudioMixer();
-                    output = new WaveOutMixerOutput(next); mixer = next;
+                    output = new WaveOutMixerOutput(next, loop && menuBuffering); mixer = next;
                 }
                 channel = mixer.Add(pcm, loop); leases++;
             }
