@@ -21,7 +21,7 @@ foreach($relativeName in $requiredAssets){
  $resourceName=$relativeName.Replace('\','.').Replace('/','.')
  $compilerArgs+=('/resource:assets\'+$relativeName+','+$resourceName)
 }
-$musicIds=@('pupsolet','illya','runtso','shuten','mimicrator','babai')
+$musicIds=@('pupsolet','illya','runtso','shuten','mimicrator','babai','doctors')
 foreach($id in $musicIds){
  $musicFile=Get-Item -LiteralPath (Join-Path $assetRoot ('music\'+$id+'.pcm.gz'))
  $compilerArgs+=('/resource:assets\music\'+$id+'.pcm.gz,music.'+$id+'.pcm.gz')

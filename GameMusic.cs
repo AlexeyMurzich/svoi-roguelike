@@ -13,6 +13,9 @@
             get
             {
                 if (mimicratorPreview || checkout) return "";
+                if (mapScreen && mapRun != null && mapRun.Pending != null && !mapRun.PendingIsRevisit &&
+                    (IsDoctorQuestion || HasLiveFight && combat != null && combat.Enemy == EnemyKind.Doctors))
+                    return "doctors";
                 if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Mimicrator)
                     return "mimicrator";
                 if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Babai)
