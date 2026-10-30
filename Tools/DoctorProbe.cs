@@ -81,7 +81,12 @@ internal static class DoctorProbe
             else if (stage == 7 && fight.Phase == CombatPhase.Victory && !timeline.IsRunning && !Read<DeathVisuals>("deathVisuals").IsRunning)
             {
                 Check(fight.Hero.Health == fight.Hero.MaxHealth && fight.Hero.Doctors.Items.Count == 1, "native victory full heal and exactly one drop");
-                Capture("victory"); Call("SetInventory", "relics"); Capture("relic-inventory"); Call("SetInventory", "");
+                Capture("victory"); Call("SetInventory", "relics"); Capture("relic-inventory");
+                foreach (DoctorDrop item in Enum.GetValues(typeof(DoctorDrop))) fight.Hero.Doctors.Give(item);
+                Capture("all-relics");
+                fight.Hero.ReceiveDamage(fight.Hero.Health);
+                Check(fight.Hero.Doctors.HeartUsed && fight.Hero.Health > 0, "used heart remains visible in gray");
+                Capture("all-relics-used-heart"); Call("SetInventory", "");
                 var run = Read<MapRun>("mapRun"); Call("CompleteMapRoom"); Check(run.DoctorsCompleted && run.Pending == null, "native return completes unique event once");
                 Call("ReturnToMainMenu"); Call("StartTestDoctorEvent");
                 run = Read<MapRun>("mapRun"); var hero = Read<HeroState>("currentHero"); hero.ReceiveDamage(30);

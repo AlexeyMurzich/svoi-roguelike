@@ -1,75 +1,53 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace ShpilSvoih
 {
-    // Draws small distinct status/relic symbols without owning source bitmaps.
-    public static class DoctorIcons
-    {
-        public static void Draw(Graphics g, RectangleF area, int kind, bool gray)
-        {
-            var state = g.Save();
-            try
-            {
-                g.TranslateTransform(area.X, area.Y);
-                g.ScaleTransform(area.Width / 40, area.Height / 40);
-                Color tone = gray ? Color.Gray : kind == 4 ? Color.YellowGreen : kind == 3 ? Color.SaddleBrown : Color.Crimson;
-                using (var fill = new SolidBrush(tone))
-                using (var edge = new Pen(gray ? Color.DarkGray : Color.Wheat, 2))
-                using (var white = new SolidBrush(gray ? Color.Silver : Color.Ivory))
-                {
-                    if (kind == 0)
-                    {
-                        g.FillEllipse(white, 2, 10, 36, 20); g.DrawEllipse(edge, 2, 10, 36, 20);
-                        g.FillEllipse(fill, 13, 11, 15, 18);
-                        using (var pupil = new SolidBrush(Color.Black)) g.FillEllipse(pupil, 18, 15, 5, 10);
-                    }
-                    else if (kind == 1)
-                    {
-                        using (var heart = new GraphicsPath())
-                        {
-                            heart.AddBezier(20, 35, -12, 15, 7, -3, 20, 11);
-                            heart.AddBezier(20, 11, 33, -3, 52, 15, 20, 35);
-                            g.FillPath(fill, heart); g.DrawPath(edge, heart);
-                        }
-                    }
-                    else if (kind == 2)
-                    {
-                        var points = new[] { new PointF(3, 14), new PointF(22, 7), new PointF(37, 13), new PointF(30, 29), new PointF(10, 34) };
-                        g.FillPolygon(fill, points); g.DrawPolygon(edge, points); g.DrawLine(edge, 22, 9, 18, 26);
-                    }
-                    else if (kind == 3)
-                    {
-                        g.FillRectangle(fill, 5, 4, 30, 32); g.DrawRectangle(edge, 5, 4, 30, 32);
-                        for (int i = 1; i < 3; i++) { g.DrawLine(edge, 5 + i * 10, 5, 5 + i * 10, 35); g.DrawLine(edge, 5, 5 + i * 10, 35, 5 + i * 10); }
-                    }
-                    else if (kind == 4)
-                    {
-                        g.FillEllipse(fill, 5, 5, 30, 25); g.DrawEllipse(edge, 5, 5, 30, 25);
-                        using (var dark = new SolidBrush(Color.DarkGreen)) { g.FillEllipse(dark, 11, 12, 6, 7); g.FillEllipse(dark, 23, 12, 6, 7); }
-                        g.DrawLine(edge, 10, 34, 31, 34);
-                    }
-                    else
-                    {
-                        // Blood drop with a bandage slash, distinct from poison's skull.
-                        using (var drop = new GraphicsPath())
-                        {
-                            drop.AddBezier(20, 2, 13, 14, 1, 20, 8, 32);
-                            drop.AddBezier(8, 32, 16, 43, 43, 37, 31, 18); drop.CloseFigure();
-                            g.FillPath(fill, drop); g.DrawPath(edge, drop);
-                        }
-                        g.DrawLine(edge, 15, 29, 26, 20);
-                    }
-                }
-            }
-            finally { g.Restore(state); }
-        }
-    }
-
     public sealed partial class Game
     {
         Image hospitalArt, femaleDoctorArt, maleDoctorArt;
+        Image poisonStatusArt, bleedingStatusArt;
+        readonly Image[] acquiredDoctorArt = new Image[4];
+        void DrawDoctorRelic(Graphics g, RectangleF area, DoctorDrop item, bool gray)
+        {
+            int index = (int)item;
+            if (acquiredDoctorArt[index] == null)
+            {
+                string id = item == DoctorDrop.Eye ? "eye" : item == DoctorDrop.Heart ? "heart" : item == DoctorDrop.Liver ? "liver" : "chocolate";
+                acquiredDoctorArt[index] = assetStore.Get("relics/doctor-" + id + ".png", "relics.doctor-" + id + ".png");
+            }
+            var art = acquiredDoctorArt[index];
+            if (!gray) DrawInterfaceImage(g, art, area, new RectangleF(0, 0, art.Width, art.Height));
+            else
+            {
+                // No bitmap clone: apply grayscale to the shared owned source.
+                using (var attributes = new ImageAttributes())
+                {
+                    attributes.SetColorMatrix(new ColorMatrix(new[] {
+                        new[] { .2093f, .2093f, .2093f, 0f, 0f },
+                        new[] { .4109f, .4109f, .4109f, 0f, 0f },
+                        new[] { .0798f, .0798f, .0798f, 0f, 0f },
+                        new[] { 0f, 0f, 0f, 1f, 0f }, new[] { 0f, 0f, 0f, 0f, 1f } }));
+                    g.DrawImage(art, new[] { new PointF(area.Left, area.Top), new PointF(area.Right, area.Top), new PointF(area.Left, area.Bottom) }, new RectangleF(0, 0, art.Width, art.Height), GraphicsUnit.Pixel, attributes);
+                }
+            }
+        }
+        void DrawDoctorStatusIcon(Graphics g, int icon, RectangleF area)
+        {
+            Image art;
+            if (icon == 22)
+            {
+                if (poisonStatusArt == null) poisonStatusArt = assetStore.Get("statuses/poison.png", "statuses.poison.png");
+                art = poisonStatusArt;
+            }
+            else
+            {
+                if (bleedingStatusArt == null) bleedingStatusArt = assetStore.Get("statuses/bleeding.png", "statuses.bleeding.png");
+                art = bleedingStatusArt;
+            }
+            DrawInterfaceImage(g, art, area, new RectangleF(0, 0, art.Width, art.Height));
+        }
         bool IsDoctorQuestion
         {
             get { return mapRun != null && mapRun.Pending != null && mapRun.Pending.Kind == RoomKind.Question && mapRun.QuestionAt(mapRun.Pending.Id, currentHero) == QuestionKind.Doctors; }
@@ -185,7 +163,7 @@ namespace ShpilSvoih
             foreach (var item in currentHero.Doctors.Items)
             {
                 var area = new RectangleF(86 + index++ * 49, 73, 40, 40);
-                DoctorIcons.Draw(g, area, (int)item, item == DoctorDrop.Heart && currentHero.Doctors.HeartUsed);
+                DrawDoctorRelic(g, area, item, item == DoctorDrop.Heart && currentHero.Doctors.HeartUsed);
                 actions.Add(Tuple.Create(area, (Action)(() => SetInventory("relics"))));
             }
         }
@@ -203,7 +181,7 @@ namespace ShpilSvoih
             {
                 float y = 358 + row++ * 70;
                 bool used = item == DoctorDrop.Heart && currentHero.Doctors.HeartUsed;
-                DoctorIcons.Draw(g, new RectangleF(257, y, 45, 45), (int)item, used);
+                DrawDoctorRelic(g, new RectangleF(257, y, 45, 45), item, used);
                 TextAt(g, DoctorRules.Name(item), 332, y, 19, used ? muted : gold, 650, true);
                 TextAt(g, DoctorRules.Description(item, used), 332, y + 26, 14, text, 690);
             }

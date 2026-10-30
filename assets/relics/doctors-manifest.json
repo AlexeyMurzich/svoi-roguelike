@@ -1,0 +1,26 @@
+﻿[
+  {
+    "file": "doctor-eye.png",
+    "sha256": "BDBEB45688B2C36D4408D88A288462AF52ED759DE976211F545ADAF94AC7F137",
+    "generator": "Built-in ImageGen",
+    "reference": "assets/combat-icons.png"
+  },
+  {
+    "file": "doctor-heart.png",
+    "sha256": "6E346966EC842B2F8D1E9E9C7B94E14D2E49D465CCC4EF8A85E55F9CDEDADEB9",
+    "generator": "Built-in ImageGen",
+    "reference": "assets/combat-icons.png"
+  },
+  {
+    "file": "doctor-liver.png",
+    "sha256": "411B0A6EC3F4559C74F413173466799A3EF51E4E56D976BCE04ECD1DC386DB7C",
+    "generator": "Built-in ImageGen",
+    "reference": "assets/combat-icons.png"
+  },
+  {
+    "file": "doctor-chocolate.png",
+    "sha256": "792618C728AD42032DB64C9B754F6155A1A201F7D9DDD727D8B0FAE8B9D5F293",
+    "generator": "Built-in ImageGen",
+    "reference": "assets/combat-icons.png"
+  }
+]

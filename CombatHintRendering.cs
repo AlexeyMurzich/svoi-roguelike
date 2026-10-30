@@ -34,7 +34,8 @@ namespace ShpilSvoih
 
         void DrawCombatHintIcon(Graphics g, int icon, RectangleF area)
         {
-            if (icon >= 22 && icon <= 24) DoctorIcons.Draw(g, area, icon == 22 ? 4 : icon == 23 ? 5 : 0, false);
+            if (icon == 22 || icon == 23) DrawDoctorStatusIcon(g, icon, area);
+            else if (icon == 24) DrawDoctorRelic(g, area, DoctorDrop.Eye, false);
             else if (icon == 21) VigorIcon.Draw(g, area);
             else if (icon == 20) { LoadBabaiArt(); FitImage(g, babaiBed, area); }
             else if (icon == 19)

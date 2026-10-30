@@ -91,6 +91,7 @@ namespace ShpilSvoih
                 else if (resourceName == "map-icons.png") displayWidth = Math.Min(displayWidth, 384);
                 else if (resourceName == "menu-icons.png") displayWidth = Math.Min(displayWidth, 256);
                 else if (resourceName == "health-icon.png" || resourceName == "coin-icon.png") displayWidth = Math.Min(displayWidth, 128);
+                else if (resourceName.StartsWith("statuses.", StringComparison.Ordinal)) displayWidth = Math.Min(displayWidth, 256);
                 else if (resourceName.StartsWith("relics.", StringComparison.Ordinal)) displayWidth = Math.Min(displayWidth, 256);
                 else if (resourceName == "hud-texture.png") displayWidth = Math.Min(displayWidth, 1086);
                 // These sources are much larger than their largest on-screen
