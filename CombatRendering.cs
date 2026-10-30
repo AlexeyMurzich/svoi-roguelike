@@ -44,7 +44,7 @@ namespace ShpilSvoih
                 g.FillEllipse(fill, cx - 17, cy - 17, 34, 34);
             using (var rim = new Pen(gold, 2))
                 g.DrawEllipse(rim, cx - 17, cy - 17, 34, 34);
-            var price = combat.Cost(card).ToString("0.#");
+            var price = combat.HiddenCosts ? "?" : combat.Cost(card).ToString("0.#");
             var font = HudFont(21, true);
             var size = g.MeasureString(price, font);
             using (var brush = new SolidBrush(text))
@@ -74,13 +74,17 @@ namespace ShpilSvoih
             combatHintAreas.Clear();
             SyncDeaths();
             g.InterpolationMode = InterpolationMode.Bilinear;
-            if (UsesDistrictBackdrop) DrawDistrictBackdrop(g);
+            if (combat.Enemy == EnemyKind.Doctors) DrawHospital(g);
+            else if (UsesDistrictBackdrop) DrawDistrictBackdrop(g);
             else if (combat.Enemy == EnemyKind.Toha) DrawTohaBackground(g);
             else DrawSceneBackground(g, true);
             float heroX = HeroCenter;
             float floor = CombatFloor;
             DrawCombatActors(g, heroX, floor);
-            TextAt(g, combatNotice, CanvasWidth / 2 - 150, floor + 34, 16, gold, 360, true);
+            string noticeText = combatNotice;
+            if (combat.Phase == CombatPhase.Victory && IsDoctorQuestion)
+                noticeText = DoctorRules.Name(mapRun.DoctorsAt(mapRun.Pending.Id).Drop) + " · полное лечение";
+            TextAt(g, noticeText, CanvasWidth / 2 - 210, floor + 34, 16, gold, 440, true);
             DrawCombatDock(g);
             DrawCombatHand(g);
 

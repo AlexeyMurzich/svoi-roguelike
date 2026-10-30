@@ -73,6 +73,10 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Doctors: attacks, statuses and injuries", DoctorTests.Rules);
+            Run("Doctors: acquired relics, reward and revival", DoctorTests.Relics);
+            Run("Doctors: question rooms and eye", DoctorTests.Questions);
+            Run("Doctors: native rendering, animation and event", UiTests.TestDoctors);
             Run("Encounter progression: history, forks and unchanged rooms", EncounterProgressionTests.Routes);
             Run("Encounter progression: cached contents and previews", EncounterProgressionTests.CachedPreviews);
             Run("Encounter progression: real combat, intel, pause and revisit", UiTests.TestEncounterProgression);

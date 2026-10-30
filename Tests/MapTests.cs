@@ -128,6 +128,9 @@ namespace ShpilSvoih
 
                     Click(game, 1010, 741);
                     var run = Read<MapRun>(game, "mapRun");
+                    // Navigation fixture retains quiet modal rooms; event consequences are tested separately.
+                    var questionRolls = (Dictionary<int, int>)typeof(MapRun).GetField("questionRolls", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(run);
+                    foreach (int question in questionRolls.Keys.ToArray()) questionRolls[question] = 3;
                     TestSuite.Check(Read<bool>(game, "mapScreen") && run != null && !Read<bool>(game, "checkout"), "checkout opens map");
                     var intel = Read<Dictionary<int, IntelNode>>(game, "mapIntel");
                     foreach (var kind in new[]

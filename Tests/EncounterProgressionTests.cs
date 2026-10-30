@@ -133,6 +133,9 @@ namespace ShpilSvoih
                 // A fixed route fixture makes the UI regression reproducible.
                 var run = new MapRun(ActMap.Generate(42));
                 Write(game, "mapRun", run);
+                // This fixture isolates ordinary-node progression; doctor choices have their own suite.
+                var questionRolls = (Dictionary<int, int>)typeof(MapRun).GetField("questionRolls", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(run);
+                foreach (int question in questionRolls.Keys.ToArray()) questionRolls[question] = 3;
                 var intel = Read<Dictionary<int, IntelNode>>(game, "mapIntel");
                 intel.Clear();
                 foreach (var node in run.Map.Nodes)

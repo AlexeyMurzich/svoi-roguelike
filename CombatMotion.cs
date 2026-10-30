@@ -68,10 +68,11 @@ namespace ShpilSvoih
                 int width = combat.Enemy == EnemyKind.Fomatreshka ? (int)(CanvasWidth * .104f) : combat.Enemies.Count == 1 ? 250 : 180;
                 bool selectedTarget = combat.SelectedTarget == index;
                 float nameY = floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 414 : 315);
+                if (combat.Enemy == EnemyKind.Doctors) nameY = floor - 425;
                 if (combat.Enemy == EnemyKind.Fomatreshka) nameY = floor - (index == 0 ? 418 : 347);
                 if (enemy.Kind == EnemyKind.StrayDogs) nameY = Math.Max(150, dogPoses.Target(index == 1 ? 1 : 0, 2, EnemyArea(index)).Top - 90);
                 TextAt(graphics, enemy.Name, center - width / 2, nameY, combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
-                DrawEnemyIntent(graphics, enemy, center, (enemy.Kind == EnemyKind.StrayDogs || combat.Enemy == EnemyKind.Fomatreshka) ? nameY + 34 : floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
+                DrawEnemyIntent(graphics, enemy, center, (enemy.Kind == EnemyKind.StrayDogs || combat.Enemy == EnemyKind.Fomatreshka || combat.Enemy == EnemyKind.Doctors) ? nameY + 34 : floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
                 DrawBlockBadge(graphics, center + width / 2 + 4, floor + 8, enemy.Block);
                 if (enemy.Vigor > 0) DrawCombatHint(graphics, new CombatHint(21, enemy.Vigor.ToString(), "Бодрость", "+" + enemy.Vigor + " урона к каждому попаданию ближайшей атаки. Усиливает всю очередь из трёх выстрелов и исчезает после неё, даже если весь урон поглотил блок."), new RectangleF(center - 18, floor + 32, 28, 28), false);

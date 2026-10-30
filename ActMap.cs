@@ -230,6 +230,35 @@ namespace ShpilSvoih
         public bool PendingIsRevisit { get; private set; }
 
         private readonly HashSet<int> visited = new HashSet<int>();
+        readonly Dictionary<int, EnemyKind> questionEnemies = new Dictionary<int, EnemyKind>();
+        readonly HashSet<int> questionFights = new HashSet<int>();
+        public EnemyKind StartQuestionFight(int id)
+        {
+            if (Pending == null || Pending.Id != id || PendingIsRevisit || Map.Nodes[id].Kind != RoomKind.Question || questionRolls[id] != 1)
+                throw new InvalidOperationException("No pending ordinary question fight.");
+            questionFights.Add(id);
+            return questionEnemies[id];
+        }
+        readonly Dictionary<int, int> questionRolls = new Dictionary<int, int>();
+        readonly Dictionary<int, DoctorEvent> doctors = new Dictionary<int, DoctorEvent>();
+        public bool DoctorsCompleted { get; private set; }
+        public QuestionKind QuestionAt(int id, HeroState hero)
+        {
+            if (id < 0 || id >= Map.Nodes.Count || Map.Nodes[id].Kind != RoomKind.Question) throw new ArgumentOutOfRangeException("id");
+            int roll = questionRolls[id];
+            if (roll == 0 && (!DoctorsCompleted || doctors.ContainsKey(id))) return QuestionKind.Doctors;
+            return roll == 1 && !hero.Doctors.Has(DoctorDrop.Eye) ? QuestionKind.Fight : QuestionKind.Quiet;
+        }
+        public DoctorEvent DoctorsAt(int id)
+        {
+            DoctorEvent result;
+            if (!doctors.TryGetValue(id, out result))
+            {
+                if (DoctorsCompleted) throw new InvalidOperationException("Doctors event already completed.");
+                doctors.Add(id, result = new DoctorEvent(unchecked(Map.Seed * 31 ^ id * 991)));
+            }
+            return result;
+        }
         private readonly Dictionary<int, EnemyKind> ordinaryEnemies = new Dictionary<int, EnemyKind>();
         private readonly List<EnemyKind> ordinaryHistory = new List<EnemyKind>();
         private readonly bool[] reachable;
@@ -243,6 +272,8 @@ namespace ShpilSvoih
             Current = map.Nodes[0];
             visited.Add(Current.Id);
             reachable = new bool[map.Nodes.Count];
+            foreach (var node in map.Nodes)
+                if (node.Kind == RoomKind.Question) questionRolls.Add(node.Id, new Random(unchecked(Map.Seed * 397 ^ node.Id * 7919 ^ 0xD0C)).Next(4));
             RefreshOrdinaryEnemies();
         }
 
@@ -267,6 +298,8 @@ namespace ShpilSvoih
             foreach (var node in Map.Nodes)
             {
                 if (!reachable[node.Id]) continue;
+                if (node.Kind == RoomKind.Question && !visited.Contains(node.Id) && questionRolls[node.Id] == 1)
+                    questionEnemies[node.Id] = OrdinaryEncounters.Select(Map.Seed, node.Id, ordinaryHistory);
                 if (node.Kind == RoomKind.Fight && !visited.Contains(node.Id))
                     ordinaryEnemies[node.Id] = OrdinaryEncounters.Select(Map.Seed, node.Id, ordinaryHistory);
                 foreach (int next in node.Exits) reachable[next] = true;
@@ -302,6 +335,13 @@ namespace ShpilSvoih
 
             if (Pending == null || Finished)
                 return false;
+            DoctorEvent doctor;
+            if (doctors.TryGetValue(Pending.Id, out doctor))
+            {
+                if (doctor.Choice != DoctorChoice.Treatment && doctor.Choice != DoctorChoice.Victory) return false;
+                DoctorsCompleted = true;
+            }
+            if (questionFights.Contains(Pending.Id)) ordinaryHistory.Add(questionEnemies[Pending.Id]);
             if (Pending.Kind == RoomKind.Fight)
                 ordinaryHistory.Add(ordinaryEnemies[Pending.Id]);
             Current = Pending;
@@ -312,6 +352,11 @@ namespace ShpilSvoih
             return true;
         }
 
+        internal void EnterDoctorTestRoom(int id)
+        {
+            if (Map.Nodes[id].Kind != RoomKind.Question) throw new ArgumentException("Question required");
+            Pending = Map.Nodes[id];
+        }
         public bool ReopenCurrent()
         {
             if (Pending != null || Current.Kind == RoomKind.Start)

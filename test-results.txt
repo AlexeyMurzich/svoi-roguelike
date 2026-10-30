@@ -1,7 +1,8 @@
-﻿v0.39 verification record — unchanged production EXE across full run and targeted repairs.
-Full first pass: 110 passed, 4 failed due to outdated asset expectations and HWND sampling setup.
-Production code and EXE were not changed for fixture repairs.
-INFO Room completion and cached encounter refresh: 96000 transitions; median 0.0018 ms; p95 0.0058 ms; max 5.8941 ms (includes scheduler/GC). No FPS guarantee.
+﻿PASS Doctors: attacks, statuses and injuries
+PASS Doctors: acquired relics, reward and revival
+PASS Doctors: question rooms and eye
+PASS Doctors: native rendering, animation and event
+INFO Room completion and cached encounter refresh: 96000 transitions; median 0.0021 ms; p95 0.0073 ms; max 0.3159 ms (includes scheduler/GC). No FPS guarantee.
 PASS Encounter progression: history, forks and unchanged rooms
 PASS Encounter progression: cached contents and previews
 PASS Encounter progression: real combat, intel, pause and revisit
@@ -21,7 +22,7 @@ PASS Card audio: bounded voices, tails, cache, pause and failure
 PASS Card audio: eight complete embedded effects
 INFO Mixer positions: music 69632 -> 102400; effect 17640/17640; error=
 PASS Card audio: late music gain and simultaneous native playback
-INFO Menu output: 3,006s audio / 3,006s wall; underruns=0
+INFO Menu output: 3,035s audio / 3,035s wall; underruns=0
 PASS Music continuity: real menu, redraw, resize and GC
 PASS Babai: complete silhouette, no giant arm and cached shade
 PASS Babai: low lasso, stable face scale and one contact
@@ -48,16 +49,8 @@ PASS Combat hints: statuses, intents and scaled hover
 PASS Toha: Illya test launcher preserves free auto plays and confusion
 PASS Toha: threshold, damage and elite generation
 PASS Toha: frame-rate independent ram and transformation
-FAIL Toha: battle, backgrounds, pause, death and six sizes
-System.Exception: Toha lazily loads four shared assets
-   в ShpilSvoih.TestSuite.Check(Boolean condition, String message)
-   в ShpilSvoih.UiTests.TestTohaCombat()
-   в ShpilSvoih.TestSuite.Run(String name, Action test)
-FAIL Toha: real elite room, investigation and revisit
-System.Exception: resizing reuses the four decoded source images
-   в ShpilSvoih.TestSuite.Check(Boolean condition, String message)
-   в ShpilSvoih.UiTests.TestTohaEliteRoom()
-   в ShpilSvoih.TestSuite.Run(String name, Action test)
+PASS Toha: battle, backgrounds, pause, death and six sizes
+PASS Toha: real elite room, investigation and revisit
 INFO fade GDI handles after warmup: 52 -> 52
 PASS Fade: native alpha, clipping and handle cleanup
 PASS Repaint: partial frames are pixel-identical
@@ -100,13 +93,9 @@ PASS Fullscreen bounds, taskbar coverage, minimal HUD and pause
 PASS Return to main menu and fresh run at six sizes
 PASS Combat rules, recycling, resources, victory and defeat
 PASS Combat UI, animation, pause and victory at six sizes
-FAIL Hero portraits and relic hover across all twelve relics and six sizes
-System.Exception: tooltip is actually painted below relic
-   в ShpilSvoih.TestSuite.Check(Boolean condition, String message)
-   в ShpilSvoih.UiTests.TestHudPortraitsAndTooltips()
-   в ShpilSvoih.TestSuite.Run(String name, Action test)
+PASS Hero portraits and relic hover across all twelve relics and six sizes
 PASS Smooth camera timing at 30/60/120 Hz
-INFO Map render + camera update at 1280x840: 17,8 ms/frame (offscreen sample, not a live FPS guarantee).
+INFO Map render + camera update at 1280x840: 26,5 ms/frame (offscreen sample, not a live FPS guarantee).
 PASS Smooth camera, pause, pose frames and render timing
 PASS Two dogs: staggered cycles, targeting, shared block, deaths and generation
 PASS Dog bite, accelerated timing, howl and pause at six sizes
@@ -128,40 +117,12 @@ PASS Hedgehogs: full pose extraction, animation, pause and resize
 PASS Hedgehogs pair: switching target per card, queue and deaths
 PASS Hedgehogs pair: real clicks target different enemies in one turn
 PASS Mimicrator: depth, perspective and frame-rate independence
-FAIL Mimicrator: layers, pause, focus, resize, menu and resource ownership
-System.Exception: two shared new images
-   в ShpilSvoih.TestSuite.Check(Boolean condition, String message)
-   в ShpilSvoih.UiTests.TestMimicratorPreview()
-   в ShpilSvoih.TestSuite.Run(String name, Action test)
+INFO Mimicrator offscreen 1280x840 mean repaint: 27,71 ms (not an FPS guarantee).
+PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
 PASS Mimicrator: four orbit phases for visual review
 PASS Mimicrator combat: forms, stun, auto cards and enemy block
 PASS Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes
 PASS Mimicrator combat: real elite room, investigation, victory and revisit
 PASS Mimicrator combat: animation contact sheet
-Suites: 110 passed, 4 failed. Assertions: 3184557.
+Suites: 118 passed, 0 failed. Assertions: 3202490.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-TARGETED REPAIR: repair-toha
-PASS Toha: battle, backgrounds, pause, death and six sizes
-Suites: 1 passed, 0 failed. Assertions: 156.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-TARGETED REPAIR: repair-toha-room
-PASS Toha: real elite room, investigation and revisit
-Suites: 1 passed, 0 failed. Assertions: 11.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-TARGETED REPAIR: repair-hud
-PASS Hero portraits and relic hover across all twelve relics and six sizes
-Suites: 1 passed, 0 failed. Assertions: 145.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-TARGETED REPAIR: repair-mimicrator
-INFO Mimicrator offscreen 1280x840 mean repaint: 19,05 ms (not an FPS guarantee).
-PASS Mimicrator: layers, pause, focus, resize, menu and resource ownership
-Suites: 1 passed, 0 failed. Assertions: 54.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-FINAL AGGREGATE: 114 unique suites passed; 0 unresolved failures.
-Full first pass: 3,184,557 assertions, plus 366 targeted repair assertions (includes partial duplicate coverage).
-Native packaged EXE: 79 PASS, 0 FAIL; archive CRC and exact EXE bytes PASS.

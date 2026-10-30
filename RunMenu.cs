@@ -32,6 +32,7 @@ namespace ShpilSvoih
             SetInventory("");
             currentHero = null;
             mapRun = null;
+            doctorTestSeed = null;
             mapIntel.Clear();
             mapScroll = previousMapMaxScroll = 0;
             mapDragging = mapDragMoved = suppressMapClick = false;
@@ -76,6 +77,7 @@ namespace ShpilSvoih
             var relic = currentHero.Effects.Chosen;
             string icon = relic.Icon == "placeholder" ? "mystery" : relic.Icon;
             FitImage(g, relicImages[icon], new RectangleF(22, 69, 49, 49));
+            DrawAcquiredDoctorRelics(g);
             actions.Add(Tuple.Create(RelicHitArea, (Action)(() => SetInventory("relics"))));
         }
 
@@ -101,6 +103,7 @@ namespace ShpilSvoih
             string cost = currentHero.Hero == 3
                 ? "Золото: " + currentHero.Effects.GoldPrice(card.GoldCost)
                 : "Энергия: " + card.ManaCost;
+            if (combat != null && combat.HiddenCosts) cost = "Стоимость: ?";
             return cost + "   Урон: " + card.Damage + "   Защита: " + card.Block;
         }
 
@@ -111,7 +114,7 @@ namespace ShpilSvoih
             var cards = isDeck ? InventoryCards : null;
             string pileTitle = inventoryView == "draw" ? "Колода добора" : inventoryView == "discard" ? "Сброс" : "Колода";
             bool isPause = inventoryView == "pause";
-            TextAt(g, isPause ? "Пауза" : isDeck ? pileTitle + " · " + cards.Count : "Реликвии · 1", 237, 202, 29, gold, 650, true);
+            TextAt(g, isPause ? "Пауза" : isDeck ? pileTitle + " · " + cards.Count : "Реликвии · " + (1 + currentHero.Doctors.Items.Count), 237, 202, 29, gold, 650, true);
             Button(g, "Закрыть · Esc", 897, 195, 145, 39, () => SetInventory(""));
             if (isPause)
             {
@@ -122,6 +125,7 @@ namespace ShpilSvoih
             }
             else if (!isDeck)
             {
+                if (currentHero.Doctors.Items.Count > 0 || currentHero.Doctors.BlindFights > 0 || currentHero.Doctors.LiverFights > 0) { DrawDoctorInventory(g); return; }
                 var relic = currentHero.Effects.Chosen;
                 string icon = relic.Icon == "placeholder" ? "mystery" : relic.Icon;
                 FitImage(g, relicImages[icon], new RectangleF(244, 293, 210, 240));

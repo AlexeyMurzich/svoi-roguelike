@@ -23,6 +23,7 @@ namespace ShpilSvoih
         EnemyKind EnemyAtNode(int id)
         {
             if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id, mapRun.Map.Nodes[id].District);
+            if (mapRun.Map.Nodes[id].Kind == RoomKind.Question) return QuestionEnemy;
             EnemyKind enemy;
             return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : mapRun.OrdinaryEnemyAt(id);
         }
@@ -32,7 +33,7 @@ namespace ShpilSvoih
         {
             get
             {
-                return mapScreen && mapRun != null && mapRun.Pending != null && (mapRun.Pending.Kind == RoomKind.Fight || mapRun.Pending.Kind == RoomKind.Elite) && !mapRun.PendingIsRevisit;
+                return mapScreen && mapRun != null && mapRun.Pending != null && (mapRun.Pending.Kind == RoomKind.Fight || mapRun.Pending.Kind == RoomKind.Elite || QuestionBattle) && !mapRun.PendingIsRevisit;
             }
         }
 
@@ -107,6 +108,8 @@ namespace ShpilSvoih
         internal void StartTestRabidHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestHedgehogs() { StartTestEncounter(EnemyKind.Hedgehogs); }
 
+        internal void StartTestDoctors() { StartTestEncounter(EnemyKind.Doctors); }
+
         internal void StartTestBabai() { StartTestEncounter(EnemyKind.Babai); }
 
         internal void StartTestToha() { StartTestEncounter(EnemyKind.Toha); }
@@ -150,6 +153,7 @@ namespace ShpilSvoih
             mapIntel[combatNode].Identity = EnemyCatalog.Name(enemy);
             combat = new CombatState(currentHero, new Random(mapRun.Map.Seed ^ combatNode ^ 0xA71), enemy);
             cardSounds.Prepare(selected);
+            if (enemy == EnemyKind.Doctors) LoadDoctorArt();
             if (enemy == EnemyKind.Fomatreshka) LoadFomatreshkaArt();
             if (enemy == EnemyKind.Mimicrator)
             {
@@ -284,13 +288,14 @@ namespace ShpilSvoih
                 combat.ResolveNextEnemyAction();
                 if (combat.Block < block) guardVisualTime = .3f;
                 SyncDeaths();
-                combatNotice = !wasRabid && combat.Rabies ? "Бешенство наложено" : howling ? "Слабость: урон атак −25% на 1 ход" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
+                combatNotice = actor.Kind == EnemyKind.FemaleDoctor ? "Укол: 5 урона · яд +2" : actor.Kind == EnemyKind.MaleDoctor ? "Кровотечение +2" : !wasRabid && combat.Rabies ? "Бешенство наложено" : howling ? "Слабость: урон атак −25% на 1 ход" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
             });
         }
 
         void SyncDeaths()
         {
             if (combat == null) return;
+            RewardDoctors();
             for (int i = 0; i < combat.Enemies.Count; i++)
             {
                 int index = i;

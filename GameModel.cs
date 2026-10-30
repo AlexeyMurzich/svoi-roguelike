@@ -33,6 +33,7 @@ namespace ShpilSvoih
         public readonly int Hero;
         public readonly StartingEffects Effects;
         public readonly Balance Settings;
+        public readonly DoctorProgress Doctors = new DoctorProgress();
         public decimal Money { get; private set; }
         public bool ShutGod { get; private set; }
         public string MoneyDisplay { get { return ShutGod ? "∞" : Money.ToString(); } }
@@ -132,6 +133,7 @@ namespace ShpilSvoih
             int damage = Hero == 3 ? DebtDamage(previousDebt, Math.Max(0, -nextMoney)) : 0;
             Money = nextMoney;
             Health -= damage;
+            ReviveIfNeeded();
         }
 
         int DebtDamage(decimal previousDebt, decimal nextDebt)
@@ -162,17 +164,36 @@ namespace ShpilSvoih
             return true;
         }
 
-        internal void DefeatByCapture() { Health = 0; }
+        internal void DefeatByCapture() { Health = 0; ReviveIfNeeded(); }
+        internal void ReduceMaximumHealth()
+        {
+            MaxHealth = Math.Max(1, (int)((long)MaxHealth * 3 / 4));
+            Health = Math.Min(Health, MaxHealth);
+        }
+        public void HealFully() { if (Health > 0) Health = MaxHealth; }
+        void ReviveIfNeeded()
+        {
+            if (Health == 0 && Doctors.UseHeart()) Health = Math.Max(1, (int)(((long)MaxHealth + 3) / 4));
+        }
+        internal void ReceiveStatusLoss(int amount)
+        {
+            if (Effects.NegatesFirstTurn) return;
+            LoseHealth(amount);
+        }
+        void LoseHealth(int amount)
+        {
+            int lost = Math.Min(Health, Math.Max(0, amount));
+            Health -= lost;
+            if (Hero == 0) Tears = Saturate((long)Tears + (long)lost * Settings.TearsPerDamage);
+            ReviveIfNeeded();
+        }
 
         public void ReceiveDamage(int actualHealthLost)
         {
             Settings.Validate();
             if (Effects.NegatesFirstTurn)
                 return;
-            int lost = Math.Min(Health, Math.Max(0, actualHealthLost));
-            Health -= lost;
-            if (Hero == 0)
-                Tears = Saturate((long)Tears + (long)lost * Settings.TearsPerDamage);
+            LoseHealth(actualHealthLost);
         }
 
         public bool CanUseFamily(CardFamily family)
