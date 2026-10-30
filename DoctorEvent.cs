@@ -12,6 +12,10 @@ namespace ShpilSvoih
     {
         public const int FemaleHealth = 40, MaleHealth = 50;
         public const int Attack = 5, Poison = 2, Bleeding = 2;
+        public static string NegativeName(Organ organ)
+        {
+            return organ == Organ.Eye ? "Потерянный глаз" : organ == Organ.Heart ? "Потерянное сердце" : "Потерянная печень";
+        }
         public static string Name(DoctorDrop drop)
         {
             return drop == DoctorDrop.Eye ? "Глаз" : drop == DoctorDrop.Heart ? "Сердце" : drop == DoctorDrop.Liver ? "Печень" : "Шоколад «Бабаевский»";
@@ -28,11 +32,15 @@ namespace ShpilSvoih
     public sealed class DoctorProgress
     {
         readonly List<DoctorDrop> items = new List<DoctorDrop>();
+        readonly List<Organ> losses = new List<Organ>();
+        public System.Collections.ObjectModel.ReadOnlyCollection<Organ> LostOrgans { get; private set; }
+        public int HeartHealthLost { get; private set; }
+        public int RemainingFights(Organ organ) { return organ == Organ.Eye ? BlindFights : organ == Organ.Liver ? LiverFights : 0; }
         public System.Collections.ObjectModel.ReadOnlyCollection<DoctorDrop> Items { get; private set; }
         public int BlindFights { get; private set; }
         public int LiverFights { get; private set; }
         public bool HeartUsed { get; private set; }
-        public DoctorProgress() { Items = items.AsReadOnly(); }
+        public DoctorProgress() { Items = items.AsReadOnly(); LostOrgans = losses.AsReadOnly(); }
         public bool Has(DoctorDrop drop) { return items.Contains(drop); }
         public bool Give(DoctorDrop drop)
         {
@@ -44,9 +52,12 @@ namespace ShpilSvoih
         public void Lose(Organ organ, HeroState hero)
         {
             if (hero == null) throw new ArgumentNullException("hero");
+            if (!Enum.IsDefined(typeof(Organ), organ)) throw new ArgumentOutOfRangeException("organ");
+            if (losses.Contains(organ)) return;
+            losses.Add(organ);
             if (organ == Organ.Eye) BlindFights = 3;
             else if (organ == Organ.Liver) LiverFights = 3;
-            else if (organ == Organ.Heart) hero.ReduceMaximumHealth();
+            else if (organ == Organ.Heart) { int before = hero.MaxHealth; hero.ReduceMaximumHealth(); HeartHealthLost = before - hero.MaxHealth; }
             else throw new ArgumentOutOfRangeException("organ");
         }
         internal bool StartFight(out int poison)

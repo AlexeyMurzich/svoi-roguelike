@@ -9,6 +9,32 @@ namespace ShpilSvoih
         Image hospitalArt, femaleDoctorArt, maleDoctorArt;
         Image poisonStatusArt, bleedingStatusArt;
         readonly Image[] acquiredDoctorArt = new Image[4];
+        readonly Image[] negativeDoctorArt = new Image[3];
+        int doctorRelicPage;
+        int NegativeFights(Organ organ)
+        {
+            int remaining = currentHero.Doctors.RemainingFights(organ);
+            if (combat != null && (combat.Phase == CombatPhase.Player || combat.Phase == CombatPhase.Enemy) &&
+                (organ == Organ.Eye && combat.HiddenCosts || organ == Organ.Liver && combat.LiverPenaltyActive)) remaining++;
+            return remaining;
+        }
+        string NegativeDescription(Organ organ)
+        {
+            if (organ == Organ.Heart) return "Максимум HP уменьшен на 25% (−" + currentHero.Doctors.HeartHealthLost + " HP) до конца забега.";
+            int left = NegativeFights(organ);
+            if (left == 0) return "Последствия операции прошли. Штраф больше не действует.";
+            return (organ == Organ.Eye ? "Стоимость карт скрыта символом «?»." : "В начале боя получаете 5 яда.") + " Осталось боёв: " + left + (combat != null && (combat.Phase == CombatPhase.Player || combat.Phase == CombatPhase.Enemy) ? " (включая текущий)." : ".");
+        }
+        void DrawNegativeRelic(Graphics g, RectangleF area, Organ organ, bool expired)
+        {
+            int index = (int)organ;
+            if (negativeDoctorArt[index] == null)
+            {
+                string id = organ == Organ.Eye ? "eye" : organ == Organ.Heart ? "heart" : "liver";
+                negativeDoctorArt[index] = assetStore.Get("relics/lost-" + id + ".png", "relics.lost-" + id + ".png");
+            }
+            DrawDoctorRelicImage(g, negativeDoctorArt[index], area, expired);
+        }
         void DrawDoctorRelic(Graphics g, RectangleF area, DoctorDrop item, bool gray)
         {
             int index = (int)item;
@@ -17,7 +43,10 @@ namespace ShpilSvoih
                 string id = item == DoctorDrop.Eye ? "eye" : item == DoctorDrop.Heart ? "heart" : item == DoctorDrop.Liver ? "liver" : "chocolate";
                 acquiredDoctorArt[index] = assetStore.Get("relics/doctor-" + id + ".png", "relics.doctor-" + id + ".png");
             }
-            var art = acquiredDoctorArt[index];
+            DrawDoctorRelicImage(g, acquiredDoctorArt[index], area, gray);
+        }
+        void DrawDoctorRelicImage(Graphics g, Image art, RectangleF area, bool gray)
+        {
             if (!gray) DrawInterfaceImage(g, art, area, new RectangleF(0, 0, art.Width, art.Height));
             else
             {
@@ -152,6 +181,11 @@ namespace ShpilSvoih
                 {
                     string result = visit.Choice == DoctorChoice.Treatment ? "Здоровье восстановлено. Потерян орган: " + DoctorRules.Name((DoctorDrop)visit.LostOrgan) : "Получено: " + DoctorRules.Name(visit.Drop) + ". Здоровье восстановлено.";
                     TextAt(canvas, result, 392, 327, 23, text, 492, true);
+                    if (visit.Choice == DoctorChoice.Treatment)
+                    {
+                        DrawNegativeRelic(canvas, new RectangleF(394, 418, 62, 62), visit.LostOrgan, false);
+                        TextAt(canvas, NegativeDescription(visit.LostOrgan), 476, 421, 16, Color.Salmon, 400);
+                    }
                     Button(canvas, "Продолжить путь", 390, 555, 500, 53, CompleteMapRoom, true);
                 }
             });
@@ -166,24 +200,53 @@ namespace ShpilSvoih
                 DrawDoctorRelic(g, area, item, item == DoctorDrop.Heart && currentHero.Doctors.HeartUsed);
                 actions.Add(Tuple.Create(area, (Action)(() => SetInventory("relics"))));
             }
+            foreach (var organ in currentHero.Doctors.LostOrgans)
+            {
+                var area = new RectangleF(86 + index++ * 49, 73, 40, 40);
+                int left = NegativeFights(organ);
+                bool expired = organ != Organ.Heart && left == 0;
+                DrawNegativeRelic(g, area, organ, expired);
+                Rect(g, area.X, area.Bottom - 8, 40, 17, Color.FromArgb(220, 24, 12, 20));
+                TextAt(g, organ == Organ.Heart ? "−25%" : left.ToString(), area.X + 3, area.Bottom - 8, 12, expired ? muted : Color.Salmon, 38, true);
+                actions.Add(Tuple.Create(new RectangleF(area.X, area.Y, 40, 49), (Action)(() => SetInventory("relics"))));
+            }
         }
         void DrawDoctorInventory(Graphics g)
         {
             var start = currentHero.Effects.Chosen;
             FitImage(g, relicImages[start.Icon], new RectangleF(247, 269, 64, 64));
             TextAt(g, start.Name + " · " + start.Description, 332, 269, 16, text, 690);
-            string penalties = "";
-            if (currentHero.Doctors.BlindFights > 0) penalties += "Глаз: цены скрыты ещё на " + currentHero.Doctors.BlindFights + " боя. ";
-            if (currentHero.Doctors.LiverFights > 0) penalties += "Печень: яд 5 ещё на " + currentHero.Doctors.LiverFights + " боя.";
-            if (penalties.Length > 0) TextAt(g, penalties, 247, 672, 15, gold, 775);
-            int row = 0;
-            foreach (var item in currentHero.Doctors.Items)
+            int positives = currentHero.Doctors.Items.Count;
+            int count = positives + currentHero.Doctors.LostOrgans.Count;
+            const int pageSize = 4;
+            int maxPage = Math.Max(0, (count - 1) / pageSize);
+            doctorRelicPage = Math.Min(doctorRelicPage, maxPage);
+            int end = Math.Min(count, (doctorRelicPage + 1) * pageSize);
+            for (int at = doctorRelicPage * pageSize; at < end; at++)
             {
-                float y = 358 + row++ * 70;
-                bool used = item == DoctorDrop.Heart && currentHero.Doctors.HeartUsed;
-                DrawDoctorRelic(g, new RectangleF(257, y, 45, 45), item, used);
-                TextAt(g, DoctorRules.Name(item), 332, y, 19, used ? muted : gold, 650, true);
-                TextAt(g, DoctorRules.Description(item, used), 332, y + 26, 14, text, 690);
+                float y = 358 + (at % pageSize) * 70;
+                if (at < positives)
+                {
+                    var item = currentHero.Doctors.Items[at];
+                    bool used = item == DoctorDrop.Heart && currentHero.Doctors.HeartUsed;
+                    DrawDoctorRelic(g, new RectangleF(257, y, 45, 45), item, used);
+                    TextAt(g, DoctorRules.Name(item), 332, y, 19, used ? muted : gold, 650, true);
+                    TextAt(g, DoctorRules.Description(item, used), 332, y + 26, 14, text, 690);
+                }
+                else
+                {
+                    var organ = currentHero.Doctors.LostOrgans[at - positives];
+                    bool expired = organ != Organ.Heart && NegativeFights(organ) == 0;
+                    DrawNegativeRelic(g, new RectangleF(257, y, 45, 45), organ, expired);
+                    TextAt(g, DoctorRules.NegativeName(organ) + " · негативная реликвия", 332, y, 19, expired ? muted : Color.Salmon, 680, true);
+                    TextAt(g, NegativeDescription(organ), 332, y + 26, 14, text, 690);
+                }
+            }
+            if (maxPage > 0)
+            {
+                if (doctorRelicPage > 0) Button(g, "← Назад", 237, 687, 155, 34, () => doctorRelicPage--);
+                TextAt(g, (doctorRelicPage + 1) + " / " + (maxPage + 1), 606, 695, 12, muted, 130);
+                if (doctorRelicPage < maxPage) Button(g, "Далее →", 887, 687, 155, 34, () => doctorRelicPage++);
             }
         }
     }

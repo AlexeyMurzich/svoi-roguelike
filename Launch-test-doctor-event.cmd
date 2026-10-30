@@ -1,2 +1,2 @@
 @echo off
-start "" "%~dp0Svoi-v0.40.1.exe" --test-doctor-event
+start "" "%~dp0Svoi-v0.40.2.exe" --test-doctor-event

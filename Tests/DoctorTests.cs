@@ -85,6 +85,37 @@ namespace ShpilSvoih
             Check(f.Phase == CombatPhase.Victory && visit.Reward(f), "victory reward and full heal");
             Check(h.Health == h.MaxHealth && h.Doctors.Items.Count == 1 && !visit.Reward(f), "exactly one item even chocolate and no duplication");
         }
+        public static void NegativeRelics()
+        {
+            foreach (Organ organ in Enum.GetValues(typeof(Organ)))
+            {
+                var h = Hero(101);
+                int seed = Enumerable.Range(0, 100).First(n => new DoctorEvent(n).LostOrgan == organ);
+                var visit = new DoctorEvent(seed);
+                h.ReceiveDamage(70);
+                Check(visit.Treat(h) && h.Health == h.MaxHealth && h.Doctors.LostOrgans.Count == 1 && h.Doctors.LostOrgans[0] == organ, "treatment grants exact negative organ relic");
+                int max = h.MaxHealth;
+                h.Doctors.Lose(organ, h);
+                Check(h.MaxHealth == max && h.Doctors.LostOrgans.Count == 1 && !visit.Treat(h), "negative relic cannot duplicate or reapply on reopen");
+                if (organ == Organ.Heart) Check(h.MaxHealth == 75 && h.Doctors.HeartHealthLost == 26, "permanent heart loss stores exact max HP reduction");
+                else
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var fight = new CombatState(h, new Random(i));
+                        Check(fight.HiddenCosts == (organ == Organ.Eye && i < 3), "eye penalty survives exactly three starts");
+                        Check(fight.LiverPenaltyActive == (organ == Organ.Liver && i < 3), "liver penalty active identity tracked separately from immunity");
+                        Check(h.Doctors.RemainingFights(organ) == Math.Max(0, 2 - i), "future fights counter decrements once");
+                    }
+                    Check(h.Doctors.LostOrgans.Count == 1, "expired relic retained as operation history");
+                }
+            }
+            var healthy = Hero(100); var battle = new DoctorEvent(4); battle.Fight();
+            Check(healthy.Doctors.LostOrgans.Count == 0, "choosing battle never grants a negative relic");
+            healthy.Doctors.Give(DoctorDrop.Liver); healthy.Doctors.Lose(Organ.Liver, healthy);
+            var immune = new CombatState(healthy, new Random(2));
+            Check(immune.LiverPenaltyActive && immune.Poison == 0 && healthy.Doctors.LiverFights == 2, "immunity suppresses poison without rerolling or losing curse record");
+        }
         public static void Questions()
         {
             for (int seed = 0; seed < 100; seed++)

@@ -35,6 +35,7 @@ namespace ShpilSvoih
         public int Poison { get; private set; }
         public int Bleeding { get; private set; }
         public bool HiddenCosts { get; private set; }
+        public bool LiverPenaltyActive { get; private set; }
         public void ApplyPoison(int amount)
         {
             if (amount > 0 && Hero.Health > 0 && !Hero.Doctors.Has(DoctorDrop.Liver) && Hero.Effects.AcceptDebuff())
@@ -140,6 +141,7 @@ namespace ShpilSvoih
             Shuffle(draw);
             var bonus = hero.Effects.StartCombat();
             int startPoison;
+            LiverPenaltyActive = Hero.Doctors.LiverFights > 0;
             HiddenCosts = Hero.Doctors.StartFight(out startPoison);
             BeginPlayerTurn(startPoison);
             if (Phase == CombatPhase.Player)

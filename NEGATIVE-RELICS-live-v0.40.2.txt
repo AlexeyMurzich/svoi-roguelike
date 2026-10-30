@@ -1,0 +1,13 @@
+﻿PASS live native game window
+PASS treatment fully heals and gives exactly one negative relic
+PASS permanent heart and three future fights
+PASS current fight counted once: 1
+PASS native card pipeline wins affected fight
+PASS current fight counted once: 2
+PASS native card pipeline wins affected fight
+PASS current fight counted once: 3
+PASS native card pipeline wins affected fight
+PASS temporary penalties expire; heart persists
+PASS mixed relic inventory pagination
+PASS menu clears combat
+PASS native close releases audio
