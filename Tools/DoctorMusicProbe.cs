@@ -100,7 +100,11 @@ internal static class DoctorMusicProbe
             }
             else if (stage == 7 && fight.Phase == CombatPhase.Victory && !timeline.IsRunning && !Read<DeathVisuals>("deathVisuals").IsRunning)
             {
-                Check(fight.Hero.Health == fight.Hero.MaxHealth && fight.Hero.Doctors.Items.Count == 1, "native victory full heal and exactly one drop");
+                Capture("reward-unclaimed");
+                Check(fight.Hero.Health == fight.Hero.MaxHealth && fight.Hero.Doctors.Items.Count == 0, "victory heals; relic waits on reward screen");
+                Call("CompleteMapRoom"); Check(Read<MapRun>("mapRun").Pending != null, "unclaimed reward blocks route completion");
+                Call("ClaimDoctorReward"); Call("ClaimDoctorReward");
+                Check(fight.Hero.Doctors.Items.Count == 1, "reward claimed once despite repeated click");
                 Check(Object.ReferenceEquals(song, CurrentVoice()) && Read<MusicPlayer>("music").Track == "doctors", "victory retains same scene theme without restart");
                 Capture("victory"); Call("SetInventory", "relics"); Capture("relic-inventory");
                 foreach (DoctorDrop item in Enum.GetValues(typeof(DoctorDrop))) fight.Hero.Doctors.Give(item);

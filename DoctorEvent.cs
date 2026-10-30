@@ -81,6 +81,7 @@ namespace ShpilSvoih
         public readonly Organ LostOrgan;
         public readonly DoctorDrop Drop;
         public DoctorChoice Choice { get; private set; }
+        public bool RewardClaimed { get; private set; }
         public DoctorEvent(int seed)
         {
             var random = new Random(seed);
@@ -102,11 +103,17 @@ namespace ShpilSvoih
             Choice = DoctorChoice.Battle;
             return true;
         }
+        public bool ClaimReward(CombatState fight)
+        {
+            if (fight == null || fight.Enemy != EnemyKind.Doctors || fight.Phase != CombatPhase.Victory || Choice != DoctorChoice.Victory || RewardClaimed) return false;
+            RewardClaimed = true;
+            fight.Hero.Doctors.Give(Drop);
+            return true;
+        }
         public bool Reward(CombatState fight)
         {
             if (fight == null || fight.Enemy != EnemyKind.Doctors || fight.Phase != CombatPhase.Victory || Choice != DoctorChoice.Battle) return false;
             Choice = DoctorChoice.Victory;
-            fight.Hero.Doctors.Give(Drop);
             fight.Hero.HealFully();
             return true;
         }

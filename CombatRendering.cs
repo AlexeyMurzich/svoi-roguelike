@@ -90,11 +90,12 @@ namespace ShpilSvoih
 
             DrawRunBar(g);
             DrawMapRelics(g);
+            if (DoctorRewardOpen) DrawDoctorRewards(g);
             if (inventoryView != "")
                 DrawRunInventory(g);
             else if (hoveredRelic)
                 DrawRelicTooltip(g);
-            if (inventoryView == "") DrawCombatTooltip(g);
+            if (inventoryView == "" && !DoctorRewardOpen) DrawCombatTooltip(g);
         }
     }
 }

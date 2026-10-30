@@ -320,6 +320,15 @@ namespace ShpilSvoih
 
         void HandleCombatKey(KeyEventArgs e)
         {
+            if (DoctorRewardOpen)
+            {
+                if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
+                {
+                    if (!mapRun.DoctorsAt(mapRun.Pending.Id).RewardClaimed) ClaimDoctorReward();
+                    else CompleteMapRoom();
+                }
+                return;
+            }
             if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D6)
                 PlayCombatCard(e.KeyCode - Keys.D1);
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)

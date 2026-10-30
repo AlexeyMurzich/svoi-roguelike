@@ -1,17 +1,26 @@
-﻿v0.40.3 — targeted validation only. Full suite stopped at user request; not claimed as passed.
+﻿v0.41 targeted validation: 12 suites, 17725 assertions, 0 failures. No full-suite claim.
 
-MUSIC
+PASS Transplant: choice, rewards, real clicks and one claim
+Suites: 1 passed, 0 failed. Assertions: 11.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+
+PASS Doctors: negative relic acquisition, expiry and permanent heart
+PASS Doctors: negative relic HUD, inventory and current fight
+PASS Doctors: attacks, statuses and injuries
+PASS Doctors: acquired relics, reward and revival
+PASS Doctors: question rooms and eye
+PASS Doctors: native rendering, animation and event
+Suites: 6 passed, 0 failed. Assertions: 17642.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+
 PASS Music: asynchronous switching, pause, cancellation and disposal
 PASS Music: doctor choice, battle, victory, treatment and revisit
 PASS Music: seven embedded tracks match prepared samples
 PASS Music: native loop, pause and resume
 PASS Music: actual hero clicks and elite scene transitions
 Suites: 5 passed, 0 failed. Assertions: 72.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-ASSETS
-PASS Image ownership, fallback and file unlocking
-Suites: 1 passed, 0 failed. Assertions: 24.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
 NATIVE
@@ -26,7 +35,9 @@ PASS resume continues same doctor voice
 PASS 5 direct plus separate poison and bleeding at turn start
 PASS focus loss freezes motion
 PASS focus loss pauses doctor theme
-PASS native victory full heal and exactly one drop
+PASS victory heals; relic waits on reward screen
+PASS unclaimed reward blocks route completion
+PASS reward claimed once despite repeated click
 PASS victory retains same scene theme without restart
 PASS used heart remains visible in gray
 PASS native return completes unique event once

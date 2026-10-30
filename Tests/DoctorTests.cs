@@ -83,7 +83,8 @@ namespace ShpilSvoih
             Check(!visit.Reward(f), "no premature reward");
             f.TryPlay(0); f.EndPlayerTurn(); f.ResolveEnemyTurn(); f.TryPlay(0);
             Check(f.Phase == CombatPhase.Victory && visit.Reward(f), "victory reward and full heal");
-            Check(h.Health == h.MaxHealth && h.Doctors.Items.Count == 1 && !visit.Reward(f), "exactly one item even chocolate and no duplication");
+            Check(h.Health == h.MaxHealth && h.Doctors.Items.Count == 0 && !visit.Reward(f), "reward waits for claim");
+            Check(visit.ClaimReward(f) && !visit.ClaimReward(f) && h.Doctors.Items.Count == 1, "exactly one item even chocolate and no duplication");
         }
         public static void NegativeRelics()
         {

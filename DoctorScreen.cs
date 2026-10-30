@@ -97,13 +97,13 @@ namespace ShpilSvoih
             {
                 if (!IsDoctorQuestion || mapRun.PendingIsRevisit) return true;
                 var choice = mapRun.DoctorsAt(mapRun.Pending.Id).Choice;
-                return choice == DoctorChoice.Treatment || choice == DoctorChoice.Victory;
+                return choice == DoctorChoice.Treatment || choice == DoctorChoice.Victory && mapRun.DoctorsAt(mapRun.Pending.Id).RewardClaimed;
             }
         }
         string QuestionIdentity(int id)
         {
             var kind = mapRun.QuestionAt(id, currentHero);
-            return kind == QuestionKind.Doctors ? "Безумные доктора" : kind == QuestionKind.Fight ? "Обычный бой" : "Тихая комната";
+            return kind == QuestionKind.Doctors ? "Чёрные трансплантологи" : kind == QuestionKind.Fight ? "Обычный бой" : "Тихая комната";
         }
         void LoadDoctorArt()
         {
@@ -159,38 +159,7 @@ namespace ShpilSvoih
                 }
             throw new InvalidOperationException("No doctors in this test seed.");
         }
-        void DrawDoctorEvent(Graphics g)
-        {
-            DrawHospital(g);
-            var visit = mapRun.DoctorsAt(mapRun.Pending.Id);
-            DoctorPose(g, 0, 0, new RectangleF(CanvasWidth * .06f, 145, 300, CanvasHeight - 220));
-            DoctorPose(g, 1, 0, new RectangleF(CanvasWidth - 360, 145, 300, CanvasHeight - 220));
-            DrawRunBar(g); DrawMapRelics(g);
-            DrawCenteredOverlay(g, canvas =>
-            {
-                RelicFrame(canvas, 365, 220, 550, 435, true);
-                TextAt(canvas, "Безумные доктора", 390, 245, 29, gold, 500, true);
-                if (visit.Choice == DoctorChoice.None)
-                {
-                    TextAt(canvas, "«Вылечим полностью. Один орган — наша плата».", 392, 300, 19, text, 492);
-                    TextAt(canvas, "Случайно потеряете глаз (цены скрыты на 3 боя), сердце (−25% максимума HP) или печень (яд 5 в начале 3 боёв).", 392, 365, 16, text, 492);
-                    Button(canvas, "Лечение · отдать случайный орган", 390, 483, 500, 53, () => { visit.Treat(currentHero); RefreshScene(); });
-                    Button(canvas, "В бой · полный хил и случайный дроп", 390, 555, 500, 53, () => { if (visit.Fight()) { EnsureCombat(); RefreshScene(); } });
-                }
-                else
-                {
-                    string result = visit.Choice == DoctorChoice.Treatment ? "Здоровье восстановлено. Потерян орган: " + DoctorRules.Name((DoctorDrop)visit.LostOrgan) : "Получено: " + DoctorRules.Name(visit.Drop) + ". Здоровье восстановлено.";
-                    TextAt(canvas, result, 392, 327, 23, text, 492, true);
-                    if (visit.Choice == DoctorChoice.Treatment)
-                    {
-                        DrawNegativeRelic(canvas, new RectangleF(394, 418, 62, 62), visit.LostOrgan, false);
-                        TextAt(canvas, NegativeDescription(visit.LostOrgan), 476, 421, 16, Color.Salmon, 400);
-                    }
-                    Button(canvas, "Продолжить путь", 390, 555, 500, 53, CompleteMapRoom, true);
-                }
-            });
-            if (inventoryView != "") DrawRunInventory(g);
-        }
+        void DrawDoctorEvent(Graphics g) { DrawTransplantEvent(g); }
         void DrawAcquiredDoctorRelics(Graphics g)
         {
             int index = 0;

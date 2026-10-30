@@ -73,6 +73,7 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Transplant: choice, rewards, real clicks and one claim", UiTests.TestTransplantRewards);
             Run("Doctors: negative relic acquisition, expiry and permanent heart", DoctorTests.NegativeRelics);
             Run("Doctors: negative relic HUD, inventory and current fight", UiTests.TestNegativeRelics);
             Run("Doctors: attacks, statuses and injuries", DoctorTests.Rules);
