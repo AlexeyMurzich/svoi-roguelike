@@ -1,48 +1,46 @@
-﻿v0.41 targeted validation: 12 suites, 17725 assertions, 0 failures. No full-suite claim.
+﻿v0.42 targeted validation: 9 suites, 1960243 assertions, 0 failures. No full-suite claim.
 
-PASS Transplant: choice, rewards, real clicks and one claim
-Suites: 1 passed, 0 failed. Assertions: 11.
+PASS Skaters: independent targets, attacks, block and victory
+PASS Skaters: hard pool without consecutive repeats
+PASS Skaters: rendering, targeting, pause and frame rates
+Suites: 3 passed, 0 failed. Assertions: 7830.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
 
-PASS Doctors: negative relic acquisition, expiry and permanent heart
-PASS Doctors: negative relic HUD, inventory and current fight
-PASS Doctors: attacks, statuses and injuries
-PASS Doctors: acquired relics, reward and revival
+INFO Room completion and cached encounter refresh: 96000 transitions; median 0.0022 ms; p95 0.0064 ms; max 0.8764 ms (includes scheduler/GC). No FPS guarantee.
+PASS Encounter progression: history, forks and unchanged rooms
+PASS Encounter progression: cached contents and previews
+PASS Encounter progression: real combat, intel, pause and revisit
+Suites: 3 passed, 0 failed. Assertions: 1940639.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+
 PASS Doctors: question rooms and eye
-PASS Doctors: native rendering, animation and event
-Suites: 6 passed, 0 failed. Assertions: 17642.
+Suites: 1 passed, 0 failed. Assertions: 7550.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
 
-PASS Music: asynchronous switching, pause, cancellation and disposal
-PASS Music: doctor choice, battle, victory, treatment and revisit
-PASS Music: seven embedded tracks match prepared samples
-PASS Music: native loop, pause and resume
-PASS Music: actual hero clicks and elite scene transitions
-Suites: 5 passed, 0 failed. Assertions: 72.
+PASS Babai: hard pool and legal route previews
+Suites: 1 passed, 0 failed. Assertions: 4200.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+
+PASS Image ownership, fallback and file unlocking
+Suites: 1 passed, 0 failed. Assertions: 24.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
 NATIVE
-PASS choice screen loads user song asynchronously
-PASS native user song advances before choice
-PASS native unique event offers two choices
-PASS starting battle preserves same voice and position
-PASS pause before impact preserves HP
-PASS pause suspends doctor song
-PASS native pause holds song position
-PASS resume continues same doctor voice
-PASS 5 direct plus separate poison and bleeding at turn start
+PASS native approved trio and labels
+PASS pause before saber impact holds HP
+PASS master impact applied once
+PASS first blaster impact applied once
+PASS three distinct impacts total twenty
 PASS focus loss freezes motion
-PASS focus loss pauses doctor theme
-PASS victory heals; relic waits on reward screen
-PASS unclaimed reward blocks route completion
-PASS reward claimed once despite repeated click
-PASS victory retains same scene theme without restart
-PASS used heart remains visible in gray
-PASS native return completes unique event once
-PASS leaving event stops and releases song
-PASS native treatment full heal
-PASS peaceful result retains event theme
+PASS native click selects target 1
+PASS first padawan dies independently
+PASS native click selects target 2
+PASS second padawan dies independently
+PASS native click selects target 0
+PASS ordinary victory does not grant doctor treatment or relic
 PASS menu clears battle
-PASS native close releases audio
+PASS close releases audio

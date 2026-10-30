@@ -53,7 +53,9 @@ namespace ShpilSvoih
         {
             var result = new List<CombatHint>();
             if (!enemy.IsAlive) return result;
-            if (enemy.Kind == EnemyKind.FemaleDoctor)
+            if (enemy.Kind == EnemyKind.SkaterMaster || enemy.Kind == EnemyKind.SkaterPadawan)
+                result.Add(new CombatHint(8, enemy.AttackDamage.ToString(), enemy.Kind == EnemyKind.SkaterMaster ? "Красный меч" : "Бластер", "Один удар на " + enemy.AttackDamage + " урона. Блок поглощает урон."));
+            else if (enemy.Kind == EnemyKind.FemaleDoctor)
             {
                 result.Add(new CombatHint(8, "5", "Укол", "Каждый ход наносит 5 урона."));
                 result.Add(new CombatHint(22, "2", "Яд", "Наложит 2 яда даже через полный блок, если нет иммунитета."));

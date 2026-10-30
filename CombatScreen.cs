@@ -261,6 +261,7 @@ namespace ShpilSvoih
             if (combat.Phase != CombatPhase.Enemy || combat.ActingEnemy < 0) return;
             actingEnemyIndex = combat.ActingEnemy;
             var actor = combat.Enemies[actingEnemyIndex];
+            if (actor.Kind == EnemyKind.SkaterMaster || actor.Kind == EnemyKind.SkaterPadawan) { StartSkaterAttack(actor); return; }
             if (actor.Kind == EnemyKind.Fomatreshka || actor.Kind == EnemyKind.Fan) { StartFomatreshkaAction(actor); return; }
             if (actor.Kind == EnemyKind.Babai) { StartBabaiLasso(); return; }
             if (actor.Kind == EnemyKind.Toha)

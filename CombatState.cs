@@ -134,6 +134,8 @@ namespace ShpilSvoih
             if (enemy == EnemyKind.Doctors) enemies.Add(new CombatEnemy(1, EnemyKind.MaleDoctor, 0));
             if (enemy == EnemyKind.StrayDogs) enemies.Add(new CombatEnemy(1, enemy, 1));
             if (enemy == EnemyKind.Hedgehogs) enemies.Add(new CombatEnemy(1, EnemyKind.RabidHedgehog, 0));
+            if (enemy == EnemyKind.SkaterMaster)
+            { enemies.Add(new CombatEnemy(1, EnemyKind.SkaterPadawan, 0)); enemies.Add(new CombatEnemy(2, EnemyKind.SkaterPadawan, 0)); }
             Enemies = enemies.AsReadOnly();
             SelectedTarget = 0;
             ActingEnemy = -1;

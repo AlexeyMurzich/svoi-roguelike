@@ -1,2 +1,2 @@
 @echo off
-start "" "%~dp0Svoi-v0.41.exe" --test-doctors
+start "" "%~dp0Svoi-v0.42.exe" --test-doctors

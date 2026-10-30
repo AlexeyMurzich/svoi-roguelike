@@ -133,7 +133,7 @@ namespace ShpilSvoih
                         if (kind == QuestionKind.Doctors) { run.DoctorsAt(id).Treat(h); doctorVisits++; }
                         if (kind == QuestionKind.Fight) enemy = run.StartQuestionFight(id);
                     }
-                    if (enemy.HasValue) { Check(fights < 3 ? enemy != EnemyKind.Babai && easy.Add(enemy.Value) : enemy == EnemyKind.Babai, "question and normal nodes share unique easy then hard pool"); fights++; }
+                    if (enemy.HasValue) { Check(fights < 3 ? enemy != EnemyKind.Babai && easy.Add(enemy.Value) : SkaterRules.IsHard(enemy.Value), "question and normal nodes share unique easy then hard pool"); fights++; }
                     Check(run.CompleteRoom(), "route closes resolved question");
                     Check(run.CompletedOrdinaryFights == fights && doctorVisits <= 1, "no duplicate doctors or ordinary counters");
                 }

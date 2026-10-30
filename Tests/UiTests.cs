@@ -130,7 +130,7 @@ namespace ShpilSvoih
                 TestSuite.Throws<InvalidDataException>(() => corrupt.Get("missing.png", "missing.png"), "missing required asset fails clearly");
             }
 
-            TestSuite.Check(typeof(Game).Assembly.GetManifestResourceNames().Count() == 91, "73 images, seven music tracks, two Toha, eight card sounds and one cashier glitch");
+            TestSuite.Check(typeof(Game).Assembly.GetManifestResourceNames().Count() == 92, "74 images, seven music tracks, two Toha, eight card sounds and one cashier glitch");
             using (var embedded = new ImageAssets(assembly, Path.Combine(directory, "no-overrides")))
             {
                 var atlas = embedded.Get("map-icons.png", "map-icons.png");

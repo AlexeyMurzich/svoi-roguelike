@@ -11,9 +11,16 @@ namespace ShpilSvoih
         public static EnemyKind Select(int seed, int node, ICollection<EnemyKind> completed)
         {
             if (completed == null) throw new ArgumentNullException("completed");
-            // Temporary content rule approved for the one-enemy hard pool:
-            // Babai can repeat and can appear in all three districts.
-            if (completed.Count >= EasyPool.Length) return EnemyKind.Babai;
+            // Hard encounters stay in all districts; alternate the two available groups.
+            // The easy pool is permanently exhausted after the first three completions.
+            if (completed.Count >= EasyPool.Length)
+            {
+                EnemyKind last = EnemyKind.Rat;
+                foreach (var value in completed) last = value;
+                if (last == EnemyKind.Babai) return EnemyKind.SkaterMaster;
+                if (last == EnemyKind.SkaterMaster) return EnemyKind.Babai;
+                return ((uint)seed ^ (uint)node * 0x9E3779B9u) % 2 == 0 ? EnemyKind.Babai : EnemyKind.SkaterMaster;
+            }
             int remaining = 0;
             foreach (var enemy in EasyPool)
                 if (!completed.Contains(enemy)) remaining++;

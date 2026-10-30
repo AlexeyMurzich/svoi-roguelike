@@ -1,0 +1,14 @@
+﻿PASS native approved trio and labels
+PASS pause before saber impact holds HP
+PASS master impact applied once
+PASS first blaster impact applied once
+PASS three distinct impacts total twenty
+PASS focus loss freezes motion
+PASS native click selects target 1
+PASS first padawan dies independently
+PASS native click selects target 2
+PASS second padawan dies independently
+PASS native click selects target 0
+PASS ordinary victory does not grant doctor treatment or relic
+PASS menu clears battle
+PASS close releases audio

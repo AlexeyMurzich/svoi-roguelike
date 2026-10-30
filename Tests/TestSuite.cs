@@ -73,6 +73,9 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Skaters: independent targets, attacks, block and victory", SkaterTests.Combat);
+            Run("Skaters: hard pool without consecutive repeats", SkaterTests.HardPool);
+            Run("Skaters: rendering, targeting, pause and frame rates", UiTests.TestSkaters);
             Run("Transplant: choice, rewards, real clicks and one claim", UiTests.TestTransplantRewards);
             Run("Doctors: negative relic acquisition, expiry and permanent heart", DoctorTests.NegativeRelics);
             Run("Doctors: negative relic HUD, inventory and current fight", UiTests.TestNegativeRelics);

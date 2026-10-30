@@ -54,7 +54,7 @@ namespace ShpilSvoih
                 for (int count = 3; count < 20; count++)
                 {
                     var hard = OrdinaryEncounters.Select(seed, count + 1, history);
-                    TestSuite.Check(hard == EnemyKind.Babai, "temporary hard pool repeats only Babai after the easy pool");
+                    TestSuite.Check(SkaterRules.IsHard(hard), "expanded hard pool stays closed to easy encounters");
                     history.Add(hard);
                 }
                 TestSuite.Check(EnemyCatalog.ForEliteNode(seed, 1) != EnemyKind.Babai, "Babai never replaces an elite");

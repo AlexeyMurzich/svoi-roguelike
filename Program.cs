@@ -16,6 +16,7 @@ namespace ShpilSvoih
                 using (var game = new Game())
                 {
                     game.StartFullscreen();
+                    if (Array.IndexOf(args, "--test-skaters") >= 0) game.StartTestSkaters();
                     if (Array.IndexOf(args, "--test-doctors") >= 0) game.StartTestDoctors();
                     if (Array.IndexOf(args, "--test-doctor-event") >= 0) game.StartTestDoctorEvent();
                     if (Array.IndexOf(args, "--test-fomatreshka") >= 0) game.StartTestFomatreshka();

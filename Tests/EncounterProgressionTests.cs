@@ -51,12 +51,12 @@ namespace ShpilSvoih
                             TestSuite.Check(OrdinaryEncounters.Preview(run, next) == EnemyCatalog.Name(actual), "available room preview names its exact cached opponent");
                             if (history.Count < 3)
                             {
-                                TestSuite.Check(actual != EnemyKind.Babai && !history.Contains(actual), "first three fights are easy and never repeat, even across intervening elites/events");
+                                TestSuite.Check(!SkaterRules.IsHard(actual) && !history.Contains(actual), "first three fights are easy and never repeat, even across intervening elites/events");
                                 if (history.Count == 0) firstEnemies.Add(actual);
                             }
                             else
                             {
-                                TestSuite.Check(actual == EnemyKind.Babai, "fourth and ALL later fights are hard; easy pool never returns");
+                                TestSuite.Check(SkaterRules.IsHard(actual) && (history.Count == 3 || history[history.Count - 1] != actual), "fourth and ALL later fights are hard; easy pool never returns");
                                 repeatedHard |= history.Count > 3;
                                 hardOutsideEstate |= node.District != 2;
                             }
@@ -72,7 +72,7 @@ namespace ShpilSvoih
                         foreach (var past in visitedEnemies)
                             TestSuite.Check(run.OrdinaryEnemyAt(past.Key) == past.Value, "visited enemies remain unchanged");
                         foreach (var future in map.Nodes.Where(n => n.Kind == RoomKind.Fight && !run.Visited(n.Id) && run.Reachable(n.Id)))
-                            TestSuite.Check(history.Count < 3 ? !history.Contains(run.OrdinaryEnemyAt(future.Id)) : run.OrdinaryEnemyAt(future.Id) == EnemyKind.Babai, "every future reachable fight excludes used easy opponents or uses hard pool");
+                            TestSuite.Check(history.Count < 3 ? !history.Contains(run.OrdinaryEnemyAt(future.Id)) : SkaterRules.IsHard(run.OrdinaryEnemyAt(future.Id)), "every future reachable fight excludes used easy opponents or uses hard pool");
                         changed |= before != Contents(run);
                         string after = Contents(run);
                         TestSuite.Check(!run.CompleteRoom() && Contents(run) == after, "duplicate completion cannot reroll contents");
@@ -87,7 +87,7 @@ namespace ShpilSvoih
                     TestSuite.Check(fresh.CompletedOrdinaryFights == 0 && fresh.OrdinaryEnemyAt(1) != EnemyKind.Babai, "a new run resets history without changing the map");
                 }
             }
-            TestSuite.Check(changed && repeatedHard && hardOutsideEstate && longRoute && firstEnemies.Count == 3, "coverage includes regenerated enemies, repeated Babai, early-district hard fights and routes beyond four fights");
+            TestSuite.Check(changed && repeatedHard && hardOutsideEstate && longRoute && firstEnemies.Count == 3, "coverage includes regenerated enemies, alternating hard encounters, early-district hard fights and routes beyond four fights");
             timings.Sort();
             TestSuite.Note(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Room completion and cached encounter refresh: {0} transitions; median {1:F4} ms; p95 {2:F4} ms; max {3:F4} ms (includes scheduler/GC). No FPS guarantee.", timings.Count, timings[timings.Count / 2], timings[(int)(timings.Count * .95)], timings.Last()));
         }
@@ -165,7 +165,7 @@ namespace ShpilSvoih
                         if (node.Kind == RoomKind.Fight)
                         {
                             TestSuite.Check(fight.Enemy == expected, "actual combat consumes the cached enemy, without an entry reroll");
-                            TestSuite.Check(completed < 3 ? seen.Add(fight.Enemy) && fight.Enemy != EnemyKind.Babai : fight.Enemy == EnemyKind.Babai, "real UI route obeys easy-to-hard progression");
+                            TestSuite.Check(completed < 3 ? seen.Add(fight.Enemy) && !SkaterRules.IsHard(fight.Enemy) : SkaterRules.IsHard(fight.Enemy), "real UI route obeys easy-to-hard progression");
                             using (var frame = Render(game)) frame.Save(Path.Combine(TestSuite.OutputDirectory, "progression-battle-" + (completed + 1) + ".png"));
                             Key(game, Keys.Escape); Call(game, "AdvanceCombatAnimation", .2f); Key(game, Keys.Escape);
                             using (Render(game)) { }

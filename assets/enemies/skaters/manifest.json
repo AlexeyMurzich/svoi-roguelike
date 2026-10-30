@@ -1,0 +1,7 @@
+{
+  "source": "approved-source.png",
+  "sha256": "9472e35752e91e9462b64ed5ad548d4329381eb7a2624fb7393c213c51fd153e",
+  "method": "Exact approved source pixels isolated at render time by source-coordinate silhouettes; no regenerated faces",
+  "source_review": "skater-chief-battle-review-v3",
+  "rejected": "Regenerated master sheet is not used"
+}
