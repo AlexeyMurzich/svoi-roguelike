@@ -17,6 +17,7 @@ namespace ShpilSvoih
         bool mapDragging, mapDragMoved, suppressMapClick;
         float dragStartY, dragStartScroll;
         readonly Dictionary<int, IntelNode> mapIntel = new Dictionary<int, IntelNode>();
+        int? doctorTestSeed;
         static readonly Random routeSeeds = new Random();
         void OpenActMap()
         {
@@ -26,7 +27,7 @@ namespace ShpilSvoih
             mapScreen = true;
             if (mapRun == null)
             {
-                mapRun = new MapRun(ActMap.Generate(routeSeeds.Next()));
+                mapRun = new MapRun(ActMap.Generate(doctorTestSeed ?? routeSeeds.Next()));
                 mapScroll = MapMaxScroll;
                 mapIntel.Clear();
                 var intel = new List<IntelNode>();
@@ -35,7 +36,7 @@ namespace ShpilSvoih
                     var item = new IntelNode
                     {
                         Kind = node.Kind == RoomKind.Question ? IntelKind.Question : node.Kind == RoomKind.Elite ? IntelKind.Elite : node.Kind == RoomKind.Fight ? IntelKind.Fight : IntelKind.Other,
-                        Identity = node.Kind == RoomKind.Question ? "Событие ещё не задано" : node.Kind == RoomKind.Fight ? OrdinaryEncounters.Preview(mapRun, node.Id) : node.Kind == RoomKind.Elite ? EnemyCatalog.Name(EnemyCatalog.ForEliteNode(mapRun.Map.Seed, node.Id, node.District)) : "Противник ещё не задан"
+                        Identity = node.Kind == RoomKind.Question ? QuestionIdentity(node.Id) : node.Kind == RoomKind.Fight ? OrdinaryEncounters.Preview(mapRun, node.Id) : node.Kind == RoomKind.Elite ? EnemyCatalog.Name(EnemyCatalog.ForEliteNode(mapRun.Map.Seed, node.Id, node.District)) : "Противник ещё не задан"
                     };
                     mapIntel.Add(node.Id, item);
                     intel.Add(item);
@@ -65,11 +66,14 @@ namespace ShpilSvoih
                     return;
             }
 
+            if (!CanCompleteQuestion) return;
             if (mapRun.CompleteRoom())
             {
                 foreach (var future in mapRun.Map.Nodes)
                     if (future.Kind == RoomKind.Fight && !mapRun.Visited(future.Id))
                         mapIntel[future.Id].Identity = OrdinaryEncounters.Preview(mapRun, future.Id);
+                foreach (var future in mapRun.Map.Nodes)
+                    if (future.Kind == RoomKind.Question && !mapRun.Visited(future.Id)) mapIntel[future.Id].Identity = QuestionIdentity(future.Id);
                 MoveMapTo(FocusMap(mapRun.Current));
             }
             ResetCombat();
@@ -452,6 +456,7 @@ namespace ShpilSvoih
         void DrawMapRoom(Graphics g)
         {
             actions.Clear();
+            if (IsDoctorQuestion) { DrawDoctorEvent(g); return; }
             var node = mapRun.Pending;
             Rect(g, MapView.X, MapView.Y, MapView.Width, MapView.Height, Color.FromArgb(220, 7, 13, 18));
             DrawRunBar(g);
@@ -493,7 +498,7 @@ namespace ShpilSvoih
             }
 
             TextAt(g, RoomName(node.Kind), 355, 281, 32, RoomColor(node.Kind), 560, true);
-            string detail = node.Kind == RoomKind.Boss ? "Двухэтажный дом из голых бетонных блоков, без забора. Здесь будет босс Смолевичей." : node.Kind == RoomKind.Rest ? "Здесь будет отдых у костра." : node.Kind == RoomKind.Shop ? "Здесь будет магазин карт." : node.Kind == RoomKind.Question ? "Здесь будет случайное событие." : "Здесь будет " + (node.Kind == RoomKind.Elite ? "элитный враг." : "обычный бой.");
+            string detail = node.Kind == RoomKind.Boss ? "Двухэтажный дом из голых бетонных блоков, без забора. Здесь будет босс Смолевичей." : node.Kind == RoomKind.Rest ? "Здесь будет отдых у костра." : node.Kind == RoomKind.Shop ? "Здесь будет магазин карт." : node.Kind == RoomKind.Question ? "Здесь тихо. Можно продолжить путь." : "Здесь будет " + (node.Kind == RoomKind.Elite ? "элитный враг." : "обычный бой.");
             TextAt(g, detail, 355, 346, 18, text, 560);
             TextAt(g, "Содержимое этой комнаты и награды появятся позже.", 355, 425, 14, muted, 560);
             if (mapIntel[node.Id].Revealed)

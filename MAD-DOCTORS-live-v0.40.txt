@@ -1,0 +1,9 @@
+PASS native unique event offers two choices
+PASS pause before impact preserves HP
+PASS 5 direct plus separate poison and bleeding at turn start
+PASS focus loss freezes motion
+PASS native victory full heal and exactly one drop
+PASS native return completes unique event once
+PASS native treatment full heal
+PASS menu clears battle
+PASS native close releases audio

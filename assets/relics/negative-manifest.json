@@ -1,0 +1,33 @@
+{
+  "tool": "built-in ImageGen",
+  "version": "0.40.2",
+  "assets": [
+    {
+      "file": "assets/relics/lost-eye.png",
+      "sha256": "a2f1d97769c3b2e49012f5edeb0fd040dea60a992752c117636a11738a8cfca9",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "assets/relics/lost-heart.png",
+      "sha256": "e9098562aaad2bc21605015bb64ca5824e031f78b4c40058305053f2809d211d",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "assets/relics/lost-liver.png",
+      "sha256": "da8ce12f772fec298533e12757b723b02bb18f2264f8dde4bef5b8b7ecf1c740",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    }
+  ]
+}

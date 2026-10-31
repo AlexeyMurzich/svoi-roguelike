@@ -12,6 +12,8 @@ namespace ShpilSvoih
 
         RectangleF EnemyArea(int index)
         {
+            if (combat.Enemy == EnemyKind.SkaterMaster) return SkaterArea(index);
+            if (combat.Enemy == EnemyKind.Doctors) return new RectangleF(EnemyCenter(index) - 145, CombatFloor - 350, 290, 350);
             if (combat.Enemy == EnemyKind.Fomatreshka) return FomatreshkaArea(index);
             float center = EnemyCenter(index);
             if (combat.Enemies[index].Kind == EnemyKind.Babai) return BabaiBodyArea;
@@ -26,6 +28,8 @@ namespace ShpilSvoih
 
         RectangleF EnemyTargetArea(int index)
         {
+            if (combat.Enemy == EnemyKind.SkaterMaster)
+                return new RectangleF(EnemyCenter(index) - (index == 0 ? 100 : 80), CombatFloor - (index == 0 ? 350 : 185), index == 0 ? 200 : 160, index == 0 ? 380 : 215);
             if (combat.Enemy == EnemyKind.Fomatreshka)
                 return new RectangleF(EnemyCenter(index) - CanvasWidth * .055f, CombatFloor - 340, CanvasWidth * .11f, 380);
             float width = combat.Enemies.Count > 1 ? Math.Min(300, EnemyCenter(1) - EnemyCenter(0) - 12) : 300;
@@ -59,6 +63,8 @@ namespace ShpilSvoih
 
         void PaintCombatEnemy(Graphics graphics, int index)
         {
+            if (combat.Enemy == EnemyKind.SkaterMaster) { DrawSkaterSprite(graphics, index); return; }
+            if (combat.Enemy == EnemyKind.Doctors) { DrawDoctorSprite(graphics, index); return; }
             if (combat.Enemy == EnemyKind.Fomatreshka) { DrawFomatreshkaSprite(graphics, index, false); return; }
             var area = EnemyArea(index);
             if (actingEnemyIndex == index && (attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite))

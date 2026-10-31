@@ -1,0 +1,20 @@
+﻿PASS choice screen loads user song asynchronously
+PASS native user song advances before choice
+PASS native unique event offers two choices
+PASS starting battle preserves same voice and position
+PASS pause before impact preserves HP
+PASS pause suspends doctor song
+PASS native pause holds song position
+PASS resume continues same doctor voice
+PASS 5 direct plus separate poison and bleeding at turn start
+PASS focus loss freezes motion
+PASS focus loss pauses doctor theme
+PASS native victory full heal and exactly one drop
+PASS victory retains same scene theme without restart
+PASS used heart remains visible in gray
+PASS native return completes unique event once
+PASS leaving event stops and releases song
+PASS native treatment full heal
+PASS peaceful result retains event theme
+PASS menu clears battle
+PASS native close releases audio

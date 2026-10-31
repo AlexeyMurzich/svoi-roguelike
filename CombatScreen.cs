@@ -23,8 +23,9 @@ namespace ShpilSvoih
         EnemyKind EnemyAtNode(int id)
         {
             if (mapRun.Map.Nodes[id].Kind == RoomKind.Elite) return EnemyCatalog.ForEliteNode(mapRun.Map.Seed, id, mapRun.Map.Nodes[id].District);
+            if (mapRun.Map.Nodes[id].Kind == RoomKind.Question) return QuestionEnemy;
             EnemyKind enemy;
-            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : OrdinaryEncounters.Select(mapRun.Map.Seed, id, OrdinaryEncounters.Completed(mapRun), mapRun.Map.Nodes[id].District);
+            return encounteredEnemies.TryGetValue(id, out enemy) ? enemy : mapRun.OrdinaryEnemyAt(id);
         }
         readonly HowlSound howlSound = new HowlSound();
         string combatNotice = "";
@@ -32,7 +33,7 @@ namespace ShpilSvoih
         {
             get
             {
-                return mapScreen && mapRun != null && mapRun.Pending != null && (mapRun.Pending.Kind == RoomKind.Fight || mapRun.Pending.Kind == RoomKind.Elite) && !mapRun.PendingIsRevisit;
+                return mapScreen && mapRun != null && mapRun.Pending != null && (mapRun.Pending.Kind == RoomKind.Fight || mapRun.Pending.Kind == RoomKind.Elite || QuestionBattle) && !mapRun.PendingIsRevisit;
             }
         }
 
@@ -66,6 +67,7 @@ namespace ShpilSvoih
             fomatreshkaFlee = -1;
             fomatreshkaEntrance = FomatreshkaRules.EntranceDuration;
             cardSounds.Stop();
+            skaterSounds.Stop();
             audioPlayerTurn = -1;
             tohaSound.Stop();
             ClearDistrictBackdrop();
@@ -106,6 +108,8 @@ namespace ShpilSvoih
         internal void StartTestHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestRabidHedgehog() { StartTestEncounter(EnemyKind.Hedgehogs); }
         internal void StartTestHedgehogs() { StartTestEncounter(EnemyKind.Hedgehogs); }
+
+        internal void StartTestDoctors() { StartTestEncounter(EnemyKind.Doctors); }
 
         internal void StartTestBabai() { StartTestEncounter(EnemyKind.Babai); }
 
@@ -150,6 +154,7 @@ namespace ShpilSvoih
             mapIntel[combatNode].Identity = EnemyCatalog.Name(enemy);
             combat = new CombatState(currentHero, new Random(mapRun.Map.Seed ^ combatNode ^ 0xA71), enemy);
             cardSounds.Prepare(selected);
+            if (enemy == EnemyKind.Doctors) LoadDoctorArt();
             if (enemy == EnemyKind.Fomatreshka) LoadFomatreshkaArt();
             if (enemy == EnemyKind.Mimicrator)
             {
@@ -257,6 +262,7 @@ namespace ShpilSvoih
             if (combat.Phase != CombatPhase.Enemy || combat.ActingEnemy < 0) return;
             actingEnemyIndex = combat.ActingEnemy;
             var actor = combat.Enemies[actingEnemyIndex];
+            if (actor.Kind == EnemyKind.SkaterMaster || actor.Kind == EnemyKind.SkaterPadawan) { StartSkaterAttack(actor); return; }
             if (actor.Kind == EnemyKind.Fomatreshka || actor.Kind == EnemyKind.Fan) { StartFomatreshkaAction(actor); return; }
             if (actor.Kind == EnemyKind.Babai) { StartBabaiLasso(); return; }
             if (actor.Kind == EnemyKind.Toha)
@@ -284,13 +290,14 @@ namespace ShpilSvoih
                 combat.ResolveNextEnemyAction();
                 if (combat.Block < block) guardVisualTime = .3f;
                 SyncDeaths();
-                combatNotice = !wasRabid && combat.Rabies ? "Бешенство наложено" : howling ? "Слабость: урон атак −25% на 1 ход" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
+                combatNotice = actor.Kind == EnemyKind.FemaleDoctor ? "Укол: 5 урона · яд +2" : actor.Kind == EnemyKind.MaleDoctor ? "Кровотечение +2" : !wasRabid && combat.Rabies ? "Бешенство наложено" : howling ? "Слабость: урон атак −25% на 1 ход" : combat.Phase == CombatPhase.Defeat ? "Поражение" : combat.LastDamage == 0 ? "Удар заблокирован" : "Получено урона: " + combat.LastDamage;
             });
         }
 
         void SyncDeaths()
         {
             if (combat == null) return;
+            RewardDoctors();
             for (int i = 0; i < combat.Enemies.Count; i++)
             {
                 int index = i;
@@ -315,6 +322,15 @@ namespace ShpilSvoih
 
         void HandleCombatKey(KeyEventArgs e)
         {
+            if (DoctorRewardOpen)
+            {
+                if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
+                {
+                    if (!mapRun.DoctorsAt(mapRun.Pending.Id).RewardClaimed) ClaimDoctorReward();
+                    else CompleteMapRoom();
+                }
+                return;
+            }
             if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D6)
                 PlayCombatCard(e.KeyCode - Keys.D1);
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)

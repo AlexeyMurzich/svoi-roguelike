@@ -23,6 +23,9 @@ namespace ShpilSvoih
             if (hero.Health <= 0 || (fight.Phase != CombatPhase.Player && fight.Phase != CombatPhase.Enemy)) return result;
             if (fight.Babai != null)
                 result.Add(new CombatHint(20, fight.Babai.Distance.ToString(), "До кровати", "Каждое лассо притягивает на 1 даже через полный блок. На расстоянии 0 — немедленная смерть. Начальная дистанция: 5."));
+            if (fight.Poison > 0) result.Add(new CombatHint(22, fight.Poison.ToString(), "Яд", "В начале хода теряет HP по числу стаков, затем яд уменьшается на 1. Игнорирует блок."));
+            if (fight.Bleeding > 0) result.Add(new CombatHint(23, fight.Bleeding.ToString(), "Кровотечение", "Отдельно от яда: в начале хода теряет HP по числу стаков, затем −1. Игнорирует блок."));
+            if (fight.HiddenCosts) result.Add(new CombatHint(24, "?", "Потерян глаз", "Стоимость карт скрыта в этом бою. Оплата карт остаётся прежней."));
             if (fight.WeakTurns > 0)
                 result.Add(new CombatHint(0, fight.WeakTurns.ToString(), "Слабость", "Урон атак снижен на 25%, с округлением вниз. Осталось ходов: " + fight.WeakTurns + "."));
             if (fight.StunPending)
@@ -50,7 +53,15 @@ namespace ShpilSvoih
         {
             var result = new List<CombatHint>();
             if (!enemy.IsAlive) return result;
-            if (enemy.Kind == EnemyKind.Fomatreshka)
+            if (enemy.Kind == EnemyKind.SkaterMaster || enemy.Kind == EnemyKind.SkaterPadawan)
+                result.Add(new CombatHint(8, enemy.AttackDamage.ToString(), enemy.Kind == EnemyKind.SkaterMaster ? "Красный меч" : "Бластер", "Один удар на " + enemy.AttackDamage + " урона. Блок поглощает урон."));
+            else if (enemy.Kind == EnemyKind.FemaleDoctor)
+            {
+                result.Add(new CombatHint(8, "5", "Укол", "Каждый ход наносит 5 урона."));
+                result.Add(new CombatHint(22, "2", "Яд", "Наложит 2 яда даже через полный блок, если нет иммунитета."));
+            }
+            else if (enemy.Kind == EnemyKind.MaleDoctor) result.Add(new CombatHint(23, "2", "Кровотечение", "Наложит 2 кровотечения. Прямого урона нет. Печень не защищает."));
+            else if (enemy.Kind == EnemyKind.Fomatreshka)
                 result.Add(enemy.WillSummon ? new CombatHint(14, "3", "Призыв фанаток", "Смахнёт волосы и призовёт трёх фанаток. В этот ход они не атакуют. После смерти старшего выжившие фанатки сбегают.") :
                     enemy.WillDrink ? new CombatHint(21, "+6", "Gorilla · Бодрость", "Получит 6 бодрости: каждое попадание следующей очереди нанесёт на 6 урона больше. Бодрость исчезнет после всей очереди. Фанатки атакуют перед ним.") :
                     new CombatHint(8, enemy.AttackDamage + " × " + enemy.HitCount, "Императрица · очередь", "Три отдельных выстрела по " + enemy.AttackDamage + " урона. Блок расходуется поочерёдно, HP снимаются на каждом попадании. Бодрость усиливает все три попадания и расходуется после всей очереди, включая полный блок."));

@@ -2,7 +2,7 @@
 
 namespace ShpilSvoih
 {
-    public enum EnemyKind { Rat, StrayDogs, Hedgehog, RabidHedgehog, Hedgehogs, Mimicrator, Toha, Babai, Fomatreshka, Fan }
+    public enum EnemyKind { Rat, StrayDogs, Hedgehog, RabidHedgehog, Hedgehogs, Mimicrator, Toha, Babai, Fomatreshka, Fan, Doctors, FemaleDoctor, MaleDoctor, SkaterMaster, SkaterPadawan }
 
     public static class EnemyCatalog
     {
@@ -10,6 +10,11 @@ namespace ShpilSvoih
         {
             switch (kind)
             {
+                case EnemyKind.SkaterMaster: return "Магистр скейтер";
+                case EnemyKind.SkaterPadawan: return "Падаван скейтер";
+                case EnemyKind.Doctors: return "Чёрные трансплантологи";
+                case EnemyKind.FemaleDoctor: return "Чёрный трансплантолог";
+                case EnemyKind.MaleDoctor: return "Чёрный трансплантолог";
                 case EnemyKind.Fomatreshka: return "Фоматрешка";
                 case EnemyKind.Fan: return "Фанатка";
                 case EnemyKind.Babai: return "Бабай";

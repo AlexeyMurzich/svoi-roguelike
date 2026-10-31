@@ -1,0 +1,10 @@
+﻿Built-in ImageGen. Runtime assets derived from approved hospital mockup; male final uses user's locked sprite sheet.
+
+female
+Extract the APPROVED female doctor from LEFT of reference, preserving her exact recognizable face and thin glasses, restrained angry crooked closed-mouth smile, soft rounded cheeks/chin, brown ponytail and all clothing. Output transparent sprite sheet with exactly two equally sized cells side by side: left SAME syringe ready pose, right syringe thrust attacking pose with extended arm. Huge white cylindrical cap, white coat, BLACK surgical scrubs, cream gloves, blue shoe covers. Same identical woman, same head size and total height, floor baseline in both cells. Full cap/feet with margins. No scene, no text, no background. Do not make smile toothy or caricature face.
+
+ward
+Remove BOTH doctors completely from reference and reconstruct the hospital ward behind them. Output ONLY empty hospital ward game background: preserve mint/cream walls, beds at sides, central window, overhead fluorescents and empty foreground linoleum/tile floor. Same camera and landscape 16:9 framing. No people, weapons, caps, reflections of characters or text. Painted 2D game background.
+
+male
+Edit this FINISHED APPROVED sprite sheet with two precise changes only: remove white background to actual transparent alpha, and recolor ONLY the teal surgical scrub tops and trousers to matte black with charcoal highlights. Preserve every other part exactly, especially both male faces, their real photographic facial likeness, glasses, facial expressions, heads, body proportions, poses, hair, enormous white caps, white coats, scalpels, gloves and blue shoe covers. Do not redraw or beautify faces. Preserve the left ready pose with free hand held before chest and right extended-arm attack pose, same sheet layout and margins. User specifically locked this existing model and rejected redrawn versions. Direct image edit, no new interpretation.

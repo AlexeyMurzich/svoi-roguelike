@@ -1,0 +1,34 @@
+[
+  {
+    "id": "saber",
+    "original": "lightsaber-original.mp3",
+    "source_sha256": "bcaf33da29b27dc0ea5e2212dd3a48aa6cc0bd460c3dbedc136e2c84332143a0",
+    "sample_rate": 24000,
+    "channels": 2,
+    "frames": 54720,
+    "duration_seconds": 2.28,
+    "pcm_bytes": 218880,
+    "trim_start_seconds": 0,
+    "edge_fade_seconds": 0.01,
+    "preparation_gain": 2.627222890192252,
+    "asset_sha256": "91d9eb92852b2460ef0557875c1fda115289c31a5c763da94d097f3c19a949fa",
+    "compressed_bytes": 116871,
+    "clipped_samples": 0
+  },
+  {
+    "id": "blaster",
+    "original": "blaster-original.mp3",
+    "source_sha256": "265dfce8ea2f00d4d980307a87069cbed93cae2ba91186b20346373874019912",
+    "sample_rate": 24000,
+    "channels": 2,
+    "frames": 46080,
+    "duration_seconds": 1.92,
+    "pcm_bytes": 184320,
+    "trim_start_seconds": 0,
+    "edge_fade_seconds": 0.01,
+    "preparation_gain": 0.6466192926244826,
+    "asset_sha256": "8f260ebf947cc57326136c1e2c6ae255101521e986fbc8a702e88838c8965bf0",
+    "compressed_bytes": 141145,
+    "clipped_samples": 0
+  }
+]

@@ -20,7 +20,7 @@ namespace ShpilSvoih
         {
             get
             {
-                return combat != null && combat.Enemy != EnemyKind.Toha && combat.Enemy != EnemyKind.Mimicrator;
+                return combat != null && combat.Enemy != EnemyKind.Toha && combat.Enemy != EnemyKind.Mimicrator && combat.Enemy != EnemyKind.Doctors;
             }
         }
         void ClearDistrictBackdrop()

@@ -7,6 +7,7 @@ namespace ShpilSvoih
     {
         void DrawCombatImpactEffects(Graphics graphics, float heroX, float floor, float time)
         {
+            DrawSkaterAttack(graphics);
             bool babai = combat.Babai != null;
             int aimIndex = Math.Max(0, Math.Min(attackTarget, combat.Enemies.Count - 1));
             bool dog = combat.Enemies[aimIndex].Kind == EnemyKind.StrayDogs;
@@ -24,7 +25,7 @@ namespace ShpilSvoih
             float afterHit = time - attackTimeline.HitTime;
             if ((currentHero.Health > 0 || attackTimeline.Kind != AttackAnimation.HeroStrike) && attackTimeline.IsRunning && attackTimeline.Kind != AttackAnimation.DogHowl && attackTimeline.Kind != AttackAnimation.TohaTransform && attackTimeline.Kind != AttackAnimation.MimicratorTransform && attackTimeline.Kind != AttackAnimation.MimicratorRest && afterHit >= 0 && afterHit < .18f)
             {
-                bool enemyHit = attackTimeline.Kind == AttackAnimation.FomatreshkaShot || attackTimeline.Kind == AttackAnimation.FanStrike || IsBabaiLasso || IsTohaRamming || attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite || attackTimeline.Kind == AttackAnimation.HedgehogNeedles || attackTimeline.Kind == AttackAnimation.MimicratorMagic || attackTimeline.Kind == AttackAnimation.MimicratorBeacon || attackTimeline.Kind == AttackAnimation.MimicratorBear || attackTimeline.Kind == AttackAnimation.MimicratorShell;
+                bool enemyHit = attackTimeline.Kind == AttackAnimation.SkaterSlash || attackTimeline.Kind == AttackAnimation.PadawanShot || attackTimeline.Kind == AttackAnimation.FomatreshkaShot || attackTimeline.Kind == AttackAnimation.FanStrike || IsBabaiLasso || IsTohaRamming || attackTimeline.Kind == AttackAnimation.RatBite || attackTimeline.Kind == AttackAnimation.DogBite || attackTimeline.Kind == AttackAnimation.HedgehogBite || attackTimeline.Kind == AttackAnimation.HedgehogNeedles || attackTimeline.Kind == AttackAnimation.MimicratorMagic || attackTimeline.Kind == AttackAnimation.MimicratorBeacon || attackTimeline.Kind == AttackAnimation.MimicratorBear || attackTimeline.Kind == AttackAnimation.MimicratorShell;
                 float x = enemyHit || attackTimeline.Kind == AttackAnimation.HeroGuard ? heroX : target;
                 float hitY = floor - 180;
                 if ((babai || dog) && !enemyHit && attackTimeline.Kind == AttackAnimation.HeroStrike) { x = aim.X; hitY = aim.Y; }

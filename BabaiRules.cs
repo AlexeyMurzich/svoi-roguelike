@@ -14,7 +14,7 @@
         {
             if (Caught) return;
             Distance--;
-            if (Caught) hero.DefeatByCapture();
+            if (Caught) { hero.DefeatByCapture(); if (hero.Health > 0) Distance = 1; }
         }
     }
 }

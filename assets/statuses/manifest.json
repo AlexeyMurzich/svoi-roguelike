@@ -1,0 +1,14 @@
+﻿[
+  {
+    "file": "poison.png",
+    "sha256": "A9E501776DCF680CBAEAC037ED75E117405A142A87AB6890EC4651D8FB896C20",
+    "generator": "Built-in ImageGen",
+    "reference": "assets/combat-icons.png"
+  },
+  {
+    "file": "bleeding.png",
+    "sha256": "D600252889898F3DC6F1703BFC5AFE50895A6D47F0F0D472468885F384D40401",
+    "generator": "Built-in ImageGen",
+    "reference": "assets/combat-icons.png"
+  }
+]

@@ -19,6 +19,9 @@ namespace ShpilSvoih
             using (var game = new Game())
             {
                 game.CreateControl();
+                // Create the HWND before sizing: Windows can clamp a hidden form
+                // to the monitor on first paint, invalidating sampled coordinates.
+                TestSuite.Check(game.Handle != IntPtr.Zero, "HUD fixture creates native handle before sizing");
                 game.ClientSize = new Size(1280, 840);
                 var sources = (RectangleF[])typeof(Game).GetField("PortraitSources", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).GetValue(null);
                 var sprites = Read<Dictionary<int, Image>>(game, "sprites");
@@ -35,11 +38,16 @@ namespace ShpilSvoih
                         Call(game, "TakeBuff");
                         Call(game, "OpenActMap");
                         HoverRelic(game, 500, 80);
-                        Color before;
-                        int border = (game.Width - game.ClientSize.Width) / 2;
-                        int caption = game.Height - game.ClientSize.Height - border;
+                        var before = new List<Color>();
+                        var clientOrigin = game.PointToScreen(Point.Empty);
+                        int border = clientOrigin.X - game.Left;
+                        int caption = clientOrigin.Y - game.Top;
                         using (var frame = Render(game))
-                            before = frame.GetPixel(border + 22, caption + 140);
+                        {
+                            for (int y = 145; y <= 215; y += 10)
+                                for (int x = 30; x <= 230; x += 10)
+                                    before.Add(frame.GetPixel(border + x, caption + y));
+                        }
                         var actions = Read<List<Tuple<RectangleF, Action>>>(game, "actions");
                         int count = actions.Count;
                         HoverRelic(game, 46, 90);
@@ -51,7 +59,11 @@ namespace ShpilSvoih
                         Call(game, "OnMapMouseUp", game, new MouseEventArgs(MouseButtons.Left, 1, relicPoint.X, relicPoint.Y, 0));
                         using (var frame = Render(game))
                         {
-                            TestSuite.Check(frame.GetPixel(border + 22, caption + 140) != before, "tooltip is actually painted below relic");
+                            int sample = 0, changed = 0;
+                            for (int y = 145; y <= 215; y += 10)
+                                for (int x = 30; x <= 230; x += 10)
+                                    if (frame.GetPixel(border + x, caption + y) != before[sample++]) changed++;
+                            TestSuite.Check(changed > before.Count / 2, "tooltip visibly covers the panel below relic " + hero + "/" + buff);
                             if (buff == 0)
                                 frame.Save(Path.Combine(TestSuite.OutputDirectory, "hud-hero-" + hero + ".png"));
                         }
@@ -95,7 +107,7 @@ namespace ShpilSvoih
 
                     HoverRelic(game, 90, 90);
                     TestSuite.Check(!Read<bool>(game, "hoveredRelic"), "moving beyond icon hides tooltip");
-                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 38, "HUD reuses sprite and icon cache across resizes");
+                    TestSuite.Check((Read<ImageAssets>(game, "assetStore").Count - HeroArtCount(game)) == 40, "HUD reuses sprite and icon cache across resizes");
                 }
 
                 game.ClientSize = new Size(1280, 840);
