@@ -1,0 +1,256 @@
+﻿ACTION AUDIT v0.43.3 — issue #6 — 31.10.2026
+Среда: Linux-контейнер, Mono 6.8.0.105, libgdiplus 6.1, Xvfb 1920x1080x24, нулевая заглушка winmm.dll (dllmap), SVOI_SOFTWARE_RENDERER=1.
+Это НЕ Windows/GDI+: времена сравнимы только до/после на этой машине. EXE на Windows не собирался.
+Обходы libgdiplus только в локальной копии исходников, не в репозитории: без поворота карт руки, SourceOver после блита фона, управляемая замена OpaqueImageBlend.
+
+КОМПИЛЯЦИЯ
+mcs -target:winexe -optimize+ -warn:4 -warnaserror+ -langversion:5 (+ -nowarn:414, предупреждение только mcs о поле presentationFailure), 95 ресурсов, как build.ps1: OK.
+Svoi.Tests.exe и Tools/ActionAudit.cs: mcs -langversion:5 -warnaserror+: OK.
+
+НОВЫЕ И РАСШИРЕННЫЕ НАБОРЫ (до = HEAD 3165462, после = v0.43.3)
+до:    PASS Repaint: partial frames are pixel-identical
+до:    FAIL Action sync: fan run-in starts at the summon impact at any frame rate
+до:    FAIL Action sync: closing the console resumes sound-tail clock
+до:    FAIL Action sync: skater bolt and saber arc end at the impact
+после: PASS Repaint: partial frames are pixel-identical
+после: PASS Action sync: fan run-in starts at the summon impact at any frame rate
+после: PASS Action sync: closing the console resumes sound-tail clock
+после: PASS Action sync: skater bolt and saber arc end at the impact
+
+ПОЛНЫЙ НАБОР ПОД MONO
+до:    Suites: 118 passed, 12 failed. Assertions: 3209911.
+после: Suites: 121 passed, 9 failed. Assertions: 3209860.
+Оставшиеся 9 падений одинаковы до и после (те же сообщения): нативный звук/темп меню, Direct3D-вывод, GetGuiResources (user32), пиксельные эталоны и IsVisible под libgdiplus:
+  Skater audio: labels, theme and scene transitions :: System.Exception: approved wrist, sleeve, board and wheel pixels remain visible {X=#, Y=#}
+  Music continuity: real menu, redraw, resize and GC :: System.Exception: menu music keeps real-time speed under redraw, resize and collection
+  Fade: native alpha, clipping and handle cleanup :: System.EntryPointNotFoundException: GetGuiResources assembly:<unknown assembly> type:<unknown type> member:(null)
+  Presentation: real HWND, GPU pixels, resize, focus and fallback :: System.Exception: real HWND uses flip presentation without fallback
+  Living: lifecycle and fixed paws :: System.EntryPointNotFoundException: GetGuiResources assembly:<unknown assembly> type:<unknown type> member:(null)
+  Resize/repaint determinism and GDI resources :: System.EntryPointNotFoundException: GetGuiResources assembly:<unknown assembly> type:<unknown type> member:(null)
+  Map UI, modal clicks, investigation and resizing :: System.Exception: only encountered art sets are decoded once and shared
+  Repeated battle/map/pause/resize transitions release resources :: System.EntryPointNotFoundException: GetGuiResources assembly:<unknown assembly> type:<unknown type> member:(null)
+  Mimicrator combat: actions, transforms, birds, pause and deaths at six sizes :: System.Exception: birds animate
+
+АУДИТ ДЕЙСТВИЙ, СВОДКА (1280x840, 60 Гц, окно видимо и в фокусе)
+ДО
+  Rat           frames=184 motion-only=177 stale-frames=0 full-median-ms=5.69 band-median-ms=3.69 invalidated-share=0.746; SUMMARY problems=0
+  StrayDogs     frames=482 motion-only=464 stale-frames=0 full-median-ms=5.48 band-median-ms=3.24 invalidated-share=0.718; SUMMARY problems=0
+  Hedgehogs     frames=494 motion-only=476 stale-frames=0 full-median-ms=5.71 band-median-ms=3.49 invalidated-share=0.716; SUMMARY problems=0
+  Doctors       frames=729 motion-only=701 stale-frames=0 full-median-ms=6.21 band-median-ms=4.09 invalidated-share=0.688; SUMMARY problems=0
+  Babai         frames=361 motion-only=350 stale-frames=0 full-median-ms=6.04 band-median-ms=3.77 invalidated-share=0.686; SUMMARY problems=0
+  Toha          frames=667 motion-only=644 stale-frames=0 full-median-ms=5.66 band-median-ms=3.29 invalidated-share=0.694; SUMMARY problems=0
+  Mimicrator    frames=482 motion-only=463 stale-frames=0 full-median-ms=9.22 band-median-ms=8.06 invalidated-share=0.674; SUMMARY problems=0
+  Fomatreshka   frames=896 motion-only=859 stale-frames=0 full-median-ms=7.14 band-median-ms=6.93 invalidated-share=1.000; SUMMARY problems=0
+  SkaterMaster  frames=503 motion-only=482 stale-frames=0 full-median-ms=10.52 band-median-ms=8.30 invalidated-share=0.673; SUMMARY problems=0
+ПОСЛЕ
+  Rat           frames=184 motion-only=177 stale-frames=0 full-median-ms=5.86 band-median-ms=3.44 invalidated-share=0.746; SUMMARY problems=0
+  StrayDogs     frames=482 motion-only=464 stale-frames=0 full-median-ms=5.32 band-median-ms=3.16 invalidated-share=0.718; SUMMARY problems=0
+  Hedgehogs     frames=494 motion-only=476 stale-frames=0 full-median-ms=5.66 band-median-ms=3.45 invalidated-share=0.716; SUMMARY problems=0
+  Doctors       frames=729 motion-only=701 stale-frames=0 full-median-ms=6.21 band-median-ms=4.12 invalidated-share=0.688; SUMMARY problems=0
+  Babai         frames=361 motion-only=350 stale-frames=0 full-median-ms=5.93 band-median-ms=3.74 invalidated-share=0.686; SUMMARY problems=0
+  Toha          frames=667 motion-only=644 stale-frames=0 full-median-ms=5.72 band-median-ms=3.27 invalidated-share=0.694; SUMMARY problems=0
+  Mimicrator    frames=482 motion-only=463 stale-frames=0 full-median-ms=8.69 band-median-ms=6.16 invalidated-share=0.674; SUMMARY problems=0
+  Fomatreshka   frames=896 motion-only=859 stale-frames=0 full-median-ms=7.18 band-median-ms=4.94 invalidated-share=0.654; SUMMARY problems=0
+  SkaterMaster  frames=503 motion-only=482 stale-frames=0 full-median-ms=10.62 band-median-ms=8.46 invalidated-share=0.673; SUMMARY problems=0
+
+АУДИТ ДЕЙСТВИЙ, ПОЛНЫЙ ЖУРНАЛ ПОСЛЕ
+== Rat
+focus=True; visible=True; music=
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during RatBite: timerStopped=True soundsPaused=True resumedTimer=True
+  action RatBite by Большая крыса turn 1: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  resize during HeroStrike t=0.50: rendered 1920x1080, 900x1400, 1280x840
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+result phase=Victory turn=2 hero=45 block=0 enemies=0
+death visuals: running=False snapshots=0
+frames=184 motion-only=177 stale-frames=0 full-median-ms=5.86 band-median-ms=3.44 invalidated-share=0.746
+sound-map HeroStrike:card x2
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== StrayDogs
+focus=True; visible=True; music=
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during DogBite: timerStopped=True soundsPaused=True resumedTimer=True
+  action DogBite by Серый пёс turn 1: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  resize during DogBite t=0.53: rendered 1920x1080, 900x1400, 1280x840
+  action DogBite by Рыжий пёс turn 1: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action DogHowl by Рыжий пёс turn 2: frames=60 real=1.000s hit@0.500s impacts=1 sounds=[howl@0.00]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action DogBite by Рыжий пёс turn 3: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action HeroStrike by hero turn 4: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+result phase=Victory turn=4 hero=35 block=0 enemies=0/0
+death visuals: running=False snapshots=0
+frames=482 motion-only=464 stale-frames=0 full-median-ms=5.32 band-median-ms=3.16 invalidated-share=0.718
+sound-map HeroStrike:card x4
+sound-map DogHowl:howl x1
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== Hedgehogs
+focus=True; visible=True; music=
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during HedgehogNeedles: timerStopped=True soundsPaused=True resumedTimer=True
+  action HedgehogNeedles by Колючий ёж turn 1: frames=72 real=1.208s hit@0.933s impacts=1 sounds=[]
+  resize during HedgehogBite t=0.63: rendered 1920x1080, 900x1400, 1280x840
+  action HedgehogBite by Безумный ёж turn 1: frames=52 real=0.875s hit@0.517s impacts=1 sounds=[]
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action HedgehogBite by Безумный ёж turn 2: frames=52 real=0.875s hit@0.517s impacts=1 sounds=[]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action HedgehogBite by Безумный ёж turn 3: frames=52 real=0.875s hit@0.517s impacts=1 sounds=[]
+  action HeroStrike by hero turn 4: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+result phase=Victory turn=4 hero=21 block=0 enemies=0/0
+death visuals: running=False snapshots=0
+frames=494 motion-only=476 stale-frames=0 full-median-ms=5.66 band-median-ms=3.45 invalidated-share=0.716
+sound-map HeroStrike:card x4
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== Doctors
+focus=True; visible=True; music=doctors
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during RatBite: timerStopped=True soundsPaused=True resumedTimer=True
+  action RatBite by Чёрный трансплантолог turn 1: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  resize during RatBite t=0.53: rendered 1920x1080, 900x1400, 1280x840
+  action RatBite by Чёрный трансплантолог turn 1: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action RatBite by Чёрный трансплантолог turn 2: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action RatBite by Чёрный трансплантолог turn 2: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action RatBite by Чёрный трансплантолог turn 3: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action HeroStrike by hero turn 4: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action RatBite by Чёрный трансплантолог turn 4: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action HeroStrike by hero turn 5: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action RatBite by Чёрный трансплантолог turn 5: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action HeroStrike by hero turn 6: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+result phase=Victory turn=6 hero=12 block=0 enemies=0/0
+death visuals: running=False snapshots=0
+frames=729 motion-only=701 stale-frames=0 full-median-ms=6.21 band-median-ms=4.12 invalidated-share=0.688
+sound-map HeroStrike:card x6
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== Babai
+focus=True; visible=True; music=babai
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during BabaiLasso: timerStopped=True soundsPaused=True resumedTimer=True
+  action BabaiLasso by Бабай turn 1: frames=90 real=1.500s hit@0.750s impacts=1 sounds=[]
+  resize during HeroStrike t=0.50: rendered 1920x1080, 900x1400, 1280x840
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action BabaiLasso by Бабай turn 2: frames=90 real=1.500s hit@0.750s impacts=1 sounds=[]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+result phase=Victory turn=3 hero=30 block=0 enemies=0
+death visuals: running=False snapshots=0
+frames=361 motion-only=350 stale-frames=0 full-median-ms=5.93 band-median-ms=3.74 invalidated-share=0.686
+sound-map HeroStrike:card x3
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== Toha
+focus=True; visible=True; music=
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during TohaRam: timerStopped=True soundsPaused=True resumedTimer=True
+  action TohaRam by Тоха · Светлая сторона turn 1: frames=67 real=1.125s hit@0.517s impacts=1 sounds=[toha@0.00]
+  resize during HeroStrike t=0.50: rendered 1920x1080, 900x1400, 1280x840
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action TohaRam by Тоха · Светлая сторона turn 2: frames=67 real=1.125s hit@0.517s impacts=1 sounds=[toha@0.00]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action TohaRam by Тоха · Светлая сторона turn 3: frames=67 real=1.125s hit@0.517s impacts=1 sounds=[toha@0.00]
+  action HeroStrike by hero turn 4: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action TohaTransform by Тоха · Тёмная сторона turn 4: frames=59 real=1.000s hit@0.500s impacts=1 sounds=[]
+  action TohaDarkRam by Тоха · Тёмная сторона turn 4: frames=75 real=1.250s hit@0.483s impacts=1 sounds=[toha@0.00]
+  action HeroStrike by hero turn 5: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action TohaDarkRam by Тоха · Тёмная сторона turn 5: frames=75 real=1.250s hit@0.483s impacts=1 sounds=[toha@0.00]
+result phase=Defeat turn=5 hero=0 block=0 enemies=10
+death visuals: running=False snapshots=0
+frames=667 motion-only=644 stale-frames=0 full-median-ms=5.72 band-median-ms=3.27 invalidated-share=0.694
+sound-map HeroStrike:card x5
+sound-map TohaRam:toha x3
+sound-map TohaDarkRam:toha x2
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== Mimicrator
+focus=True; visible=True; music=mimicrator
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during MimicratorRest: timerStopped=True soundsPaused=True resumedTimer=True
+  action MimicratorRest by Мимикратор turn 1: frames=47 real=0.792s hit@0.400s impacts=1 sounds=[]
+  resize during HeroStrike t=0.50: rendered 1920x1080, 900x1400, 1280x840
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action MimicratorTransform by Мимикратор turn 2: frames=42 real=0.708s hit@0.354s impacts=1 sounds=[]
+  action MimicratorBeacon by Мимикратор turn 2: frames=57 real=0.958s hit@0.542s impacts=1 sounds=[]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action MimicratorTransform by Мимикратор turn 3: frames=42 real=0.708s hit@0.354s impacts=1 sounds=[]
+  action MimicratorBear by Мимикратор turn 3: frames=62 real=1.042s hit@0.583s impacts=1 sounds=[]
+  action HeroStrike by hero turn 4: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+result phase=Victory turn=4 hero=30 block=0 enemies=0
+death visuals: running=False snapshots=0
+frames=482 motion-only=463 stale-frames=0 full-median-ms=8.69 band-median-ms=6.16 invalidated-share=0.674
+sound-map HeroStrike:card x4
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== Fomatreshka
+focus=True; visible=True; music=
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during FomatreshkaSummon: timerStopped=True soundsPaused=True resumedTimer=True
+  action FomatreshkaSummon by Фоматрешка turn 1: frames=82 real=1.375s hit@0.417s impacts=1 sounds=[]
+  resize during HeroStrike t=0.50: rendered 1920x1080, 900x1400, 1280x840
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action FanStrike by Фанатка turn 2: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FanStrike by Фанатка turn 2: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FanStrike by Фанатка turn 2: frames=51 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FomatreshkaDrink by Фоматрешка turn 2: frames=64 real=1.083s hit@0.583s impacts=1 sounds=[]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action FanStrike by Фанатка turn 3: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FanStrike by Фанатка turn 3: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FanStrike by Фанатка turn 3: frames=51 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FomatreshkaShot by Фоматрешка turn 3: frames=16 real=0.283s hit@0.100s impacts=1 sounds=[]
+  action FomatreshkaShot by Фоматрешка turn 3: frames=16 real=0.283s hit@0.100s impacts=1 sounds=[]
+  action FomatreshkaShot by Фоматрешка turn 3: frames=16 real=0.283s hit@0.100s impacts=1 sounds=[]
+  action HeroStrike by hero turn 4: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action FanStrike by Фанатка turn 4: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FanStrike by Фанатка turn 4: frames=52 real=0.875s hit@0.433s impacts=1 sounds=[]
+  action FanStrike by Фанатка turn 4: frames=51 real=0.875s hit@0.433s impacts=1 sounds=[]
+result phase=Defeat turn=4 hero=0 block=0 enemies=8/16/16/16
+death visuals: running=False snapshots=0
+frames=896 motion-only=859 stale-frames=0 full-median-ms=7.18 band-median-ms=4.94 invalidated-share=0.654
+sound-map HeroStrike:card x4
+resources; actorArtCache count=9 MiB=2.80 misses=31; interfaceArtCache count=12 MiB=0.46 misses=47; private-MiB=372.0; gdi=n/a; gen0=15 gen2=9
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0
+== SkaterMaster
+focus=True; visible=True; music=skaters
+  pause during HeroStrike: frozen=True soundsPaused=True timerStopped=True
+  action HeroStrike by hero turn 1: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  focus loss during SkaterSlash: timerStopped=True soundsPaused=True resumedTimer=True
+  action SkaterSlash by Магистр скейтер turn 1: frames=55 real=0.917s hit@0.483s impacts=1 sounds=[skater@0.00]
+  resize during PadawanShot t=0.52: rendered 1920x1080, 900x1400, 1280x840
+  action PadawanShot by Падаван скейтер turn 1: frames=39 real=0.667s hit@0.417s impacts=1 sounds=[skater@0.02]
+  action PadawanShot by Падаван скейтер turn 1: frames=39 real=0.667s hit@0.417s impacts=1 sounds=[skater@0.02]
+  action HeroStrike by hero turn 2: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action SkaterSlash by Магистр скейтер turn 2: frames=55 real=0.917s hit@0.483s impacts=1 sounds=[skater@0.00]
+  action PadawanShot by Падаван скейтер turn 2: frames=39 real=0.667s hit@0.417s impacts=1 sounds=[skater@0.02]
+  action PadawanShot by Падаван скейтер turn 2: frames=39 real=0.667s hit@0.417s impacts=1 sounds=[skater@0.02]
+  action HeroStrike by hero turn 3: frames=47 real=0.792s hit@0.417s impacts=1 sounds=[card@0.00]
+  action SkaterSlash by Магистр скейтер turn 3: frames=55 real=0.917s hit@0.483s impacts=1 sounds=[skater@0.00]
+result phase=Defeat turn=3 hero=0 block=0 enemies=26/20/20
+death visuals: running=False snapshots=0
+frames=503 motion-only=482 stale-frames=0 full-median-ms=10.62 band-median-ms=8.46 invalidated-share=0.673
+sound-map HeroStrike:card x3
+sound-map SkaterSlash:skater x3
+sound-map PadawanShot:skater x4
+resources; actorArtCache count=6 MiB=1.74 misses=24; interfaceArtCache count=12 MiB=0.46 misses=46; private-MiB=374.5; gdi=n/a; gen0=10 gen2=6
+exit: combat cleared, voices=0, snapshots=0, clean=True
+re-entry: fresh=True phase=Player
+SUMMARY problems=0

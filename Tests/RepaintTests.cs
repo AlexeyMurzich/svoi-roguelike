@@ -39,12 +39,21 @@ namespace ShpilSvoih
         public static void TestPartialRepaint()
         {
             foreach (var size in new[] { new Size(1280, 840), new Size(1920, 1080) })
-                foreach (string launch in new[] { "StartTestBattle", "StartTestDogs", "StartTestHedgehogs", "StartTestMimicrator", "StartTestIllyaToha", "StartTestBabai" })
+                foreach (string launch in new[] { "StartTestBattle", "StartTestDogs", "StartTestHedgehogs", "StartTestMimicrator", "StartTestIllyaToha", "StartTestBabai", "StartTestDoctors", "StartTestSkaters", "StartTestFomatreshka" })
                     using (var game = new Game())
                     using (var partial = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb))
                     using (var full = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb))
                     {
                         game.ClientSize = size; Call(game, launch);
+                        if (launch == "StartTestFomatreshka")
+                        {
+                            // Summon the fans, then replay their run-in: the actor band must contain it.
+                            Call(game, "EndCombatTurn");
+                            for (int n = 0; n < 200 && (Read<CombatState>(game, "combat").Phase != CombatPhase.Player || (bool)typeof(Game).GetProperty("CombatBusy", PrivateInstance).GetValue(game, null)); n++)
+                                Call(game, "AdvanceCombatAnimation", .05f);
+                            TestSuite.Check(Read<CombatState>(game, "combat").Enemies.Count == 4, "fans summoned before the repaint check");
+                            Write(game, "fomatreshkaEntrance", 0f);
+                        }
                         var timeline = Read<AttackTimeline>(game, "attackTimeline"); timeline.Cancel();
                         var all = new Rectangle(Point.Empty, size);
                         PaintClient(game, partial, all);
@@ -52,8 +61,9 @@ namespace ShpilSvoih
                         {
                             if (animated)
                             {
-                                var kind = launch == "StartTestBabai" ? AttackAnimation.BabaiLasso : launch == "StartTestIllyaToha" ? AttackAnimation.TohaRam : launch == "StartTestMimicrator" ? AttackAnimation.MimicratorBeacon : launch == "StartTestDogs" ? AttackAnimation.DogBite : AttackAnimation.HeroStrike;
-                                Write(game, "actingEnemyIndex", 0); timeline.Start(kind, () => { });
+                                var kind = launch == "StartTestBabai" ? AttackAnimation.BabaiLasso : launch == "StartTestIllyaToha" ? AttackAnimation.TohaRam : launch == "StartTestMimicrator" ? AttackAnimation.MimicratorBeacon : launch == "StartTestDogs" ? AttackAnimation.DogBite :
+                                    launch == "StartTestDoctors" ? AttackAnimation.RatBite : launch == "StartTestSkaters" ? AttackAnimation.SkaterSlash : launch == "StartTestFomatreshka" ? AttackAnimation.FanStrike : AttackAnimation.HeroStrike;
+                                Write(game, "actingEnemyIndex", launch == "StartTestFomatreshka" ? 1 : 0); timeline.Start(kind, () => { });
                                 PaintClient(game, partial, all);
                             }
                             for (int frame = 0; frame < 5; frame++)

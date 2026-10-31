@@ -197,6 +197,7 @@ namespace ShpilSvoih
                 float step = attackTimeline.IsRunning ? Math.Min(remaining, attackTimeline.SecondsToBoundary) : remaining;
                 deathVisuals.Advance(step);
                 if (fomatreshkaFlee >= 0) fomatreshkaFlee = Math.Min(FomatreshkaRules.FleeDuration, fomatreshkaFlee + step);
+                fomatreshkaEntrance = Math.Min(FomatreshkaRules.EntranceDuration, fomatreshkaEntrance + step);
                 guardVisualTime = Math.Max(0, guardVisualTime - step);
                 attackTimeline.Advance(step);
                 remaining = Math.Max(0, remaining - step);

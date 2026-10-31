@@ -10,6 +10,8 @@ namespace ShpilSvoih
         const int SampleRate = 22050;
         const int SampleCount = 18742;
         static readonly byte[] wave = CreateWave();
+        // One immutable PCM view for every howl: no 37 KB copy per enemy action.
+        static readonly MusicPcm pcm = CreatePcm();
         IMusicVoice voice;
         bool disposed, paused = true;
 
@@ -53,6 +55,13 @@ namespace ShpilSvoih
             }
         }
 
+        static MusicPcm CreatePcm()
+        {
+            var bytes = new byte[SampleCount * 2];
+            Buffer.BlockCopy(wave, 44, bytes, 0, bytes.Length);
+            return new MusicPcm(SampleRate, 1, bytes);
+        }
+
         public void Play()
         {
             if (disposed)
@@ -60,9 +69,7 @@ namespace ShpilSvoih
             try
             {
                 Stop();
-                var bytes = new byte[SampleCount * 2];
-                Buffer.BlockCopy(wave, 44, bytes, 0, bytes.Length);
-                voice = new LoopingMusicVoice(new MusicPcm(SampleRate, 1, bytes), false);
+                voice = new LoopingMusicVoice(pcm, false);
                 ((IAudioVolumeVoice)voice).SetVolume(AudioLevels.Howl);
                 paused = true;
                 SetPaused(false);

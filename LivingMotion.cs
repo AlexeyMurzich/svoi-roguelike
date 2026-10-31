@@ -70,9 +70,14 @@ namespace ShpilSvoih
         {
             if (!LivingScene || GameplayPaused || !Motion.IsFinite(elapsed) || elapsed <= 0) return;
             livingSeconds += elapsed;
-            fomatreshkaEntrance = Math.Min(FomatreshkaRules.EntranceDuration, fomatreshkaEntrance + elapsed);
             AdvanceCashier(elapsed);
-            if (!CombatBusy) guardVisualTime = Math.Max(0, guardVisualTime - elapsed);
+            // While an action runs, these clocks advance in the impact-split combat loop,
+            // so a summon at mid-frame receives the rest of that frame at any frame rate.
+            if (!CombatBusy)
+            {
+                guardVisualTime = Math.Max(0, guardVisualTime - elapsed);
+                fomatreshkaEntrance = Math.Min(FomatreshkaRules.EntranceDuration, fomatreshkaEntrance + elapsed);
+            }
             InvalidateMotionFrame();
         }
     }

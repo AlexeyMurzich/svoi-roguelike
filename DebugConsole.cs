@@ -24,9 +24,10 @@ namespace ShpilSvoih
                 howlSound.SetPaused(true);
                 if (combatTimer != null) combatTimer.Stop();
             }
-            else if (CombatBusy || CombatAmbientMoving || LivingScene || MapMoving || mimicratorPreview)
-                WakeMotion();
             SyncMusic();
+            // Same condition as the timer itself, including finite sound tails and a pending frame.
+            if (!open && NeedsMotion)
+                WakeMotion();
             Invalidate();
         }
 
