@@ -30,6 +30,10 @@ namespace ShpilSvoih
         {
             get
             {
+                if (Kind == EnemyKind.SkaterMaster) return SkaterRules.MasterDamage;
+                if (Kind == EnemyKind.SkaterPadawan) return SkaterRules.PadawanDamage;
+                if (Kind == EnemyKind.FemaleDoctor) return DoctorRules.Attack;
+                if (Kind == EnemyKind.MaleDoctor) return 0;
                 if (Kind == EnemyKind.Fomatreshka) return WillSummon || WillDrink ? 0 : FomatreshkaRules.ShotDamage + Vigor;
                 if (Kind == EnemyKind.Fan) return FomatreshkaRules.FanDamage;
                 if (Kind == EnemyKind.Babai) return BabaiRules.Damage;
@@ -45,6 +49,10 @@ namespace ShpilSvoih
         {
             get
             {
+                if (Kind == EnemyKind.SkaterMaster) return "Красный меч · " + AttackDamage;
+                if (Kind == EnemyKind.SkaterPadawan) return "Бластер · " + AttackDamage;
+                if (Kind == EnemyKind.FemaleDoctor) return "Укол · 5 / Яд · 2";
+                if (Kind == EnemyKind.MaleDoctor) return "Скальпель · Кровотечение 2";
                 if (Kind == EnemyKind.Fomatreshka) return WillSummon ? "Призыв · 3 фанатки" : WillDrink ? "Gorilla · Бодрость +" + FomatreshkaRules.Vigor : "Императрица · " + AttackDamage + " × " + HitCount;
                 if (Kind == EnemyKind.Fan) return "Атака · " + AttackDamage;
                 if (Kind == EnemyKind.Babai) return "Лассо · " + BabaiRules.Damage + " / Притягивание · 1";
@@ -66,7 +74,7 @@ namespace ShpilSvoih
         {
             Id = id;
             Kind = kind;
-            Health = MaxHealth = kind == EnemyKind.Fomatreshka ? FomatreshkaRules.MaxHealth : kind == EnemyKind.Fan ? FomatreshkaRules.FanHealth : kind == EnemyKind.Babai ? BabaiRules.MaxHealth : kind == EnemyKind.Toha ? TohaRules.MaxHealth : kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
+            Health = MaxHealth = kind == EnemyKind.SkaterMaster ? SkaterRules.MasterHealth : kind == EnemyKind.SkaterPadawan ? SkaterRules.PadawanHealth : kind == EnemyKind.FemaleDoctor ? DoctorRules.FemaleHealth : kind == EnemyKind.MaleDoctor ? DoctorRules.MaleHealth : kind == EnemyKind.Fomatreshka ? FomatreshkaRules.MaxHealth : kind == EnemyKind.Fan ? FomatreshkaRules.FanHealth : kind == EnemyKind.Babai ? BabaiRules.MaxHealth : kind == EnemyKind.Toha ? TohaRules.MaxHealth : kind == EnemyKind.Mimicrator ? 60 : CombatState.EnemyMaxHealth;
             CyclePosition = offset;
         }
 

@@ -1,0 +1,14 @@
+﻿[
+  {
+    "file": "assets\\combat-hospital.png",
+    "sha256": "B3696D859A7318D2B65C8A510BB78118DD144FF2EB19A6CE437BD0FB955E4AD3"
+  },
+  {
+    "file": "assets\\enemies\\doctors\\male.png",
+    "sha256": "A31F7A40072B048B2E3E741922D12530E224143A145DCAA77E3E9395B7B042E8"
+  },
+  {
+    "file": "assets\\enemies\\doctors\\female.png",
+    "sha256": "841C4F84E5A9509F9F75D369F9B6D7EFDAC996E21D6E25E162E17CD60EAAF7A8"
+  }
+]

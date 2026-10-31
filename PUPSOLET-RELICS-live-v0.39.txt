@@ -1,0 +1,79 @@
+PASS approved icon is registered and owned
+PASS image ownership has no duplicate decode
+PASS native GPU frame: checkout-0
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-0-0
+PASS GPU presenter active
+PASS native GPU frame: inventory-0-0
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-0-1
+PASS GPU presenter active
+PASS native GPU frame: inventory-0-1
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-0-2
+PASS GPU presenter active
+PASS native GPU frame: inventory-0-2
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-0-3
+PASS GPU presenter active
+PASS native GPU frame: inventory-0-3
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-0-4
+PASS GPU presenter active
+PASS native GPU frame: inventory-0-4
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-0-5
+PASS GPU presenter active
+PASS native GPU frame: inventory-0-5
+PASS GPU presenter active
+PASS ordinary combat starts with selected relic
+PASS native GPU frame: battle-relic-0
+PASS GPU presenter active
+PASS pause preserves chosen icon
+PASS focus loss stops combat timer
+PASS approved icon is registered and owned
+PASS image ownership has no duplicate decode
+PASS native GPU frame: checkout-1
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-1-0
+PASS GPU presenter active
+PASS native GPU frame: inventory-1-0
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-1-1
+PASS GPU presenter active
+PASS native GPU frame: inventory-1-1
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-1-2
+PASS GPU presenter active
+PASS native GPU frame: inventory-1-2
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-1-3
+PASS GPU presenter active
+PASS native GPU frame: inventory-1-3
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-1-4
+PASS GPU presenter active
+PASS native GPU frame: inventory-1-4
+PASS GPU presenter active
+PASS chosen relic points at approved PNG without changing rules
+PASS native GPU frame: map-relic-1-5
+PASS GPU presenter active
+PASS native GPU frame: inventory-1-5
+PASS GPU presenter active
+PASS ordinary combat starts with selected relic
+PASS native GPU frame: battle-relic-1
+PASS GPU presenter active
+PASS pause preserves chosen icon
+PASS focus loss stops combat timer
+PASS native close releases audio

@@ -23,8 +23,8 @@ namespace ShpilSvoih
 
         public static readonly System.Collections.ObjectModel.ReadOnlyCollection<StartingBuff> All = Array.AsReadOnly(new StartingBuff[]
         {
-            new StartingBuff(0, "shield", "Саттен-киссюн", "Отменяет весь урон и все дебафы, полученные в первом ходу боя.", "placeholder"),
-            new StartingBuff(0, "zalt", "Зальтраак", "В начале боя добавляет в руку особую универсальную карту: 6 защиты, 6 урона, стоимость 0.", "placeholder"),
+            new StartingBuff(0, "shield", "Саттен-киссюн", "Отменяет весь урон и все дебафы, полученные в первом ходу боя.", "soten-kisshun"),
+            new StartingBuff(0, "zalt", "Зальтраак", "В начале боя добавляет в руку особую универсальную карту: 6 защиты, 6 урона, стоимость 0.", "zoltraak"),
             new StartingBuff(0, "exchange", "Равноценный обмен", "Один раз за забег позволяет заменить любую выбранную награду за бой.", "exchange"),
             new StartingBuff(1, "polish", "Карта поляка", "При получении карты с польским названием она получает зачарование «wieczny»: её нельзя удалить или продать, зато она стоит на 50% маны меньше.", "id"),
             new StartingBuff(1, "baton", "Полицейская дубинка", "В начале первого раунда боя даёт +3 силы. Змагары получают двойной урон.", "baton"),

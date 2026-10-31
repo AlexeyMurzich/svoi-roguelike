@@ -70,5 +70,52 @@
     "duration_seconds": 167.14097916666665,
     "pcm_bytes": 32091068,
     "asset_sha256": "51956151a8181e8a5ed3992b175c1eb902f30a2c1df8a408797d10dc2df42937"
+  },
+  {
+    "id": "doctors",
+    "original": "doctors-original.mp3",
+    "title": "Владимир Трошин — Люди в белых халатах",
+    "source_sha256": "e7bb57dff0cff4b14b1ffae88fca25ae576e35d0c217c72ba8014c0806ffa9ce",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 8998272,
+    "duration_seconds": 204.04244897959182,
+    "trim_start_seconds": 0,
+    "edge_fade_seconds": 0.01,
+    "preparation_gain": 1.0,
+    "pcm_bytes": 35993088,
+    "asset_sha256": "b7c597ad83903e412237282c8420084c44e374f2291d888137842ff03f4ae31e",
+    "pcm_sha256": "9fceb4d2348d404704aef9a35af3a73e7b014e1ac8c3751cc3fec41f04539137",
+    "rms": 0.11945374638189356,
+    "peak": 0.957305908203125,
+    "clipped_samples": 0
+  },
+  {
+    "id": "skaters",
+    "original": "skaters-main-title-original.mp3",
+    "source_sha256": "f21653981c1a6e09c3cd420150fc4a3cbfd719b2e3caad6683a319f1b0653680",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 19646208,
+    "duration_seconds": 445.4922448979592,
+    "pcm_bytes": 78584832,
+    "trim_start_seconds": 0,
+    "edge_fade_seconds": 0.01,
+    "preparation_gain": 0.9908880521838754,
+    "asset_sha256": "b599db178701aca73e88f084378d176db5aad5fc580f20902ef59f634ae16e60",
+    "compressed_bytes": 73589961,
+    "clipped_samples": 0,
+    "parts": [
+      {
+        "file": "skaters.pcm.gz.part1",
+        "bytes": 40000000,
+        "sha256": "c51ac36e3999d68a4e6f5f779d6fff6e787565ac5de61b61f2b264d0109a2988"
+      },
+      {
+        "file": "skaters.pcm.gz.part2",
+        "bytes": 33589961,
+        "sha256": "4fd03d0d2c3a9d0f61728c20b119862210151bfa238d0ae2c4dde0156fb1306f"
+      }
+    ]
   }
 ]

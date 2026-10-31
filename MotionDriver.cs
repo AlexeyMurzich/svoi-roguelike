@@ -55,6 +55,7 @@ namespace ShpilSvoih
                 cashierSound.SetPaused(true);
                 tohaSound.SetPaused(true);
                 cardSounds.SetPaused(true);
+                skaterSounds.SetPaused(true);
                 howlSound.SetPaused(true);
                 if (!ContainsFocus || !presentationPending) combatTimer.Stop();
                 return;

@@ -128,6 +128,9 @@ namespace ShpilSvoih
 
                     Click(game, 1010, 741);
                     var run = Read<MapRun>(game, "mapRun");
+                    // Navigation fixture retains quiet modal rooms; event consequences are tested separately.
+                    var questionRolls = (Dictionary<int, int>)typeof(MapRun).GetField("questionRolls", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(run);
+                    foreach (int question in questionRolls.Keys.ToArray()) questionRolls[question] = 3;
                     TestSuite.Check(Read<bool>(game, "mapScreen") && run != null && !Read<bool>(game, "checkout"), "checkout opens map");
                     var intel = Read<Dictionary<int, IntelNode>>(game, "mapIntel");
                     foreach (var kind in new[]
@@ -202,7 +205,7 @@ namespace ShpilSvoih
                             frame.Save(Path.Combine(TestSuite.OutputDirectory, "map-finished.png"));
                     Key(game, Keys.Enter);
                     TestSuite.Check(run.Finished && run.Pending == null, "completed map cannot restart on enter");
-                    int expectedArt = 38 + HeroArtCount(game);
+                    int expectedArt = 40 + HeroArtCount(game);
                     if (Read<object>(game, "mimicratorBody") != null) expectedArt += 2;
                     if (Read<object>(game, "mimicratorShellPoses") != null) expectedArt++;
                     if (Read<object>(game, "tohaLight") != null) expectedArt += 4;

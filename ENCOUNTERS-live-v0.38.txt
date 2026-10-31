@@ -1,0 +1,326 @@
+PASS native investigation matches cached next encounter 1
+PASS native GPU frame: map-before-1
+PASS GPU presenter active: map-before-1
+PASS combat opens exact cached opponent 1
+PASS native fight obeys pool progression 1
+PASS native GPU frame: battle-1
+PASS GPU presenter active: battle-1
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 10.6706 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 6
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 23
+PASS future native intel refreshed 26
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native room completion and history update
+INFO native completion including UI refresh: 0.0364 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 6
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 23
+PASS future native intel refreshed 26
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native investigation matches cached next encounter 2
+PASS native GPU frame: map-before-2
+PASS GPU presenter active: map-before-2
+PASS combat opens exact cached opponent 2
+PASS native fight obeys pool progression 2
+PASS native GPU frame: battle-2
+PASS GPU presenter active: battle-2
+PASS native route fixture survives
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 9.5244 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 23
+PASS future native intel refreshed 26
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native room completion and history update
+INFO native completion including UI refresh: 0.0562 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 23
+PASS future native intel refreshed 26
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 7.2426 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 23
+PASS future native intel refreshed 26
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native room completion and history update
+INFO native completion including UI refresh: 0.0510 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 23
+PASS future native intel refreshed 26
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native investigation matches cached next encounter 3
+PASS native GPU frame: map-before-3
+PASS GPU presenter active: map-before-3
+PASS combat opens exact cached opponent 3
+PASS native fight obeys pool progression 3
+PASS native GPU frame: battle-3
+PASS GPU presenter active: battle-3
+PASS native route fixture survives
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 8.1529 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 26
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native investigation matches cached next encounter 4
+PASS native GPU frame: map-before-4
+PASS GPU presenter active: map-before-4
+PASS combat opens exact cached opponent 4
+PASS native fight obeys pool progression 4
+PASS native GPU frame: battle-4
+PASS GPU presenter active: battle-4
+PASS native GPU frame: first-hard-4k
+PASS GPU presenter active: first-hard-4k
+PASS native pause freezes time and does not consume hard encounter
+PASS focus loss stops timer without reroll
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 8.2271 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 29
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native investigation matches cached next encounter 5
+PASS native GPU frame: map-before-5
+PASS GPU presenter active: map-before-5
+PASS combat opens exact cached opponent 5
+PASS native fight obeys pool progression 5
+PASS native GPU frame: battle-5
+PASS GPU presenter active: battle-5
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 1.8913 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native room completion and history update
+INFO native completion including UI refresh: 0.0417 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 38
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native investigation matches cached next encounter 6
+PASS native GPU frame: map-before-6
+PASS GPU presenter active: map-before-6
+PASS combat opens exact cached opponent 6
+PASS native fight obeys pool progression 6
+PASS native GPU frame: battle-6
+PASS GPU presenter active: battle-6
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 1.3583 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native room completion and history update
+INFO native completion including UI refresh: 0.0247 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native room completion and history update
+INFO native completion including UI refresh: 0.0326 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 43
+PASS future native intel refreshed 49
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native investigation matches cached next encounter 7
+PASS native GPU frame: map-before-7
+PASS GPU presenter active: map-before-7
+PASS combat opens exact cached opponent 7
+PASS native fight obeys pool progression 7
+PASS native GPU frame: battle-7
+PASS GPU presenter active: battle-7
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 1.6052 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 43
+PASS future native intel refreshed 51
+PASS future native intel refreshed 52
+PASS native investigation matches cached next encounter 8
+PASS native GPU frame: map-before-8
+PASS GPU presenter active: map-before-8
+PASS combat opens exact cached opponent 8
+PASS native fight obeys pool progression 8
+PASS native GPU frame: battle-8
+PASS GPU presenter active: battle-8
+PASS native route fixture survives
+PASS native room completion and history update
+INFO native completion including UI refresh: 1.1900 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 43
+PASS future native intel refreshed 51
+PASS native room completion and history update
+INFO native completion including UI refresh: 0.0331 ms
+PASS future native intel refreshed 3
+PASS future native intel refreshed 5
+PASS future native intel refreshed 13
+PASS future native intel refreshed 16
+PASS future native intel refreshed 18
+PASS future native intel refreshed 22
+PASS future native intel refreshed 27
+PASS future native intel refreshed 32
+PASS future native intel refreshed 43
+PASS future native intel refreshed 51
+PASS route includes all three different easy fights and repeated hard fights
+PASS room types remain unchanged
+PASS closing native window releases audio

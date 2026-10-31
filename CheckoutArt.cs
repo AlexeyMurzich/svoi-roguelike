@@ -87,7 +87,9 @@ namespace ShpilSvoih
                 "processor",
                 "investigation",
                 "exchange",
-                "mystery"
+                "mystery",
+                "soten-kisshun",
+                "zoltraak"
             }
 
             )

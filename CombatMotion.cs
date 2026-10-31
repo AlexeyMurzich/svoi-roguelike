@@ -41,6 +41,7 @@ namespace ShpilSvoih
 
         float EnemyCenter(int index)
         {
+            if (combat.Enemy == EnemyKind.SkaterMaster) return CanvasWidth * (index == 0 ? .75f : index == 1 ? .55f : .92f);
             if (combat.Enemy == EnemyKind.Fomatreshka) return CanvasWidth * (index == 0 ? .86f : .48f + (index - 1) * .135f);
             if (combat.Enemies.Count == 1) return CanvasWidth * .74f;
             return CanvasWidth * (index == 0 ? .62f : .84f);
@@ -65,13 +66,33 @@ namespace ShpilSvoih
                 if (!deathVisuals.Draw(graphics, enemy.Id, EnemyArea(index), null)) PaintCombatEnemy(graphics, index);
                 if (enemy.Kind == EnemyKind.Babai) DrawBabaiBed(graphics);
                 if (!enemy.IsAlive) continue;
-                int width = combat.Enemy == EnemyKind.Fomatreshka ? (int)(CanvasWidth * .104f) : combat.Enemies.Count == 1 ? 250 : 180;
+                int width = combat.Enemy == EnemyKind.SkaterMaster ? (index == 0 ? 210 : 160) : combat.Enemy == EnemyKind.Fomatreshka ? (int)(CanvasWidth * .104f) : combat.Enemies.Count == 1 ? 250 : 180;
                 bool selectedTarget = combat.SelectedTarget == index;
                 float nameY = floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 414 : 315);
+                if (combat.Enemy == EnemyKind.SkaterMaster) nameY = floor - (index == 0 ? 405 : 260);
+                if (combat.Enemy == EnemyKind.Doctors) nameY = floor - 425;
                 if (combat.Enemy == EnemyKind.Fomatreshka) nameY = floor - (index == 0 ? 418 : 347);
                 if (enemy.Kind == EnemyKind.StrayDogs) nameY = Math.Max(150, dogPoses.Target(index == 1 ? 1 : 0, 2, EnemyArea(index)).Top - 90);
-                TextAt(graphics, enemy.Name, center - width / 2, nameY, combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
-                DrawEnemyIntent(graphics, enemy, center, (enemy.Kind == EnemyKind.StrayDogs || combat.Enemy == EnemyKind.Fomatreshka) ? nameY + 34 : floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
+                if (combat.Enemy == EnemyKind.SkaterMaster)
+                {
+                    float labelWidth = index == 0 ? 238 : 190;
+                    var area = new RectangleF(center - labelWidth / 2, nameY, labelWidth, 29);
+                    using (var format = new StringFormat { Alignment = StringAlignment.Center, FormatFlags = StringFormatFlags.NoWrap })
+                    using (var shadow = new SolidBrush(Color.FromArgb(230, 0, 0, 0)))
+                    using (var ink = new SolidBrush(selectedTarget ? gold : text))
+                    {
+                        var font = HudFont(index == 0 ? 20 : 18, true);
+                        // A narrow glyph outline preserves the scene behind the label.
+                        for (int dx = -1; dx <= 1; dx++)
+                            for (int dy = -1; dy <= 1; dy++)
+                                if (dx != 0 || dy != 0)
+                                    graphics.DrawString(enemy.Name, font, shadow,
+                                        new RectangleF(area.X + dx * 1.5f, area.Y + dy * 1.5f, area.Width, area.Height), format);
+                        graphics.DrawString(enemy.Name, font, ink, area, format);
+                    }
+                }
+                else TextAt(graphics, enemy.Name, center - width / 2, nameY, combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
+                DrawEnemyIntent(graphics, enemy, center, (enemy.Kind == EnemyKind.StrayDogs || combat.Enemy == EnemyKind.SkaterMaster || combat.Enemy == EnemyKind.Fomatreshka || combat.Enemy == EnemyKind.Doctors) ? nameY + 34 : floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
                 DrawBlockBadge(graphics, center + width / 2 + 4, floor + 8, enemy.Block);
                 if (enemy.Vigor > 0) DrawCombatHint(graphics, new CombatHint(21, enemy.Vigor.ToString(), "Бодрость", "+" + enemy.Vigor + " урона к каждому попаданию ближайшей атаки. Усиливает всю очередь из трёх выстрелов и исчезает после неё, даже если весь урон поглотил блок."), new RectangleF(center - 18, floor + 32, 28, 28), false);
