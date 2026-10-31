@@ -135,6 +135,9 @@ namespace ShpilSvoih
             Run("Fade: native alpha, clipping and handle cleanup", UiTests.TestOpaqueFade);
             Run("Repaint: partial frames are pixel-identical", UiTests.TestPartialRepaint);
             Run("Repaint: mouse movement only redraws visual changes", UiTests.TestHoverInvalidation);
+            Run("Action sync: fan run-in starts at the summon impact at any frame rate", UiTests.TestFanEntranceFrameRate);
+            Run("Action sync: closing the console resumes sound-tail clock", UiTests.TestConsoleResumesSoundClock);
+            Run("Action sync: skater bolt and saber arc end at the impact", UiTests.TestSkaterProjectileEndsAtImpact);
             Run("Presentation: real HWND, GPU pixels, resize, focus and fallback", UiTests.TestNativePresentation);
             Run("Presentation: stable silhouettes, checkout cache and partial map", UiTests.TestStableSampling);
             Run("Performance: bounded rasterization and native pointer input", UiTests.TestRenderBudget);

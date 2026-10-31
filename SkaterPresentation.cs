@@ -97,7 +97,9 @@ namespace ShpilSvoih
             bool master = attackTimeline.Kind == AttackAnimation.SkaterSlash;
             if (!master && attackTimeline.Kind != AttackAnimation.PadawanShot || actingEnemyIndex < 0) return;
             float time = attackTimeline.Time;
-            if (time < .18f || time > .69f) return;
+            // The bolt/arc lands at the impact; the shared hit sparks follow. It must not stay
+            // frozen on the hero model after the hit.
+            if (time < .18f || time > attackTimeline.HitTime) return;
             float flight = Math.Max(0, Math.Min(1, (time - .18f) / (attackTimeline.HitTime - .18f)));
             float from = EnemyCenter(actingEnemyIndex) - 60, to = HeroSpriteCenter + 40;
             float x = from + (to - from) * flight, y = CombatFloor - (master ? 220 : 110) + (master ? 40 : -65) * flight;
