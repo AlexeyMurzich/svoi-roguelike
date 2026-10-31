@@ -1,30 +1,30 @@
-﻿v0.43 — только точечные проверки, 31 октября 2026. Общий прогон не запускался по указанию пользователя.
-
-review-v0.43-audio-final
+﻿v0.43.1 — только точечные проверки.
 PASS Skater audio: complete clips, bounded voices and cleanup
 PASS Skater audio: labels, theme and scene transitions
 Suites: 2 passed, 0 failed. Assertions: 16.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-review-v0.43-skaters
-PASS Skaters: independent targets, attacks, block and victory
-PASS Skaters: hard pool without consecutive repeats
-PASS Skaters: rendering, targeting, pause and frame rates
-Suites: 3 passed, 0 failed. Assertions: 7830.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-review-v0.43-assets
-PASS Image ownership, fallback and file unlocking
-Suites: 1 passed, 0 failed. Assertions: 24.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-review-v0.43-music-final
-PASS Music: asynchronous switching, pause, cancellation and disposal
-PASS Music: doctor choice, battle, victory, treatment and revisit
-PASS Music: eight embedded tracks match prepared samples
-PASS Music: native loop, pause and resume
-PASS Music: actual hero clicks and elite scene transitions
-Suites: 5 passed, 0 failed. Assertions: 75.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-Итого: 11 наборов, 0 ошибок, 7945 утверждений.
+Нативное окно готового EXE:
+PASS native supplied battle theme loads asynchronously
+PASS native approved trio and labels
+PASS saber sound starts exactly once
+PASS native theme playback advances
+PASS pause before saber impact holds HP
+PASS pause suspends both theme and effects
+PASS master impact applied once
+PASS first padawan blaster starts once
+PASS first blaster impact applied once
+PASS second padawan has its own blaster voice
+PASS three distinct impacts total twenty
+PASS theme voice does not restart on attack or pause
+PASS focus loss freezes motion
+PASS focus loss suspends both audio systems
+PASS native click selects target 1
+PASS first padawan dies independently
+PASS native click selects target 2
+PASS second padawan dies independently
+PASS native click selects target 0
+PASS ordinary victory does not grant doctor treatment or relic
+PASS menu clears battle
+PASS menu stops all skater effects and theme without errors
+PASS close releases audio
