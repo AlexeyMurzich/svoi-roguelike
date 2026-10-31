@@ -59,6 +59,7 @@ namespace ShpilSvoih
         void StartSkaterAttack(CombatEnemy actor)
         {
             bool master = actor.Kind == EnemyKind.SkaterMaster;
+            if (Visible && ContainsFocus && !GameplayPaused) skaterSounds.Play(actor.Id, false);
             combatNotice = actor.Name + (master ? " · красный меч" : " · бластер");
             StartCombatAnimation(master ? AttackAnimation.SkaterSlash : AttackAnimation.PadawanShot, () =>
             {

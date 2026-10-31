@@ -68,8 +68,8 @@ namespace ShpilSvoih
         }
         public static void EmbeddedSongs()
         {
-            string[] ids = { "pupsolet", "illya", "runtso", "shuten", "mimicrator", "babai", "doctors" };
-            int[] frames = { 1955835, 1644930, 7673400, 8061480, 8004863, 8022767, 8998272 };
+            string[] ids = { "pupsolet", "illya", "runtso", "shuten", "mimicrator", "babai", "doctors", "skaters" };
+            int[] frames = { 1955835, 1644930, 7673400, 8061480, 8004863, 8022767, 8998272, 19646208 };
             for (int i = 0; i < ids.Length; i++)
             {
                 var pcm = MusicPlayer.LoadEmbedded(ids[i], CancellationToken.None);

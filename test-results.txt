@@ -1,46 +1,30 @@
-﻿v0.42 targeted validation: 9 suites, 1960243 assertions, 0 failures. No full-suite claim.
+﻿v0.43 — только точечные проверки, 31 октября 2026. Общий прогон не запускался по указанию пользователя.
 
+review-v0.43-audio-final
+PASS Skater audio: complete clips, bounded voices and cleanup
+PASS Skater audio: labels, theme and scene transitions
+Suites: 2 passed, 0 failed. Assertions: 16.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+review-v0.43-skaters
 PASS Skaters: independent targets, attacks, block and victory
 PASS Skaters: hard pool without consecutive repeats
 PASS Skaters: rendering, targeting, pause and frame rates
 Suites: 3 passed, 0 failed. Assertions: 7830.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-
-INFO Room completion and cached encounter refresh: 96000 transitions; median 0.0022 ms; p95 0.0064 ms; max 0.8764 ms (includes scheduler/GC). No FPS guarantee.
-PASS Encounter progression: history, forks and unchanged rooms
-PASS Encounter progression: cached contents and previews
-PASS Encounter progression: real combat, intel, pause and revisit
-Suites: 3 passed, 0 failed. Assertions: 1940639.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-
-PASS Doctors: question rooms and eye
-Suites: 1 passed, 0 failed. Assertions: 7550.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-
-PASS Babai: hard pool and legal route previews
-Suites: 1 passed, 0 failed. Assertions: 4200.
-No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
-
-
+review-v0.43-assets
 PASS Image ownership, fallback and file unlocking
 Suites: 1 passed, 0 failed. Assertions: 24.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
-NATIVE
-PASS native approved trio and labels
-PASS pause before saber impact holds HP
-PASS master impact applied once
-PASS first blaster impact applied once
-PASS three distinct impacts total twenty
-PASS focus loss freezes motion
-PASS native click selects target 1
-PASS first padawan dies independently
-PASS native click selects target 2
-PASS second padawan dies independently
-PASS native click selects target 0
-PASS ordinary victory does not grant doctor treatment or relic
-PASS menu clears battle
-PASS close releases audio
+review-v0.43-music-final
+PASS Music: asynchronous switching, pause, cancellation and disposal
+PASS Music: doctor choice, battle, victory, treatment and revisit
+PASS Music: eight embedded tracks match prepared samples
+PASS Music: native loop, pause and resume
+PASS Music: actual hero clicks and elite scene transitions
+Suites: 5 passed, 0 failed. Assertions: 75.
+No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
+
+Итого: 11 наборов, 0 ошибок, 7945 утверждений.

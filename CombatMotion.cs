@@ -73,7 +73,16 @@ namespace ShpilSvoih
                 if (combat.Enemy == EnemyKind.Doctors) nameY = floor - 425;
                 if (combat.Enemy == EnemyKind.Fomatreshka) nameY = floor - (index == 0 ? 418 : 347);
                 if (enemy.Kind == EnemyKind.StrayDogs) nameY = Math.Max(150, dogPoses.Target(index == 1 ? 1 : 0, 2, EnemyArea(index)).Top - 90);
-                TextAt(graphics, enemy.Name, center - width / 2, nameY, combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
+                if (combat.Enemy == EnemyKind.SkaterMaster)
+                {
+                    float plaqueWidth = index == 0 ? 238 : 190;
+                    Rect(graphics, center - plaqueWidth / 2, nameY - 7, plaqueWidth, 86, Color.FromArgb(245, 8, 15, 21));
+                    Stroke(graphics, center - plaqueWidth / 2, nameY - 7, plaqueWidth, 86, selectedTarget ? gold : Color.FromArgb(110, 137, 149, 156));
+                    using (var format = new StringFormat { Alignment = StringAlignment.Center })
+                    using (var ink = new SolidBrush(Color.FromArgb(255, 249, 240)))
+                        graphics.DrawString(enemy.Name, HudFont(index == 0 ? 20 : 18, true), ink, new RectangleF(center - plaqueWidth / 2 + 5, nameY, plaqueWidth - 10, 29), format);
+                }
+                else TextAt(graphics, enemy.Name, center - width / 2, nameY, combat.Enemies.Count == 1 ? 23 : 18, selectedTarget ? gold : text, width + 30, true);
                 DrawEnemyIntent(graphics, enemy, center, (enemy.Kind == EnemyKind.StrayDogs || combat.Enemy == EnemyKind.SkaterMaster || combat.Enemy == EnemyKind.Fomatreshka || combat.Enemy == EnemyKind.Doctors) ? nameY + 34 : floor - ((enemy.Kind == EnemyKind.Mimicrator || enemy.Kind == EnemyKind.Toha || enemy.Kind == EnemyKind.Babai) ? 380 : 280));
                 DrawCombatHealth(graphics, center - width / 2, floor + 8, width, enemy.Health, enemy.MaxHealth);
                 DrawBlockBadge(graphics, center + width / 2 + 4, floor + 8, enemy.Block);

@@ -1,0 +1,23 @@
+﻿PASS native supplied battle theme loads asynchronously
+PASS native approved trio and labels
+PASS saber sound starts exactly once
+PASS native theme playback advances
+PASS pause before saber impact holds HP
+PASS pause suspends both theme and effects
+PASS master impact applied once
+PASS first padawan blaster starts once
+PASS first blaster impact applied once
+PASS second padawan has its own blaster voice
+PASS three distinct impacts total twenty
+PASS theme voice does not restart on attack or pause
+PASS focus loss freezes motion
+PASS focus loss suspends both audio systems
+PASS native click selects target 1
+PASS first padawan dies independently
+PASS native click selects target 2
+PASS second padawan dies independently
+PASS native click selects target 0
+PASS ordinary victory does not grant doctor treatment or relic
+PASS menu clears battle
+PASS menu stops all skater effects and theme without errors
+PASS close releases audio

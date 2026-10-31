@@ -73,6 +73,8 @@ namespace ShpilSvoih
             OutputDirectory = Path.GetFullPath(arguments.Length > 0 ? arguments[0] : "test-results");
             filter = arguments.Length > 1 ? arguments[1] : "";
             Directory.CreateDirectory(OutputDirectory);
+            Run("Skater audio: complete clips, bounded voices and cleanup", SkaterAudioTests.ClipsAndLifetime);
+            Run("Skater audio: labels, theme and scene transitions", UiTests.TestSkaterAudioAndLabels);
             Run("Skaters: independent targets, attacks, block and victory", SkaterTests.Combat);
             Run("Skaters: hard pool without consecutive repeats", SkaterTests.HardPool);
             Run("Skaters: rendering, targeting, pause and frame rates", UiTests.TestSkaters);
@@ -118,7 +120,7 @@ namespace ShpilSvoih
             Run("Toha sound: focus, menus, console and exit", UiTests.TestTohaSoundScenes);
             Run("Music: asynchronous switching, pause, cancellation and disposal", MusicTests.StateAndCancellation);
             Run("Music: doctor choice, battle, victory, treatment and revisit", UiTests.TestDoctorMusicScenes);
-            Run("Music: seven embedded tracks match prepared samples", MusicTests.EmbeddedSongs);
+            Run("Music: eight embedded tracks match prepared samples", MusicTests.EmbeddedSongs);
             Run("Music: native loop, pause and resume", MusicTests.NativeLoop);
             Run("Music: actual hero clicks and elite scene transitions", UiTests.TestMusicScenes);
             Run("Debug console: infinite gold and exact triple multiplier", DebugModeTests.Rules);

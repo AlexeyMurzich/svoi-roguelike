@@ -4,8 +4,9 @@
     {
         readonly MusicPlayer music = new MusicPlayer();
         readonly CardSoundPlayer cardSounds = new CardSoundPlayer();
+        readonly SkaterAttackSound skaterSounds = new SkaterAttackSound();
         int audioPlayerTurn = -1;
-        bool AudioNeedsMotion { get { return cardSounds.ActiveVoices > 0 || cashierSound.Active; } }
+        bool AudioNeedsMotion { get { return cardSounds.ActiveVoices > 0 || skaterSounds.ActiveVoices > 0 || cashierSound.Active; } }
         double DesiredMusicGain { get { return AudioLevels.Music; } }
         int menuMusicHero = -1;
         string DesiredMusicTrack
@@ -16,6 +17,8 @@
                 if (mapScreen && mapRun != null && mapRun.Pending != null && !mapRun.PendingIsRevisit &&
                     (IsDoctorQuestion || HasLiveFight && combat != null && combat.Enemy == EnemyKind.Doctors))
                     return "doctors";
+                if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.SkaterMaster)
+                    return "skaters";
                 if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Mimicrator)
                     return "mimicrator";
                 if (HasLiveFight && combat != null && combat.Enemy == EnemyKind.Babai)
@@ -39,6 +42,7 @@
             cashierSound.SetPaused(pause);
             tohaSound.SetPaused(pause);
             cardSounds.SetPaused(pause);
+            skaterSounds.SetPaused(pause);
             howlSound.SetPaused(pause);
             if (!pause && combat != null && combat.Turn != audioPlayerTurn)
             {
@@ -57,6 +61,7 @@
         void AdvanceAudio(float seconds)
         {
             cardSounds.Advance(seconds);
+            skaterSounds.Advance(seconds);
             cashierSound.Advance(seconds);
         }
         void StartCardSound(bool attack)

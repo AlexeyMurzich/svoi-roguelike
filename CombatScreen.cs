@@ -67,6 +67,7 @@ namespace ShpilSvoih
             fomatreshkaFlee = -1;
             fomatreshkaEntrance = FomatreshkaRules.EntranceDuration;
             cardSounds.Stop();
+            skaterSounds.Stop();
             audioPlayerTurn = -1;
             tohaSound.Stop();
             ClearDistrictBackdrop();

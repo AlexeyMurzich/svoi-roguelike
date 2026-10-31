@@ -1,2 +1,2 @@
 @echo off
-start "" "%~dp0Svoi-v0.42.exe" --test-skaters
+start "" "%~dp0Svoi-v0.43.exe" --test-skaters

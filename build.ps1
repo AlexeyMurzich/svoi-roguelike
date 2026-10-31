@@ -22,16 +22,31 @@ foreach($relativeName in $requiredAssets){
  $resourceName=$relativeName.Replace('\','.').Replace('/','.')
  $compilerArgs+=('/resource:assets\'+$relativeName+','+$resourceName)
 }
-$musicIds=@('pupsolet','illya','runtso','shuten','mimicrator','babai','doctors')
+$musicIds=@('pupsolet','illya','runtso','shuten','mimicrator','babai','doctors','skaters')
 foreach($id in $musicIds){
- $musicFile=Get-Item -LiteralPath (Join-Path $assetRoot ('music\'+$id+'.pcm.gz'))
- $compilerArgs+=('/resource:assets\music\'+$id+'.pcm.gz,music.'+$id+'.pcm.gz')
+ if($id -eq 'skaters') {
+  $musicPath='outputs\skaters.pcm.gz'
+  New-Item -ItemType Directory -Path (Join-Path $PSScriptRoot 'outputs') -Force | Out-Null
+  $joined=[IO.File]::Create((Join-Path $PSScriptRoot $musicPath))
+  try {
+   foreach($part in @(1,2)) {
+    $inputPart=[IO.File]::OpenRead((Join-Path $assetRoot ('music\skaters.pcm.gz.part'+$part)))
+    try { $inputPart.CopyTo($joined) } finally { $inputPart.Dispose() }
+   }
+  } finally { $joined.Dispose() }
+ } else { $musicPath='assets\music\'+$id+'.pcm.gz' }
+ $musicFile=Get-Item -LiteralPath (Join-Path $PSScriptRoot $musicPath)
+ $compilerArgs+=('/resource:'+$musicPath+',music.'+$id+'.pcm.gz')
 }
 foreach($id in @('toha-light','toha-dark')) {
  $soundFile=Get-Item -LiteralPath (Join-Path $assetRoot ('sfx\'+$id+'.pcm.gz'))
  $compilerArgs+=('/resource:assets\sfx\'+$id+'.pcm.gz,sfx.'+$id+'.pcm.gz')
 }
 $compilerArgs+=('/resource:assets\sfx\cashier\glitch.pcm.gz,sfx.cashier.glitch.pcm.gz')
+foreach($effect in @('lightsaber','blaster')) {
+ $soundFile=Get-Item -LiteralPath (Join-Path $assetRoot ('sfx\skaters\'+$effect+'.pcm.gz'))
+ $compilerArgs+=('/resource:assets\sfx\skaters\'+$effect+'.pcm.gz,sfx.skaters.'+$effect+'.pcm.gz')
+}
 foreach($hero in @('pupsolet','illya','runtso','shuten')) {
  foreach($kind in @('attack','guard')) {
   $id=$hero+'-'+$kind

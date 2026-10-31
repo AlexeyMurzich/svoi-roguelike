@@ -89,5 +89,33 @@
     "rms": 0.11945374638189356,
     "peak": 0.957305908203125,
     "clipped_samples": 0
+  },
+  {
+    "id": "skaters",
+    "original": "skaters-main-title-original.mp3",
+    "source_sha256": "f21653981c1a6e09c3cd420150fc4a3cbfd719b2e3caad6683a319f1b0653680",
+    "sample_rate": 44100,
+    "channels": 2,
+    "frames": 19646208,
+    "duration_seconds": 445.4922448979592,
+    "pcm_bytes": 78584832,
+    "trim_start_seconds": 0,
+    "edge_fade_seconds": 0.01,
+    "preparation_gain": 0.9908880521838754,
+    "asset_sha256": "b599db178701aca73e88f084378d176db5aad5fc580f20902ef59f634ae16e60",
+    "compressed_bytes": 73589961,
+    "clipped_samples": 0,
+    "parts": [
+      {
+        "file": "skaters.pcm.gz.part1",
+        "bytes": 40000000,
+        "sha256": "c51ac36e3999d68a4e6f5f779d6fff6e787565ac5de61b61f2b264d0109a2988"
+      },
+      {
+        "file": "skaters.pcm.gz.part2",
+        "bytes": 33589961,
+        "sha256": "4fd03d0d2c3a9d0f61728c20b119862210151bfa238d0ae2c4dde0156fb1306f"
+      }
+    ]
   }
 ]
