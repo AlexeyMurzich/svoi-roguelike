@@ -51,6 +51,16 @@ namespace ShpilSvoih
                     game.ClientSize = size;
                     using (var shot = Render(game)) shot.Save(Path.Combine(TestSuite.OutputDirectory, "skater-labels-" + size.Width + ".png"));
                 }
+                var contour = (PointF[])typeof(Game).GetField("MasterOutline", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null);
+                using (var silhouette = new System.Drawing.Drawing2D.GraphicsPath())
+                {
+                    silhouette.AddPolygon(contour);
+                    foreach (var pixel in new[] { new PointF(975, 480), new PointF(1125, 450), new PointF(1158, 440),
+                        new PointF(1171, 623), new PointF(1210, 610), new PointF(1185, 640), new PointF(1050, 650) })
+                        TestSuite.Check(silhouette.IsVisible(pixel), "approved wrist, sleeve, board and wheel pixels remain visible " + pixel);
+                    foreach (var pixel in new[] { new PointF(1048, 325), new PointF(1140, 500), new PointF(1230, 605), new PointF(1100, 660) })
+                        TestSuite.Check(!silhouette.IsVisible(pixel), "source background and health panel remain outside silhouette " + pixel);
+                }
                 var sounds = Read<SkaterAttackSound>(game, "skaterSounds");
                 TestSuite.Check(sounds.PlayCount == 0, "repaint and offscreen tests do not emit attack sounds");
                 Call(game, "EndCombatTurn"); Call(game, "AdvanceCombatAnimation", 5f);

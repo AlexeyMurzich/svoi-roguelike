@@ -3,5 +3,7 @@
   "sha256": "9472e35752e91e9462b64ed5ad548d4329381eb7a2624fb7393c213c51fd153e",
   "method": "Exact approved source pixels isolated at render time by source-coordinate silhouettes; no regenerated faces",
   "source_review": "skater-chief-battle-review-v3",
-  "rejected": "Regenerated master sheet is not used"
+  "rejected": "Regenerated master sheet is not used",
+  "silhouette_revision": "v0.43.2: accurate sleeves, wrists, board and wheel contour; full master bounds include rear wheel below the original mockup health bar",
+  "rear_wheel_repair": "Intact approved front-wheel pixels (1174,626,24,24) drawn at rear-wheel source position (1036,645,24,24), behind the board, with an ellipse clip. No source raster changes or generated art."
 }

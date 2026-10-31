@@ -1,7 +1,7 @@
-﻿v0.43.1 — только точечные проверки.
+﻿v0.43.2 — только точечные проверки.
 PASS Skater audio: complete clips, bounded voices and cleanup
 PASS Skater audio: labels, theme and scene transitions
-Suites: 2 passed, 0 failed. Assertions: 16.
+Suites: 2 passed, 0 failed. Assertions: 27.
 No statement/branch coverage percentage is claimed; this is behavioural regression coverage.
 
 Нативное окно готового EXE:
